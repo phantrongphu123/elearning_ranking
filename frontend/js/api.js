@@ -1,4 +1,7 @@
-const API_BASE = 'https://scallop-suffice-unfixable.ngrok-free.dev';
+// Tự động chọn URL backend: nếu chạy local dùng localhost, nếu deploy dùng env hoặc config
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:8000/api'
+    : (window._API_BASE || '/api');
 
 async function fetchAPI(endpoint, options = {}) {
     const token = localStorage.getItem('token');
