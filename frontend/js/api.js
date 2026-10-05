@@ -8,6 +8,7 @@ async function fetchAPI(endpoint, options = {}) {
 
     const headers = {
         'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true',  // Bypass ngrok warning page
         ...options.headers
     };
 
