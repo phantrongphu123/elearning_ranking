@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Sinh - Hoàng Cung Học Đường</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏯</div>
+                <h2 style="font-size: 1.2rem;">Hoàng Cung<br>Học Đường</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item active">Tổng Quan</a>
+                <a href="assignments.html" class="nav-item">Tấu Chương (Bài Tập)</a>
+                <a href="leaderboard.html" class="nav-item">Bảng Vàng (BXH)</a>
+            </nav>
+            <div style="padding: 1.5rem; text-align: center;">
+                <button onclick="logout()" class="btn btn-secondary" style="width: 100%;">Xuất Cung</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div>
+                    <h1 style="font-size: 1.8rem;">Tổng Quan Tình Hình</h1>
+                </div>
+                <div class="user-profile">
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Đang tải...</div>
+                        <div class="user-role">Học sinh</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="animate-fade-in">
+                <!-- Rank Info Panel -->
+                <div class="glass-panel mb-2" style="display: flex; gap: 2rem; align-items: center;">
+                    <div style="font-size: 4rem;" id="rankIcon">📜</div>
+                    <div style="flex: 1;">
+                        <h2 style="font-size: 2rem; margin-bottom: 0.5rem;" id="rankName">Đang tải...</h2>
+                        <p style="color: var(--text-muted);">Tổng điểm: <strong style="color: var(--primary-light); font-size: 1.2rem;" id="totalScore">0</strong></p>
+                        
+                        <div style="margin-top: 1rem;">
+                            <div class="d-flex justify-between" style="font-size: 0.85rem;">
+                                <span>Tiến độ thăng cấp: <span id="nextRank">...</span></span>
+                                <span>Còn thiếu <span id="pointsNeeded">0</span> điểm</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="rankProgress" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 12px;">
+                        <div style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase;">Vị trí Bảng Vàng</div>
+                        <div style="font-size: 2.5rem; color: var(--primary-color); font-family: 'Playfair Display', serif;" id="leaderboardPos">-</div>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid-cards">
+                    <div class="glass-panel stat-card">
+                        <div class="stat-label">Bài Tập Chờ Xử Lý</div>
+                        <div class="stat-value" id="pendingAssignments">0</div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-label">Bài Đã Nộp</div>
+                        <div class="stat-value" id="totalSubmissions">0</div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-label">Chuỗi Chuyên Cần</div>
+                        <div class="stat-value" id="attendanceStreak">0</div>
+                    </div>
+                </div>
+
+                <!-- Score Breakdown -->
+                <div class="glass-panel">
+                    <h3 class="mb-1">Chi Tiết Điểm Số</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hạng Mục</th>
+                                    <th>Điểm Thu Được</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Bài Tập Về Nhà</td>
+                                    <td id="scoreHomework">0</td>
+                                </tr>
+                                <tr>
+                                    <td>Điểm Danh / Chuyên Cần</td>
+                                    <td id="scoreAttendance">0</td>
+                                </tr>
+                                <tr>
+                                    <td>Điểm Thưởng (Bonus)</td>
+                                    <td id="scoreBonus">0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

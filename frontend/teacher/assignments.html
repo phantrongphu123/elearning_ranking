@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Tấu Chương (Giáo Viên)</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .form-row { display: flex; gap: 1rem; margin-bottom: 1rem; }
+        .form-row > * { flex: 1; }
+        .badge { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; }
+        .badge-active { background: rgba(40,167,69,0.2); color: #28a745; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-content { background: var(--bg-dark); width: 90%; max-width: 600px; padding: 2rem; border-radius: 12px; border: 1px solid var(--glass-border); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); max-height: 90vh; overflow-y: auto;}
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏯</div>
+                <h2 style="font-size: 1.2rem;">Hoàng Cung<br>Học Đường</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">Tổng Quan</a>
+                <a href="assignments.html" class="nav-item active">Ban Bố Tấu Chương</a>
+                <a href="submissions.html" class="nav-item">Chấm Điểm</a>
+                <a href="attendance.html" class="nav-item">Điểm Danh</a>
+            </nav>
+            <div style="padding: 1.5rem; text-align: center;">
+                <button onclick="logout()" class="btn btn-secondary" style="width: 100%;">Xuất Cung</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <h1 style="font-size: 1.8rem;">Quản Lý Bài Tập (Tấu Chương)</h1>
+                <button class="btn btn-primary" onclick="openCreateModal()">+ Giao Bài Mới</button>
+            </header>
+
+            <div class="animate-fade-in glass-panel">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tiêu đề</th>
+                                <th>Môn</th>
+                                <th>Lớp</th>
+                                <th>Hạn chót</th>
+                                <th>Đã nộp</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assignmentsTable">
+                            <tr><td colspan="6" class="text-center">Đang tải...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create Modal -->
+    <div id="createModal" class="modal">
+        <div class="modal-content">
+            <div class="d-flex justify-between align-center mb-2">
+                <h2>Giao Bài Tập Mới</h2>
+                <button class="btn btn-secondary" onclick="closeModal()">Đóng</button>
+            </div>
+            <form id="createForm">
+                <div class="input-group">
+                    <label>Tiêu đề</label>
+                    <input type="text" name="title" required>
+                </div>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Môn học</label>
+                        <input type="text" name="subject" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Lớp (Class ID)</label>
+                        <input type="number" name="class_id" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Hạn chót</label>
+                        <input type="datetime-local" name="deadline" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Điểm thưởng nộp đúng hạn</label>
+                        <input type="number" name="bonus_score" value="10">
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <label>Mô tả / Ghi chú</label>
+                    <textarea name="description" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Ban Bố</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="assignments.js"></script>
+</body>
+</html>

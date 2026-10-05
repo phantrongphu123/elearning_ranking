@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giáo Viên - Hoàng Cung Học Đường</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏯</div>
+                <h2 style="font-size: 1.2rem;">Hoàng Cung<br>Học Đường</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item active">Tổng Quan</a>
+                <a href="assignments.html" class="nav-item">Ban Bố Tấu Chương</a>
+                <a href="submissions.html" class="nav-item">Chấm Điểm</a>
+                <a href="attendance.html" class="nav-item">Điểm Danh</a>
+            </nav>
+            <div style="padding: 1.5rem; text-align: center;">
+                <button onclick="logout()" class="btn btn-secondary" style="width: 100%;">Xuất Cung</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div>
+                    <h1 style="font-size: 1.8rem;">Tổng Quan Tình Hình</h1>
+                </div>
+                <div class="user-profile">
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Đang tải...</div>
+                        <div class="user-role">Thái Phó (Giáo viên)</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="animate-fade-in">
+                <!-- Stats Grid -->
+                <div class="grid-cards">
+                    <div class="glass-panel stat-card">
+                        <div class="stat-label">Lớp Phụ Trách</div>
+                        <div class="stat-value" id="totalClasses">0</div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-label">Tổng Học Sinh</div>
+                        <div class="stat-value" id="totalStudents">0</div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-label">Bài Tập Đang Giao</div>
+                        <div class="stat-value" id="activeAssignments">0</div>
+                    </div>
+                    <div class="stat-card glass-panel" style="border-color: var(--primary-color);">
+                        <div class="stat-label">Bài Chờ Chấm</div>
+                        <div class="stat-value" id="ungradedCount">0</div>
+                    </div>
+                </div>
+
+                <!-- Classes Table -->
+                <div class="glass-panel mt-2">
+                    <h3 class="mb-1">Danh sách lớp phụ trách</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mã Lớp</th>
+                                    <th>Tên Lớp</th>
+                                    <th>Năm Học</th>
+                                    <th>Trạng Thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="classesTableBody">
+                                <tr>
+                                    <td colspan="4" class="text-center">Đang tải dữ liệu...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

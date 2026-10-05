@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Vàng - Học Sinh</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .top-3 {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            margin-top: 2rem;
+        }
+        .podium {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border);
+            border-bottom: none;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            width: 150px;
+        }
+        .podium-1 { height: 200px; border-color: #FFD700; background: rgba(255,215,0,0.1); }
+        .podium-2 { height: 160px; border-color: #C0C0C0; background: rgba(192,192,192,0.1); }
+        .podium-3 { height: 130px; border-color: #CD7F32; background: rgba(205,127,50,0.1); }
+        
+        .avatar-circle {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            background: var(--bg-dark);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            border: 2px solid var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏯</div>
+                <h2 style="font-size: 1.2rem;">Hoàng Cung<br>Học Đường</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">Tổng Quan</a>
+                <a href="assignments.html" class="nav-item">Tấu Chương (Bài Tập)</a>
+                <a href="leaderboard.html" class="nav-item active">Bảng Vàng (BXH)</a>
+            </nav>
+            <div style="padding: 1.5rem; text-align: center;">
+                <button onclick="logout()" class="btn btn-secondary" style="width: 100%;">Xuất Cung</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <h1 style="font-size: 1.8rem;">Bảng Vàng Toàn Quốc</h1>
+            </header>
+
+            <div class="animate-fade-in">
+                
+                <div class="top-3" id="top3Container">
+                    <!-- Injected via JS -->
+                </div>
+
+                <div class="glass-panel">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hạng</th>
+                                    <th>Họ Tên</th>
+                                    <th>Lớp</th>
+                                    <th>Tước Vị</th>
+                                    <th>Điểm Tích Lũy</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lbTableBody">
+                                <tr><td colspan="5" class="text-center">Đang tải...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const data = await fetchAPI('/leaderboard?limit=50');
+                
+                // Top 3 Podium
+                const top3 = document.getElementById('top3Container');
+                top3.innerHTML = '';
+                
+                if (data.length > 1) {
+                    top3.innerHTML += createPodium(data[1], 2);
+                }
+                if (data.length > 0) {
+                    top3.innerHTML += createPodium(data[0], 1);
+                }
+                if (data.length > 2) {
+                    top3.innerHTML += createPodium(data[2], 3);
+                }
+
+                // Table
+                const tbody = document.getElementById('lbTableBody');
+                tbody.innerHTML = '';
+                data.forEach((student, index) => {
+                    if (index < 3) return; // Skip top 3
+                    
+                    const isCurrentUser = String(student.student_id) === String(getUser().student_id);
+                    
+                    tbody.innerHTML += `
+                        <tr style="${isCurrentUser ? 'background: rgba(212, 175, 55, 0.2); font-weight: bold;' : ''}">
+                            <td>#${index + 1}</td>
+                            <td>${student.full_name}</td>
+                            <td>${student.class_name || 'N/A'}</td>
+                            <td><span class="rank-badge">${student.icon || '📜'} ${student.rank}</span></td>
+                            <td style="color: var(--primary-color);">${student.total_score}</td>
+                        </tr>
+                    `;
+                });
+
+            } catch (e) {
+                console.error(e);
+            }
+        });
+
+        function createPodium(student, rank) {
+            const colors = {1: 'Vàng', 2: 'Bạc', 3: 'Đồng'};
+            return `
+                <div class="podium podium-${rank}">
+                    <div class="avatar-circle">${student.icon || '👤'}</div>
+                    <div style="font-weight: bold; text-align: center; font-size: 0.9rem;">${student.full_name}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">${student.rank}</div>
+                    <div style="font-size: 1.2rem; color: var(--primary-color); margin-top: auto; font-family: 'Playfair Display', serif;">${student.total_score}</div>
+                    <div style="position: absolute; bottom: -30px; font-weight: bold; color: var(--text-muted)">Top ${rank}</div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

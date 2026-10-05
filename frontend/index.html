@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - Hoàng Cung Học Đường</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-box {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .logo-placeholder {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .error-message {
+            color: var(--danger);
+            background: rgba(220, 53, 69, 0.1);
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="glass-panel login-box animate-fade-in">
+            <div class="logo-placeholder">🏯</div>
+            <h2 class="mb-2">Hoàng Cung Học Đường</h2>
+            
+            <div id="errorMsg" class="error-message"></div>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">Tên đăng nhập (Thẻ Bài)</label>
+                    <input type="text" id="username" required autocomplete="username">
+                </div>
+                
+                <div class="input-group mb-2">
+                    <label for="password">Mật khẩu (Khẩu Quyết)</label>
+                    <input type="password" id="password" required autocomplete="current-password">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Tiến Cung (Đăng nhập)</button>
+            </form>
+
+            <p class="mt-2" style="font-size: 0.8rem; color: var(--text-muted);">
+                Tài khoản demo:<br>
+                Admin: admin / admin123<br>
+                Học sinh: student01 / student123<br>
+                Giáo viên: teacher01 / teacher123
+            </p>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

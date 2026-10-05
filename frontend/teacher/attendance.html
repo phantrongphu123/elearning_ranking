@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Điểm Danh - Giáo Viên</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏯</div>
+                <h2 style="font-size: 1.2rem;">Hoàng Cung<br>Học Đường</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">Tổng Quan</a>
+                <a href="assignments.html" class="nav-item">Ban Bố Tấu Chương</a>
+                <a href="submissions.html" class="nav-item">Chấm Điểm</a>
+                <a href="attendance.html" class="nav-item active">Điểm Danh</a>
+            </nav>
+            <div style="padding: 1.5rem; text-align: center;">
+                <button onclick="logout()" class="btn btn-secondary" style="width: 100%;">Xuất Cung</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <h1 style="font-size: 1.8rem;">Điểm Danh Hàng Ngày</h1>
+            </header>
+
+            <div class="animate-fade-in glass-panel mb-2">
+                <div class="d-flex gap-1 align-center" style="gap: 1rem;">
+                    <div style="flex: 1">
+                        <label>Chọn Lớp (Class ID)</label>
+                        <input type="number" id="classSelect" placeholder="Nhập ID lớp (VD: 1)" value="1">
+                    </div>
+                    <div style="flex: 1">
+                        <label>Ngày Điểm Danh</label>
+                        <input type="date" id="dateSelect">
+                    </div>
+                    <div>
+                        <label>&nbsp;</label>
+                        <button class="btn btn-primary" onclick="loadStudents()">Tải Danh Sách</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="animate-fade-in glass-panel" id="attendancePanel" style="display: none;">
+                <form id="attendanceForm">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mã HS</th>
+                                    <th>Họ Tên</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Ghi Chú</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTable"></tbody>
+                        </table>
+                    </div>
+                    <div class="mt-2 text-center">
+                        <button type="submit" class="btn btn-primary" style="padding: 1rem 3rem;">Lưu Điểm Danh</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="attendance.js"></script>
+</body>
+</html>

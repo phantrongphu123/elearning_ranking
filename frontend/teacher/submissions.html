@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chấm Điểm - Giáo Viên</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .badge { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; }
+        .badge-graded { background: rgba(40,167,69,0.2); color: #28a745; }
+        .badge-pending { background: rgba(255,193,7,0.2); color: #ffc107; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-content { background: var(--bg-dark); width: 90%; max-width: 600px; padding: 2rem; border-radius: 12px; border: 1px solid var(--glass-border); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); max-height: 90vh; overflow-y: auto;}
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏯</div>
+                <h2 style="font-size: 1.2rem;">Hoàng Cung<br>Học Đường</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">Tổng Quan</a>
+                <a href="assignments.html" class="nav-item">Ban Bố Tấu Chương</a>
+                <a href="submissions.html" class="nav-item active">Chấm Điểm</a>
+                <a href="attendance.html" class="nav-item">Điểm Danh</a>
+            </nav>
+            <div style="padding: 1.5rem; text-align: center;">
+                <button onclick="logout()" class="btn btn-secondary" style="width: 100%;">Xuất Cung</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <h1 style="font-size: 1.8rem;">Chấm Điểm Bài Nộp</h1>
+            </header>
+
+            <div class="animate-fade-in glass-panel">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bài Tập</th>
+                                <th>Học Sinh</th>
+                                <th>Trạng Thái Nộp</th>
+                                <th>Điểm Hệ Thống</th>
+                                <th>Tình Trạng</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subsTable">
+                            <tr><td colspan="6" class="text-center">Đang tải...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Grade Modal -->
+    <div id="gradeModal" class="modal">
+        <div class="modal-content">
+            <div class="d-flex justify-between align-center mb-2">
+                <h2>Phê Duyệt / Chỉnh Điểm</h2>
+                <button class="btn btn-secondary" onclick="closeModal()">Đóng</button>
+            </div>
+            <div id="gradeDetails" class="mb-2 text-muted" style="font-size: 0.9rem;"></div>
+            <form id="gradeForm">
+                <div class="input-group">
+                    <label>Điểm số (Thay đổi nếu cần)</label>
+                    <input type="number" step="0.1" name="score" id="gradeScore" required>
+                </div>
+                <div class="input-group mb-2">
+                    <label>Lời phê (Phê duyệt Tấu chương)</label>
+                    <textarea name="teacher_comment" id="gradeComment" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Lưu Lời Phê & Điểm</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="submissions.js"></script>
+</body>
+</html>
