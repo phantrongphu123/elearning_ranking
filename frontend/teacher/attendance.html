@@ -6,42 +6,109 @@
     <title>Điểm Danh Hoàng Cung - Thái Phó</title>
     <link rel="stylesheet" href="../css/style.css">
     <style>
-        .attendance-status-radios {
+        .attendance-stats-bar {
             display: flex;
-            gap: 0.5rem;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0.85rem 1.25rem;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: var(--radius-sm);
+            margin-bottom: 1rem;
+        }
+
+        .stats-badges-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             flex-wrap: wrap;
         }
 
-        .status-radio-label {
-            display: flex;
+        .stat-pill {
+            display: inline-flex;
             align-items: center;
             gap: 0.35rem;
-            padding: 0.45rem 0.75rem;
-            background: #FFFFFF;
-            border: 1px solid #CBD5E1;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
+            padding: 0.3rem 0.65rem;
+            border-radius: 999px;
             font-size: 0.82rem;
             font-weight: 600;
+        }
+
+        .stat-pill-total { background: #F1F5F9; color: #475569; }
+        .stat-pill-present { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; }
+        .stat-pill-absent { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
+
+        .absent-toggle-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.45rem 0.85rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid #CBD5E1;
+            background: #FFFFFF;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            user-select: none;
             transition: all 0.2s;
         }
 
-        .status-radio-label input[type="radio"] {
-            width: 15px;
-            height: 15px;
-            accent-color: var(--gold-primary);
+        .absent-toggle-box:hover {
+            border-color: #94A3B8;
+        }
+
+        .absent-toggle-box input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            accent-color: #DC2626;
             cursor: pointer;
         }
 
-        .status-present { color: #059669; background: #ECFDF5; border-color: #A7F3D0; }
-        .status-late { color: #D97706; background: #FFFBEB; border-color: #FDE68A; }
-        .status-excused { color: #2563EB; background: #EFF6FF; border-color: #BFDBFE; }
-        .status-unexcused { color: #DC2626; background: #FEF2F2; border-color: #FECACA; }
+        .absent-toggle-box.is-absent {
+            background: #FEF2F2;
+            border-color: #F87171;
+            color: #991B1B;
+        }
+
+        tr.row-absent {
+            background-color: #FFF5F5 !important;
+        }
+
+        .absence-type-select {
+            font-size: 0.82rem;
+            padding: 0.4rem 0.65rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid #CBD5E1;
+            background: #FFFFFF;
+            min-width: 170px;
+        }
+
+        .absence-note-input {
+            font-size: 0.82rem;
+            padding: 0.4rem 0.65rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid #CBD5E1;
+            background: #FFFFFF;
+            width: 100%;
+        }
+
+        .present-status-tag {
+            display: inline-block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #059669;
+            background: #ECFDF5;
+            padding: 0.25rem 0.6rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid #A7F3D0;
+        }
 
         @media (max-width: 768px) {
-            .attendance-status-radios {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
+            .attendance-stats-bar {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
@@ -88,7 +155,7 @@
                     <button class="menu-toggle" aria-label="Mở Menu">Menu</button>
                     <div class="topbar-title">
                         <h1>Điểm Danh Khảo Hạch · <span class="hanzi">点名殿</span></h1>
-                        <p>Kiểm tra chuyên cần, chấm điểm danh theo quy chế hoàng cung</p>
+                        <p>Mặc định cả lớp có mặt. Chỉ cần chọn học sinh vắng hoặc đi trễ</p>
                     </div>
                 </div>
 
@@ -128,10 +195,10 @@
 
                         <div style="display: flex; gap: 0.5rem; align-items: flex-end; padding-top: 1.35rem;">
                             <button class="btn btn-primary" onclick="loadClassStudents()">
-                                <span>Tải Học Sinh</span>
+                                <span>Tải Lại Lớp</span>
                             </button>
                             <button class="btn btn-secondary" onclick="markAllPresent()">
-                                <span>Tất Cả Có Mặt (+5đ)</span>
+                                <span>Cả Lớp Có Mặt</span>
                             </button>
                         </div>
                     </div>
@@ -140,6 +207,18 @@
                 <!-- Students Roster Panel -->
                 <div class="glass-panel" id="rosterPanel" style="display: none;">
                     <form id="attendanceForm">
+                        <!-- Stats & Info Bar -->
+                        <div class="attendance-stats-bar">
+                            <div style="font-size: 0.85rem; color: #475569;">
+                                <span>Mặc định cả lớp <strong>có mặt</strong>. Chỉ cần tích chọn học sinh <strong>vắng</strong> hoặc <strong>trễ</strong>.</span>
+                            </div>
+                            <div class="stats-badges-group">
+                                <span class="stat-pill stat-pill-total">Sĩ số: <strong id="statTotalCount">0</strong></span>
+                                <span class="stat-pill stat-pill-present">Có mặt: <strong id="statPresentCount">0</strong></span>
+                                <span class="stat-pill stat-pill-absent">Vắng/Trễ: <strong id="statAbsentCount">0</strong></span>
+                            </div>
+                        </div>
+
                         <div class="table-container mb-2">
                             <table>
                                 <thead>
@@ -147,8 +226,9 @@
                                         <th>Mã Học Tử</th>
                                         <th>Họ Và Tên</th>
                                         <th>Tước Vị</th>
-                                        <th>Trạng Thái Chuyên Cần</th>
-                                        <th>Ghi Chú</th>
+                                        <th>Trạng Thái Điểm Danh</th>
+                                        <th>Hình Thức Vắng / Trễ</th>
+                                        <th>Lý Do / Ghi Chú</th>
                                     </tr>
                                 </thead>
                                 <tbody id="rosterTableBody">
@@ -158,8 +238,8 @@
                         </div>
 
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary" style="padding: 0.85rem 3rem; font-size: 1rem;">
-                                <span>Lưu Điểm Danh & Cập Nhật Điểm</span>
+                            <button type="submit" id="submitAttendanceBtn" class="btn btn-primary" style="padding: 0.85rem 3rem; font-size: 1rem;">
+                                <span>Lưu Điểm Danh</span>
                             </button>
                         </div>
                     </form>

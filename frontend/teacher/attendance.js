@@ -74,19 +74,20 @@ async function loadClassStudents() {
     const tbody = document.getElementById('rosterTableBody');
 
     try {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center" style="padding: 2.5rem; color: var(--text-muted)">Đang nạp danh sách học tử...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center" style="padding: 2.5rem; color: var(--text-muted)">Đang nạp danh sách học tử...</td></tr>';
         rosterPanel.style.display = 'block';
 
         // Load students of this class
         currentStudents = await fetchAPI(`/students?class_id=${classId}`);
 
         if (!currentStudents || currentStudents.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" class="text-center" style="padding: 2.5rem; color: var(--text-muted)">Lớp này chưa có học tử nào.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center" style="padding: 2.5rem; color: var(--text-muted)">Lớp này chưa có học tử nào.</td></tr>';
             rosterPanel.style.display = 'block';
+            updateAttendanceSummary();
             return;
         }
 
-        // Try to load any existing attendance for this class & date
+        // Load any existing absent/late records for this class & date
         let existingMap = new Map();
         try {
             const existing = await fetchAPI(`/attendance?class_id=${classId}&date=${dateStr}`);
@@ -97,11 +98,12 @@ async function loadClassStudents() {
 
         tbody.innerHTML = currentStudents.map(s => {
             const saved = existingMap.get(String(s.student_id));
-            const currentStatus = saved ? saved.status : 'present';
-            const savedNote = saved ? (saved.note || '') : '';
+            const isAbsent = !!(saved && saved.status && saved.status !== 'present');
+            const absenceType = isAbsent ? saved.status : 'absent_unexcused';
+            const savedNote = isAbsent ? (saved.note || '') : '';
 
             return `
-                <tr>
+                <tr id="row_${s.student_id}" class="${isAbsent ? 'row-absent' : ''}">
                     <td style="font-size: 0.85rem; color: var(--text-muted); font-family: monospace;">${escapeHtml(s.student_code)}</td>
                     <td>
                         <strong style="color: var(--gold-light); font-size: 0.95rem;">${escapeHtml(s.full_name)}</strong>
@@ -110,40 +112,95 @@ async function loadClassStudents() {
                         <span class="rank-badge sm">${escapeHtml(s.rank || 'Học sinh')}</span>
                     </td>
                     <td>
-                        <div class="attendance-status-radios">
-                            <label class="status-radio-label status-present">
-                                <input type="radio" name="status_${s.student_id}" value="present" ${currentStatus === 'present' ? 'checked' : ''}>
-                                <span>Có mặt (+5đ)</span>
-                            </label>
-                            <label class="status-radio-label status-late">
-                                <input type="radio" name="status_${s.student_id}" value="late" ${currentStatus === 'late' ? 'checked' : ''}>
-                                <span>Đi trễ (+2đ)</span>
-                            </label>
-                            <label class="status-radio-label status-excused">
-                                <input type="radio" name="status_${s.student_id}" value="absent_excused" ${currentStatus === 'absent_excused' ? 'checked' : ''}>
-                                <span>Có phép (0đ)</span>
-                            </label>
-                            <label class="status-radio-label status-unexcused">
-                                <input type="radio" name="status_${s.student_id}" value="absent_unexcused" ${currentStatus === 'absent_unexcused' ? 'checked' : ''}>
-                                <span>Không phép (-10đ)</span>
-                            </label>
-                        </div>
+                        <label class="absent-toggle-box ${isAbsent ? 'is-absent' : ''}" id="toggle_box_${s.student_id}">
+                            <input type="checkbox" id="check_absent_${s.student_id}" ${isAbsent ? 'checked' : ''} onchange="onAbsentToggle(${s.student_id})">
+                            <span id="label_absent_${s.student_id}">${isAbsent ? 'Vắng mặt' : 'Có mặt'}</span>
+                        </label>
                     </td>
                     <td>
-                        <input type="text" name="note_${s.student_id}" value="${escapeHtml(savedNote)}" placeholder="Ghi chú (nếu có)..." style="font-size: 0.85rem; padding: 0.45rem 0.75rem;">
+                        <select class="absence-type-select" id="type_${s.student_id}" ${isAbsent ? '' : 'disabled'} onchange="updateAttendanceSummary()">
+                            <option value="absent_unexcused" ${absenceType === 'absent_unexcused' ? 'selected' : ''}>Vắng không phép (-10đ)</option>
+                            <option value="absent_excused" ${absenceType === 'absent_excused' ? 'selected' : ''}>Vắng có phép (0đ)</option>
+                            <option value="late" ${absenceType === 'late' ? 'selected' : ''}>Đi học muộn (+2đ)</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="absence-note-input" id="note_${s.student_id}" value="${escapeHtml(savedNote)}" placeholder="Lý do (nếu vắng)..." ${isAbsent ? '' : 'disabled'}>
                     </td>
                 </tr>
             `;
         }).join('');
 
         rosterPanel.style.display = 'block';
+        updateAttendanceSummary();
 
         if (existingMap.size > 0) {
-            showToast(`Đã nạp dữ liệu điểm danh đã lưu ngày ${formatDate(dateStr, false)}`, 'info');
+            showToast(`Đã nạp dữ liệu ngày ${formatDate(dateStr, false)}: Có ${existingMap.size} học sinh ghi nhận vắng/trễ`, 'info');
         }
 
     } catch (e) {
         showToast('Lỗi tải danh sách học sinh: ' + e.message, 'error');
+    }
+}
+
+function onAbsentToggle(studentId) {
+    const chk = document.getElementById(`check_absent_${studentId}`);
+    const row = document.getElementById(`row_${studentId}`);
+    const toggleBox = document.getElementById(`toggle_box_${studentId}`);
+    const label = document.getElementById(`label_absent_${studentId}`);
+    const typeSelect = document.getElementById(`type_${studentId}`);
+    const noteInput = document.getElementById(`note_${studentId}`);
+
+    if (!chk) return;
+
+    if (chk.checked) {
+        if (row) row.classList.add('row-absent');
+        if (toggleBox) toggleBox.classList.add('is-absent');
+        if (label) label.textContent = 'Vắng mặt';
+        if (typeSelect) typeSelect.disabled = false;
+        if (noteInput) {
+            noteInput.disabled = false;
+            noteInput.focus();
+        }
+    } else {
+        if (row) row.classList.remove('row-absent');
+        if (toggleBox) toggleBox.classList.remove('is-absent');
+        if (label) label.textContent = 'Có mặt';
+        if (typeSelect) typeSelect.disabled = true;
+        if (noteInput) noteInput.disabled = true;
+    }
+
+    updateAttendanceSummary();
+}
+
+function updateAttendanceSummary() {
+    const totalCount = currentStudents.length;
+    let absentCount = 0;
+
+    currentStudents.forEach(s => {
+        const chk = document.getElementById(`check_absent_${s.student_id}`);
+        if (chk && chk.checked) {
+            absentCount++;
+        }
+    });
+
+    const presentCount = Math.max(0, totalCount - absentCount);
+
+    const totalEl = document.getElementById('statTotalCount');
+    const presentEl = document.getElementById('statPresentCount');
+    const absentEl = document.getElementById('statAbsentCount');
+    const submitBtn = document.getElementById('submitAttendanceBtn');
+
+    if (totalEl) totalEl.textContent = totalCount;
+    if (presentEl) presentEl.textContent = presentCount;
+    if (absentEl) absentEl.textContent = absentCount;
+
+    if (submitBtn) {
+        if (absentCount === 0) {
+            submitBtn.innerHTML = '<span>Lưu Điểm Danh (Cả lớp có mặt)</span>';
+        } else {
+            submitBtn.innerHTML = `<span>Lưu Điểm Danh (${absentCount} học sinh vắng/trễ)</span>`;
+        }
     }
 }
 
@@ -154,13 +211,23 @@ function markAllPresent() {
     }
 
     currentStudents.forEach(s => {
-        const radios = document.getElementsByName(`status_${s.student_id}`);
-        for (let r of radios) {
-            if (r.value === 'present') r.checked = true;
-        }
+        const chk = document.getElementById(`check_absent_${s.student_id}`);
+        const row = document.getElementById(`row_${s.student_id}`);
+        const toggleBox = document.getElementById(`toggle_box_${s.student_id}`);
+        const label = document.getElementById(`label_absent_${s.student_id}`);
+        const typeSelect = document.getElementById(`type_${s.student_id}`);
+        const noteInput = document.getElementById(`note_${s.student_id}`);
+
+        if (chk) chk.checked = false;
+        if (row) row.classList.remove('row-absent');
+        if (toggleBox) toggleBox.classList.remove('is-absent');
+        if (label) label.textContent = 'Có mặt';
+        if (typeSelect) typeSelect.disabled = true;
+        if (noteInput) noteInput.disabled = true;
     });
 
-    showToast('Đã chọn "Có mặt (+5đ)" cho tất cả học sinh!', 'success');
+    updateAttendanceSummary();
+    showToast('Đã đặt toàn bộ học sinh là Có mặt!', 'success');
 }
 
 function initAttendanceForm() {
@@ -178,39 +245,43 @@ function initAttendanceForm() {
             return;
         }
 
-        const formData = new FormData(form);
-        const records = [];
+        // Only collect records for students marked absent or late
+        const absentRecords = [];
 
         currentStudents.forEach(s => {
-            const status = formData.get(`status_${s.student_id}`) || 'present';
-            const note = formData.get(`note_${s.student_id}`) || '';
-            records.push({
-                student_id: parseInt(s.student_id),
-                status: status,
-                note: note.trim()
-            });
+            const chk = document.getElementById(`check_absent_${s.student_id}`);
+            if (chk && chk.checked) {
+                const typeSelect = document.getElementById(`type_${s.student_id}`);
+                const noteInput = document.getElementById(`note_${s.student_id}`);
+                absentRecords.push({
+                    student_id: parseInt(s.student_id),
+                    status: typeSelect ? typeSelect.value : 'absent_unexcused',
+                    note: noteInput ? noteInput.value.trim() : ''
+                });
+            }
         });
 
-        const submitBtn = form.querySelector('button[type="submit"]');
+        const submitBtn = document.getElementById('submitAttendanceBtn');
         try {
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span>Đang ghi sổ điểm danh...</span>';
 
-            await fetchAPI('/attendance', {
+            const res = await fetchAPI('/attendance', {
                 method: 'POST',
                 body: JSON.stringify({
                     class_id: parseInt(classId),
                     date: dateStr,
-                    records: records
+                    records: absentRecords
                 })
             });
 
-            showToast(`Đã lưu điểm danh ngày ${formatDate(dateStr, false)} thành công! Điểm đã được cập nhật.`, 'success');
+            showToast(res.message || 'Lưu điểm danh thành công!', 'success');
+            updateAttendanceSummary();
         } catch (err) {
             showToast('Lỗi lưu điểm danh: ' + err.message, 'error');
         } finally {
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<span>Lưu Điểm Danh & Cập Nhật Điểm</span>';
+            updateAttendanceSummary();
         }
     });
 }

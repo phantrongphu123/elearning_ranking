@@ -177,14 +177,25 @@ def student_dashboard(current_user: dict = Depends(get_current_user)):
     position_rows = sorted_students[sorted_s_col == s_id]
     position = int(position_rows.index[0]) + 1 if not position_rows.empty else "-"
     
-    # Attendance streak
+    # Attendance streak / absence calculation
     attendance_df = excel_service.read_sheet("DiemDanh")
-    att_s_col = pd.to_numeric(attendance_df["student_id"], errors="coerce").fillna(0).astype(int)
-    student_att = attendance_df[
-        (att_s_col == s_id) &
-        (attendance_df["status"] == "present")
-    ]
-    streak = len(student_att)  # Simplified streak count
+    if not attendance_df.empty and "student_id" in attendance_df.columns:
+        att_s_col = pd.to_numeric(attendance_df["student_id"], errors="coerce").fillna(0).astype(int)
+        student_absent = attendance_df[
+            (att_s_col == s_id) &
+            (attendance_df["status"].isin(["absent_unexcused", "absent_excused"]))
+        ]
+        absent_count = len(student_absent)
+        present_count = len(attendance_df[(att_s_col == s_id) & (attendance_df["status"] == "present")])
+        
+        if present_count > 0:
+            streak = present_count
+        else:
+            c_col = pd.to_numeric(attendance_df["class_id"], errors="coerce").fillna(0).astype(int)
+            total_sessions = attendance_df[c_col == int(float(class_id or 0))]["date"].nunique() if class_id else 0
+            streak = max(0, total_sessions - absent_count)
+    else:
+        streak = 0
     
     return {
         "student": student,
