@@ -77,9 +77,11 @@ function filterSubmissions() {
                 </td>
                 <td>${statusBadge}</td>
                 <td>
-                    <button class="btn btn-primary btn-sm" onclick="openGradeModal(${s.submission_id}, '${escapeHtml(s.student_name)}', '${escapeHtml(s.assignment_title)}', ${s.score}, '${escapeHtml(s.teacher_comment || '')}')">
-                        <span>Chấm Điểm</span>
-                    </button>
+                    <div class="table-actions">
+                        <button class="btn btn-primary btn-sm" onclick="openGradeModal(${s.submission_id}, '${escapeHtml(s.student_name)}', '${escapeHtml(s.assignment_title)}', ${s.score}, '${escapeHtml(s.teacher_comment || '')}')">
+                            <span>Chấm Điểm</span>
+                        </button>
+                    </div>
                 </td>
             </tr>
         `;

@@ -200,7 +200,7 @@ function filterStudentsList() {
                     ${s.total_score}đ
                 </td>
                 <td>
-                    <div class="d-flex gap-1" style="align-items: center;">
+                    <div class="table-actions">
                         <button class="btn btn-secondary btn-sm" onclick="openQuickScoreForStudent(${s.student_id})">
                             <span>Cộng/Trừ Điểm</span>
                         </button>

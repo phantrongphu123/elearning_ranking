@@ -97,7 +97,7 @@ async function openScoreHistoryModal() {
 
         container.innerHTML = `
             <div class="table-container">
-                <table>
+                <table class="student-score-table">
                     <thead>
                         <tr>
                             <th>Thời Gian</th>

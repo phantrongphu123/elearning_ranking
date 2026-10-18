@@ -63,7 +63,7 @@ async function loadTeacherAssignments() {
                         ${a.submission_count || 0} bài
                     </td>
                     <td>
-                        <div class="d-flex gap-1" style="align-items: center;">
+                        <div class="table-actions">
                             <button class="btn btn-secondary btn-sm" onclick="openManageQuestions(${a.assignment_id}, '${escapeHtml(a.title)}')">
                                 <span>Câu Hỏi</span>
                             </button>

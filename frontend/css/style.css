@@ -110,6 +110,10 @@ button, input, select, textarea {
     position: relative;
     overflow: hidden;
     transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .glass-panel:hover {
@@ -122,6 +126,9 @@ button, input, select, textarea {
     display: flex;
     min-height: 100vh;
     width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    position: relative;
 }
 
 /* Desktop Sidebar */
@@ -259,11 +266,15 @@ button, input, select, textarea {
 
 /* Main Content Area */
 .main-content {
-    flex: 1;
+    flex: 1 1 0%;
     margin-left: var(--sidebar-width);
     padding: 1.75rem 2.25rem 5rem 2.25rem;
     min-height: 100vh;
-    max-width: 1400px;
+    max-width: calc(100vw - var(--sidebar-width));
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 /* Topbar */
@@ -586,16 +597,20 @@ select option {
 /* Tables */
 .table-container {
     width: 100%;
-    overflow-x: auto;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
     background: #FFFFFF;
     position: relative;
+    box-sizing: border-box;
 }
 
 .table-container::-webkit-scrollbar {
-    height: 6px;
+    height: 7px;
+    display: block;
 }
 
 .table-container::-webkit-scrollbar-track {
@@ -604,12 +619,12 @@ select option {
 }
 
 .table-container::-webkit-scrollbar-thumb {
-    background: #CBD5E1;
+    background: #FCD34D;
     border-radius: var(--radius-full);
 }
 
 .table-container::-webkit-scrollbar-thumb:hover {
-    background: #94A3B8;
+    background: #F59E0B;
 }
 
 table {
@@ -618,6 +633,33 @@ table {
     border-collapse: collapse;
     text-align: left;
     white-space: nowrap;
+}
+
+.admin-table,
+.assignments-table,
+.submissions-table {
+    min-width: 780px;
+}
+
+.admin-students-table {
+    min-width: 820px;
+}
+
+.student-score-table {
+    min-width: 520px;
+}
+
+.table-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.table-actions .btn {
+    white-space: nowrap;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.8rem;
 }
 
 thead {
@@ -779,10 +821,16 @@ tbody tr:last-child td {
 
 .tab-content {
     display: none;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
 }
 
 .tab-content.active {
     display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     animation: fadeIn 0.3s ease;
 }
 
@@ -927,6 +975,9 @@ tbody tr:last-child td {
 
 .animate-fade-in {
     animation: fadeIn 0.4s ease forwards;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
 }
 
 /* Flex & Utility */
@@ -949,6 +1000,33 @@ tbody tr:last-child td {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
+}
+
+/* Universal Table Toolbar for Filters & Actions */
+.table-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.table-toolbar-filters {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.table-toolbar-filters input,
+.table-toolbar-filters select {
+    flex: 1;
+    min-width: 150px;
 }
 
 /* =======================================================
@@ -974,6 +1052,11 @@ tbody tr:last-child td {
 
     .main-content {
         margin-left: 0;
+        width: 100%;
+        max-width: 100vw;
+        min-width: 0;
+        box-sizing: border-box;
+        overflow-x: hidden;
         padding: 1.25rem 1.5rem calc(var(--mobile-nav-height) + 2rem + var(--safe-bottom)) 1.5rem;
     }
 
@@ -1040,16 +1123,29 @@ tbody tr:last-child td {
         font-size: 1.6rem;
     }
 
-    /* Filter Bar Stacking */
-    .filter-bar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.85rem;
+    /* Filter Bar & Table Toolbar Stacking */
+    .filter-bar,
+    .table-toolbar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.85rem !important;
     }
 
-    .filter-bar > div {
+    .table-toolbar-filters {
+        width: 100% !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.65rem !important;
+    }
+
+    .filter-bar > div,
+    .table-toolbar-filters input,
+    .table-toolbar-filters select,
+    .table-toolbar .btn,
+    .table-toolbar > button {
         max-width: 100% !important;
         width: 100% !important;
+        min-width: 100% !important;
     }
 
     /* Responsive Stacking Utility */

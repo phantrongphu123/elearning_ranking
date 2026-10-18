@@ -148,7 +148,7 @@
                             <span style="font-size: 0.85rem; color: #D97706; font-weight: 600;" id="dashSubmissionsStats">Bài nộp tuần này: 0</span>
                         </div>
                         <div class="table-container">
-                            <table>
+                            <table class="admin-table">
                                 <thead>
                                     <tr>
                                         <th>Thứ Hạng</th>
@@ -176,10 +176,10 @@
 
                 <!-- TAB 2: STUDENTS -->
                 <section id="tab-students" class="tab-content">
-                    <div class="glass-panel mb-2 d-flex justify-between align-center" style="gap: 1rem; flex-wrap: wrap;">
-                        <div class="d-flex gap-1 align-center" style="flex: 1; min-width: 280px; flex-wrap: wrap;">
-                            <input type="text" id="studentSearchInput" placeholder="Tìm tên hoặc mã học sinh..." style="flex: 1; min-width: 180px;" oninput="filterStudentsList()">
-                            <select id="studentClassFilterSelect" style="width: auto; min-width: 160px;" onchange="loadStudentsManagement()">
+                    <div class="glass-panel mb-2 table-toolbar">
+                        <div class="table-toolbar-filters">
+                            <input type="text" id="studentSearchInput" placeholder="Tìm tên hoặc mã học sinh..." oninput="filterStudentsList()">
+                            <select id="studentClassFilterSelect" onchange="loadStudentsManagement()">
                                 <option value="">Tất Cả Lớp</option>
                             </select>
                         </div>
@@ -190,7 +190,7 @@
 
                     <div class="glass-panel">
                         <div class="table-container">
-                            <table>
+                            <table class="admin-table admin-students-table">
                                 <thead>
                                     <tr>
                                         <th>Mã Học Tử</th>
@@ -212,7 +212,7 @@
 
                 <!-- TAB 3: TEACHERS -->
                 <section id="tab-teachers" class="tab-content">
-                    <div class="glass-panel mb-2 d-flex justify-between align-center" style="gap: 1rem; flex-wrap: wrap;">
+                    <div class="glass-panel mb-2 table-toolbar">
                         <div>
                             <h3 style="font-size: 1.25rem;">Danh Sách Thái Phó (Giáo Viên)</h3>
                             <p style="font-size: 0.85rem; color: var(--text-muted);">Quản lý tài khoản giảng dạy tiếng Trung</p>
@@ -224,7 +224,7 @@
 
                     <div class="glass-panel">
                         <div class="table-container">
-                            <table>
+                            <table class="admin-table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -245,7 +245,7 @@
 
                 <!-- TAB 4: CLASSES -->
                 <section id="tab-classes" class="tab-content">
-                    <div class="glass-panel mb-2 d-flex justify-between align-center" style="gap: 1rem; flex-wrap: wrap;">
+                    <div class="glass-panel mb-2 table-toolbar">
                         <div>
                             <h3 style="font-size: 1.25rem;">Danh Sách Lớp Học Triều Đình</h3>
                             <p style="font-size: 0.85rem; color: var(--text-muted);">Quản lý lớp học, sĩ số & giáo viên chủ nhiệm</p>
@@ -257,7 +257,7 @@
 
                     <div class="glass-panel">
                         <div class="table-container">
-                            <table>
+                            <table class="admin-table">
                                 <thead>
                                     <tr>
                                         <th>Mã Lớp</th>

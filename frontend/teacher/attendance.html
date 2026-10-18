@@ -143,6 +143,10 @@
         }
 
         @media (max-width: 768px) {
+            .attendance-controls > div {
+                min-width: 100% !important;
+                width: 100% !important;
+            }
             .attendance-stats-bar {
                 flex-direction: column;
                 align-items: stretch;
@@ -232,7 +236,7 @@
             <div class="animate-fade-in">
                 <!-- Selection Panel -->
                 <div class="glass-panel mb-2">
-                    <div class="d-flex gap-1 align-center" style="gap: 1rem; flex-wrap: wrap;">
+                    <div class="d-flex gap-1 align-center attendance-controls" style="gap: 1rem; flex-wrap: wrap;">
                         <div style="flex: 1; min-width: 200px;">
                             <label style="display: block; font-size: 0.85rem; color: #334155; font-weight: 600; margin-bottom: 0.35rem;">
                                 Lớp Học

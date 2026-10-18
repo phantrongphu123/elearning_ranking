@@ -198,22 +198,20 @@
 
             <div class="animate-fade-in">
                 <!-- Filters & Tabs -->
-                <div class="glass-panel mb-2" style="padding: 1.25rem;">
-                    <div class="d-flex justify-between align-center" style="gap: 1rem; flex-wrap: wrap;">
-                        <div class="tabs-nav" style="border-bottom: none; margin-bottom: 0;">
-                            <button class="tab-btn active" id="tabStudentsBtn" onclick="switchLBView('students')">
-                                <span>Bảng Vàng Học Sinh</span>
-                            </button>
-                            <button class="tab-btn" id="tabClassesBtn" onclick="switchLBView('classes')">
-                                <span>Xếp Hạng Lớp Học</span>
-                            </button>
-                        </div>
+                <div class="glass-panel mb-2 table-toolbar" style="padding: 1.25rem;">
+                    <div class="tabs-nav" style="border-bottom: none; margin-bottom: 0;">
+                        <button class="tab-btn active" id="tabStudentsBtn" onclick="switchLBView('students')">
+                            <span>Bảng Vàng Học Sinh</span>
+                        </button>
+                        <button class="tab-btn" id="tabClassesBtn" onclick="switchLBView('classes')">
+                            <span>Xếp Hạng Lớp Học</span>
+                        </button>
+                    </div>
 
-                        <div id="classFilterBox" style="min-width: 200px;">
-                            <select id="classFilterSelect" onchange="loadStudentLeaderboard()">
-                                <option value="">Toàn Bộ Lớp Học</option>
-                            </select>
-                        </div>
+                    <div id="classFilterBox" class="table-toolbar-filters" style="max-width: 300px;">
+                        <select id="classFilterSelect" onchange="loadStudentLeaderboard()">
+                            <option value="">Toàn Bộ Lớp Học</option>
+                        </select>
                     </div>
                 </div>
 
@@ -227,7 +225,7 @@
                     <!-- Leaderboard Table -->
                     <div class="glass-panel">
                         <div class="table-container">
-                            <table>
+                            <table class="admin-table">
                                 <thead>
                                     <tr>
                                         <th>Thứ Hạng</th>
@@ -249,7 +247,7 @@
                 <div id="classesViewContainer" style="display: none;">
                     <div class="glass-panel">
                         <div class="table-container">
-                            <table>
+                            <table class="admin-table">
                                 <thead>
                                     <tr>
                                         <th>Hạng</th>
