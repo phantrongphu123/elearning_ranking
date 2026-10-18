@@ -78,14 +78,14 @@ async function loadAdminDashboard() {
             if (data.top_students && data.top_students.length > 0) {
                 topTable.innerHTML = data.top_students.map((s, idx) => `
                     <tr>
-                        <td style="font-family: 'Cinzel', serif; font-weight: 700; color: ${idx === 0 ? 'var(--gold-light)' : 'inherit'};">
+                        <td style="font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif; font-weight: 700; color: ${idx === 0 ? 'var(--gold-light)' : 'inherit'};">
                             ${idx === 0 ? '👑 #1' : `#${idx + 1}`}
                         </td>
                         <td><strong>${escapeHtml(s.full_name)}</strong> (${escapeHtml(s.student_code)})</td>
                         <td>
                             <span class="rank-badge sm">${s.icon || '📜'} ${escapeHtml(s.rank || 'Học tử')}</span>
                         </td>
-                        <td style="font-family: 'Cinzel', serif; font-weight: 700; color: var(--gold-light);">
+                        <td style="font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif; font-weight: 700; color: var(--gold-light);">
                             ${s.total_score}đ
                         </td>
                     </tr>
@@ -196,7 +196,7 @@ function filterStudentsList() {
                         ${s.icon || '📜'} ${escapeHtml(s.rank || 'Học tử')}
                     </span>
                 </td>
-                <td style="font-family: 'Cinzel', serif; font-weight: 700; color: var(--gold-light);">
+                <td style="font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif; font-weight: 700; color: var(--gold-light);">
                     ${s.total_score}đ
                 </td>
                 <td>

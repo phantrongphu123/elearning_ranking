@@ -72,7 +72,7 @@ function filterSubmissions() {
                 <td><strong style="color: var(--gold-light);">${escapeHtml(s.student_name || 'Học tử')}</strong></td>
                 <td style="font-size: 0.85rem; color: var(--text-muted);">${formatDate(s.submitted_at)}</td>
                 <td>${lateBadge}</td>
-                <td style="font-family: 'Cinzel', serif; font-weight: 700; color: var(--gold-light); font-size: 1.05rem;">
+                <td style="font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif; font-weight: 700; color: var(--gold-light); font-size: 1.05rem;">
                     ${s.score ?? 0}đ
                 </td>
                 <td>${statusBadge}</td>

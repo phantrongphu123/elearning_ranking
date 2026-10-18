@@ -91,7 +91,7 @@
 
         .podium-rank-tag {
             font-size: 1.8rem;
-            font-family: 'Cinzel', serif;
+            font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif;
             font-weight: 800;
             line-height: 1;
             color: #1E293B;
@@ -100,7 +100,7 @@
         .podium-score {
             font-size: 1.25rem;
             color: #D97706;
-            font-family: 'Cinzel', serif;
+            font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif;
             font-weight: 700;
             margin-top: 0.35rem;
         }
@@ -325,7 +325,7 @@
 
                 tbody.innerHTML = currentClassesLBData.map((c, idx) => `
                     <tr>
-                        <td style="font-family:'Cinzel', serif; font-weight:700; color:${idx < 3 ? 'var(--gold-light)' : 'var(--text-muted)'};">
+                        <td style="font-family:'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif; font-weight:700; color:${idx < 3 ? 'var(--gold-light)' : 'var(--text-muted)'};">
                             ${idx === 0 ? '👑 #1' : `#${idx + 1}`}
                         </td>
                         <td><strong>${escapeHtml(c.class_name)}</strong></td>
@@ -416,7 +416,7 @@
 
                 return `
                     <tr class="${isMe ? 'current-user-row' : ''}">
-                        <td style="font-family:'Cinzel', serif; font-weight:700; color:${position <= 3 ? 'var(--gold-light)' : 'var(--text-muted)'};">
+                        <td style="font-family:'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif; font-weight:700; color:${position <= 3 ? 'var(--gold-light)' : 'var(--text-muted)'};">
                             #${position}
                         </td>
                         <td>
@@ -425,7 +425,7 @@
                         </td>
                         <td style="color:var(--text-muted);">${escapeHtml(s.class_name || 'N/A')}</td>
                         <td>${rankBadge}</td>
-                        <td style="color:#D97706; font-weight:700; font-family:'Cinzel', serif;">
+                        <td style="color:#D97706; font-weight:700; font-family:'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif;">
                             ${s.total_score}đ
                         </td>
                     </tr>

@@ -126,7 +126,7 @@ async function openScoreHistoryModal() {
                                     <td style="font-size: 0.82rem; color: var(--text-muted);">${formatDate(s.created_at)}</td>
                                     <td><span class="badge ${isPositive ? 'badge-success' : 'badge-danger'}">${typeLabels[s.type] || s.type}</span></td>
                                     <td>${s.reason || 'Cập nhật điểm số'}</td>
-                                    <td style="font-weight: 700; color: ${pointClass}; font-family: 'Cinzel', serif;">${pointSign}</td>
+                                    <td style="font-weight: 700; color: ${pointClass}; font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif;">${pointSign}</td>
                                 </tr>
                             `;
                         }).join('')}
