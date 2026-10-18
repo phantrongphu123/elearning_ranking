@@ -29,33 +29,35 @@ def seed_all():
          "status": "active", "created_at": now.isoformat()},
         # Teachers
         {"user_id": 2, "username": "teacher01", "password_hash": hash_password("teacher123"),
-         "full_name": "Nguyễn Thị Lan", "role": "teacher", "student_id": "", "class_id": "",
-         "status": "active", "created_at": now.isoformat()},
-        {"user_id": 3, "username": "teacher02", "password_hash": hash_password("teacher123"),
-         "full_name": "Trần Văn Minh", "role": "teacher", "student_id": "", "class_id": "",
+         "full_name": "Nguyễn Thị Lan (GVCN 10A4)", "role": "teacher", "student_id": "", "class_id": "1",
          "status": "active", "created_at": now.isoformat()},
     ]
 
-    # Students (20 students)
-    student_names_female = [
-        "Nguyễn Thị Hoa", "Trần Thị Mai", "Lê Thị Lan", "Phạm Thị Hương",
-        "Vũ Thị Ngọc", "Đặng Thị Thủy", "Bùi Thị Linh", "Hoàng Thị Yến",
-        "Phan Thị Trang", "Ngô Thị Thu",
-    ]
-    student_names_male = [
-        "Nguyễn Văn An", "Trần Văn Bình", "Lê Văn Cường", "Phạm Văn Dũng",
-        "Vũ Văn Em", "Đặng Văn Phúc", "Bùi Văn Giang", "Hoàng Văn Hải",
-        "Phan Văn Ích", "Ngô Văn Khoa",
+    student_data = [
+        ("Ngô Vĩnh Thái", "male", 1350),
+        ("Trương Quốc Tiến", "male", 980),
+        ("Nguyễn Minh Anh", "female", 380),
+        ("Hoàng Gia Hân", "female", 1550),
+        ("Lê Minh Tuệ", "female", 540),
+        ("Trần Ngọc Phương Anh", "female", 1220),
+        ("Lê Phương Linh", "female", 870),
+        ("Nguyễn Khánh Uyên", "female", 650),
+        ("Phạm Gia Bách", "male", 720),
+        ("Đinh Hoàng Bảo Linh", "female", 250),
+        ("Nguyễn Ngân Nguyệt", "female", 160),
+        ("Nguyễn Xuân Thủy", "male", 320),
+        ("Hoàng Thanh Tùng", "male", 450),
+        ("Dương Nguyễn Vân Khánh", "female", 120),
+        ("Võ Minh Nam", "male", 200),
+        ("Nguyễn Gia Khánh", "male", 80),
+        ("Nguyễn Nhã Linh", "female", 50),
+        ("Nguyễn Minh Khuê", "female", 30),
     ]
 
-    student_scores = [1820, 1650, 1520, 1380, 1250, 1100, 980, 850, 720, 600,
-                      480, 380, 290, 210, 150, 90, 60, 35, 15, 5]
-
-    for i, (score, name) in enumerate(zip(student_scores, student_names_female + student_names_male)):
+    for i, (name, gender, score) in enumerate(student_data):
         sid = i + 1
-        uid = sid + 3  # user_id starts after admin+teachers
-        gender = "female" if i < 10 else "male"
-        class_id = 1 if i < 7 else (2 if i < 14 else 3)
+        uid = sid + 2  # user_id starts after admin+teacher01
+        class_id = 1
         
         from app.services.rank_service import calculate_rank
         rank_info = calculate_rank(score, gender)
@@ -76,7 +78,7 @@ def seed_all():
             "student_id": sid,
             "student_code": f"HS{sid:04d}",
             "full_name": name,
-            "date_of_birth": f"{2008 + random.randint(0, 2)}-{random.randint(1,12):02d}-{random.randint(1,28):02d}",
+            "date_of_birth": "2009-01-01",
             "gender": gender,
             "class_id": class_id,
             "total_score": score,
@@ -94,9 +96,7 @@ def seed_all():
     # ── 2. CLASSES ────────────────────────────────────────────────────────────
     print("🏫 Tạo lớp học...")
     classes = [
-        {"class_id": 1, "class_code": "12A1", "class_name": "Lớp 12A1", "teacher_id": 2, "school_year": "2026-2027", "status": "active"},
-        {"class_id": 2, "class_code": "12A2", "class_name": "Lớp 12A2", "teacher_id": 3, "school_year": "2026-2027", "status": "active"},
-        {"class_id": 3, "class_code": "11A1", "class_name": "Lớp 11A1", "teacher_id": 2, "school_year": "2026-2027", "status": "active"},
+        {"class_id": 1, "class_code": "10A4", "class_name": "Lớp 10A4 - Càn Long Cung", "teacher_id": 2, "school_year": "2025-2026", "status": "active"},
     ]
     excel_service.write_sheet("LopHoc", pd.DataFrame(classes))
     print(f"  ✓ {len(classes)} lớp đã tạo")

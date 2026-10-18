@@ -19,7 +19,7 @@ from app.services.excel_service import SHEET_COLUMNS
 
 # ── Cấu hình ────────────────────────────────────────────────
 SHEET_ID = "1Abfw5CMLtseRVwoXOgTjnkEpjGkzHhkg5nD4PcBOExk"
-CREDENTIALS_FILE = "service_account.json"
+CREDENTIALS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "service_account.json")
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive",
@@ -75,33 +75,43 @@ users = [
     {"user_id": 1, "username": "admin",      "password_hash": hash_password("admin123"),
      "full_name": "Hoàng Đế - Admin",  "role": "admin",   "student_id": "", "class_id": "", "status": "active", "created_at": now.isoformat()},
     {"user_id": 2, "username": "teacher01",  "password_hash": hash_password("teacher123"),
-     "full_name": "Nguyễn Thị Lan",    "role": "teacher", "student_id": "", "class_id": "", "status": "active", "created_at": now.isoformat()},
-    {"user_id": 3, "username": "teacher02",  "password_hash": hash_password("teacher123"),
-     "full_name": "Trần Văn Minh",     "role": "teacher", "student_id": "", "class_id": "", "status": "active", "created_at": now.isoformat()},
+     "full_name": "Nguyễn Thị Lan (GVCN 10A4)", "role": "teacher", "student_id": "", "class_id": "1", "status": "active", "created_at": now.isoformat()},
 ]
 
 from app.services.rank_service import calculate_rank
 
 student_names = [
-    ("Nguyễn Thị Hoa", "female"), ("Trần Thị Mai", "female"), ("Lê Thị Lan", "female"),
-    ("Phạm Thị Hương", "female"), ("Vũ Thị Ngọc", "female"), ("Đặng Thị Thủy", "female"),
-    ("Bùi Thị Linh", "female"), ("Hoàng Thị Yến", "female"), ("Phan Thị Trang", "female"),
-    ("Ngô Thị Thu", "female"),
-    ("Nguyễn Văn An", "male"), ("Trần Văn Bình", "male"), ("Lê Văn Cường", "male"),
-    ("Phạm Văn Dũng", "male"), ("Vũ Văn Em", "male"), ("Đặng Văn Phúc", "male"),
-    ("Bùi Văn Giang", "male"), ("Hoàng Văn Hải", "male"), ("Phan Văn Ích", "male"),
-    ("Ngô Văn Khoa", "male"),
+    ("Ngô Vĩnh Thái", "male"),
+    ("Trương Quốc Tiến", "male"),
+    ("Nguyễn Minh Anh", "female"),
+    ("Hoàng Gia Hân", "female"),
+    ("Lê Minh Tuệ", "female"),
+    ("Trần Ngọc Phương Anh", "female"),
+    ("Lê Phương Linh", "female"),
+    ("Nguyễn Khánh Uyên", "female"),
+    ("Phạm Gia Bách", "male"),
+    ("Đinh Hoàng Bảo Linh", "female"),
+    ("Nguyễn Ngân Nguyệt", "female"),
+    ("Nguyễn Xuân Thủy", "male"),
+    ("Hoàng Thanh Tùng", "male"),
+    ("Dương Nguyễn Vân Khánh", "female"),
+    ("Võ Minh Nam", "male"),
+    ("Nguyễn Gia Khánh", "male"),
+    ("Nguyễn Nhã Linh", "female"),
+    ("Nguyễn Minh Khuê", "female"),
 ]
-student_scores = [1820, 1650, 1520, 1380, 1250, 1100, 980, 850, 720, 600,
-                  480, 380, 290, 210, 150,  90,  60,  35,  15,   5]
+
+student_scores = [
+    1350, 980, 380, 1550, 540, 1220, 870, 650, 720,
+    250, 160, 320, 450, 120, 200, 80, 50, 30
+]
 
 for i, ((name, gender), score) in enumerate(zip(student_names, student_scores)):
     sid = i + 1
-    uid = sid + 3
-    class_id = 1 if i < 7 else (2 if i < 14 else 3)
+    uid = sid + 2  # user_id bắt đầu sau admin (1) và teacher01 (2)
     users.append({
         "user_id": uid, "username": f"student{sid:02d}", "password_hash": hash_password("student123"),
-        "full_name": name, "role": "student", "student_id": sid, "class_id": class_id,
+        "full_name": name, "role": "student", "student_id": sid, "class_id": 1,
         "status": "active", "created_at": now.isoformat(),
     })
 
@@ -114,11 +124,10 @@ print("\n📋 Đang ghi sheet HocSinh...")
 hoc_sinh = []
 for i, ((name, gender), score) in enumerate(zip(student_names, student_scores)):
     sid = i + 1
-    class_id = 1 if i < 7 else (2 if i < 14 else 3)
     rank_info = calculate_rank(score, gender)
     hoc_sinh.append({
         "student_id": sid, "student_code": f"HS{sid:04d}", "full_name": name,
-        "date_of_birth": "2009-01-01", "gender": gender, "class_id": class_id,
+        "date_of_birth": "2009-01-01", "gender": gender, "class_id": 1,
         "total_score": score, "rank": rank_info["rank"], "rank_level": rank_info["rank_level"],
         "avatar": "", "status": "active", "created_at": now.isoformat(),
     })
@@ -129,9 +138,7 @@ write_sheet("HocSinh", hoc_sinh)
 # ══════════════════════════════════════════════════════════════
 print("\n📋 Đang ghi sheet LopHoc...")
 lop_hoc = [
-    {"class_id": 1, "class_code": "10A1", "class_name": "Lớp 10A1 - Nghi Xuân Cung", "teacher_id": 2, "school_year": "2025-2026", "status": "active"},
-    {"class_id": 2, "class_code": "10A2", "class_name": "Lớp 10A2 - Trường Xuân Cung", "teacher_id": 2, "school_year": "2025-2026", "status": "active"},
-    {"class_id": 3, "class_code": "10A3", "class_name": "Lớp 10A3 - Thái Hòa Cung",  "teacher_id": 3, "school_year": "2025-2026", "status": "active"},
+    {"class_id": 1, "class_code": "10A4", "class_name": "Lớp 10A4 - Càn Long Cung", "teacher_id": 2, "school_year": "2025-2026", "status": "active"},
 ]
 write_sheet("LopHoc", lop_hoc)
 
@@ -151,9 +158,9 @@ bai_tap = [
      "deadline": (now + timedelta(days=5)).isoformat(),
      "max_score": 100, "bonus_score": 5, "penalty_score": 10, "status": "active"},
     {"assignment_id": 3, "title": "Tấu Chương Lý Số 1", "description": "Định luật Newton",
-     "subject": "Vật Lý", "class_id": 2, "teacher_id": 2,
+     "subject": "Vật Lý", "class_id": 1, "teacher_id": 2,
      "created_at": now.isoformat(), "start_time": now.isoformat(),
-     "deadline": (now - timedelta(days=1)).isoformat(),
+     "deadline": (now + timedelta(days=3)).isoformat(),
      "max_score": 100, "bonus_score": 5, "penalty_score": 5, "status": "active"},
 ]
 write_sheet("BaiTap", bai_tap)
