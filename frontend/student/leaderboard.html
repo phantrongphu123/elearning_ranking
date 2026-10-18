@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Bảng Vàng Triều Đình - Hoàng Cung Học Đường</title>
     <link rel="stylesheet" href="../css/style.css">
     <style>
@@ -41,18 +41,6 @@
             margin-bottom: 0.75rem;
             position: relative;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        }
-
-        .podium-crown {
-            position: absolute;
-            top: -24px;
-            font-size: 1.6rem;
-            animation: bounceCrown 2s infinite ease-in-out;
-        }
-
-        @keyframes bounceCrown {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
         }
 
         .podium-pillar {
@@ -113,24 +101,41 @@
         @media (max-width: 640px) {
             .podium-container {
                 gap: 0.5rem;
+                padding: 0 0.5rem;
             }
             .podium-step {
-                width: 105px;
+                width: clamp(90px, 30vw, 110px);
             }
             .podium-avatar {
                 width: 50px;
                 height: 50px;
                 font-size: 1.5rem;
             }
-            .podium-crown {
-                top: -18px;
-                font-size: 1.2rem;
-            }
             .podium-1 .podium-pillar { height: 160px; }
             .podium-2 .podium-pillar { height: 130px; }
             .podium-3 .podium-pillar { height: 110px; }
             .podium-rank-tag { font-size: 1.3rem; }
             .podium-score { font-size: 0.95rem; }
+        }
+
+        @media (max-width: 380px) {
+            .podium-container {
+                gap: 0.25rem;
+                padding: 0;
+            }
+            .podium-step {
+                width: clamp(80px, 31vw, 95px);
+            }
+            .podium-avatar {
+                width: 42px;
+                height: 42px;
+                font-size: 1.2rem;
+            }
+            .podium-1 .podium-pillar { height: 135px; }
+            .podium-2 .podium-pillar { height: 110px; }
+            .podium-3 .podium-pillar { height: 90px; }
+            .podium-rank-tag { font-size: 1.1rem; }
+            .podium-score { font-size: 0.8rem; }
         }
     </style>
 </head>

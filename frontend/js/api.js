@@ -209,18 +209,38 @@ function initMobileNav(activePage = '') {
         document.body.appendChild(backdrop);
     }
 
-    // Setup Hamburger Toggle
+    // Setup Hamburger Toggle & Sidebar Drawer Interactions
     const toggleBtn = document.querySelector('.menu-toggle');
     const sidebar = document.querySelector('.sidebar');
     if (toggleBtn && sidebar) {
         toggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('open');
             backdrop.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
         });
 
-        backdrop.addEventListener('click', () => {
+        const closeSidebar = () => {
             sidebar.classList.remove('open');
             backdrop.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        backdrop.addEventListener('click', closeSidebar);
+
+        // Inject explicit close button in sidebar header if missing
+        const sidebarHeader = sidebar.querySelector('.sidebar-header');
+        if (sidebarHeader && !sidebarHeader.querySelector('.sidebar-close-btn')) {
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'sidebar-close-btn';
+            closeBtn.setAttribute('aria-label', 'Đóng Menu');
+            closeBtn.innerHTML = '&times;';
+            closeBtn.addEventListener('click', closeSidebar);
+            sidebarHeader.appendChild(closeBtn);
+        }
+
+        // Auto-close drawer when clicking any nav-item
+        sidebar.querySelectorAll('.nav-item').forEach(link => {
+            link.addEventListener('click', closeSidebar);
         });
     }
 
@@ -247,10 +267,10 @@ function initMobileNav(activePage = '') {
             ];
         } else if (user.role === 'admin') {
             navItems = [
-                { id: 'dashboard', label: 'Tổng Quan', href: 'index.html#dashboard' },
-                { id: 'students', label: 'Học Sinh', href: 'index.html#students' },
-                { id: 'teachers', label: 'Giảng Viên', href: 'index.html#teachers' },
-                { id: 'classes', label: 'Lớp Học', href: 'index.html#classes' }
+                { id: 'dashboard', label: 'Tổng Quan', href: '#dashboard', onClick: "typeof switchAdminTab === 'function' ? switchAdminTab('dashboard', document.querySelector('.sidebar-nav a[href=\\'#dashboard\\']')) : null" },
+                { id: 'students', label: 'Học Tử', href: '#students', onClick: "typeof switchAdminTab === 'function' ? switchAdminTab('students', document.querySelector('.sidebar-nav a[href=\\'#students\\']')) : null" },
+                { id: 'teachers', label: 'Thái Phó', href: '#teachers', onClick: "typeof switchAdminTab === 'function' ? switchAdminTab('teachers', document.querySelector('.sidebar-nav a[href=\\'#teachers\\']')) : null" },
+                { id: 'classes', label: 'Lớp Học', href: '#classes', onClick: "typeof switchAdminTab === 'function' ? switchAdminTab('classes', document.querySelector('.sidebar-nav a[href=\\'#classes\\']')) : null" }
             ];
         }
 

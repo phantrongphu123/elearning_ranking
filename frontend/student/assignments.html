@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Tấu Chương Hán Ngữ - Học Sinh</title>
     <link rel="stylesheet" href="../css/style.css">
     <style>
@@ -114,6 +114,34 @@
         .review-wrong {
             border-color: #F43F5E !important;
             background: #FFF1F2 !important;
+        }
+
+        @media (max-width: 640px) {
+            .assignment-card {
+                padding: 1.15rem;
+            }
+            .assignment-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .assignment-header .btn {
+                width: 100%;
+            }
+            .assignment-meta {
+                gap: 0.75rem;
+                font-size: 0.8rem;
+            }
+            .question-card {
+                padding: 1rem;
+            }
+            .option-item {
+                padding: 0.75rem 0.85rem;
+                font-size: 0.9rem;
+            }
+            #submitActionArea .btn {
+                width: 100%;
+                padding: 0.85rem 1rem;
+            }
         }
     </style>
 </head>

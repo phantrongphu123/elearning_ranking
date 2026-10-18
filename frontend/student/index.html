@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Học Viện Hán Ngữ - Hoàng Cung Học Đường</title>
     <link rel="stylesheet" href="../css/style.css">
     <style>
@@ -88,18 +88,28 @@
             line-height: 1.1;
         }
 
+        .student-score-table {
+            min-width: 520px;
+        }
+
         @media (max-width: 768px) {
             .rank-card {
                 flex-direction: column;
                 text-align: center;
                 gap: 1.25rem;
-                padding: 1.35rem;
+                padding: 1.25rem;
+            }
+            .rank-card::after {
+                font-size: 6rem;
+                right: -10px;
+                bottom: -20px;
             }
             .rank-title {
                 justify-content: center;
             }
             .podium-box {
                 width: 100%;
+                min-width: unset;
             }
         }
     </style>
@@ -227,7 +237,7 @@
                     </div>
 
                     <div class="table-container">
-                        <table>
+                        <table class="student-score-table">
                             <thead>
                                 <tr>
                                     <th>Hạng Mục Tu Dưỡng</th>

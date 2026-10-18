@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Chấm Bài & Phê Duyệt - Thái Phó</title>
     <link rel="stylesheet" href="../css/style.css">
     <style>
@@ -12,6 +12,10 @@
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
+        }
+
+        .submissions-table {
+            min-width: 720px;
         }
 
         .review-q-card {
@@ -30,6 +34,22 @@
         .review-q-card.wrong {
             border-left: 4px solid #F43F5E;
             background: #FFF1F2;
+        }
+
+        @media (max-width: 768px) {
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-bar .tabs-nav {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 0.35rem;
+            }
+            .filter-bar > div:last-child {
+                max-width: 100% !important;
+                min-width: 100% !important;
+            }
         }
     </style>
 </head>
@@ -111,7 +131,7 @@
                 <!-- Submissions Table -->
                 <div class="glass-panel">
                     <div class="table-container">
-                        <table>
+                        <table class="submissions-table">
                             <thead>
                                 <tr>
                                     <th>Tấu Chương</th>

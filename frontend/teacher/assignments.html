@@ -2,10 +2,13 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Ban Bố Tấu Chương - Thái Phó</title>
     <link rel="stylesheet" href="../css/style.css">
     <style>
+        .assignments-table {
+            min-width: 660px;
+        }
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -101,7 +104,7 @@
 
             <div class="animate-fade-in">
                 <!-- Action Header -->
-                <div class="glass-panel mb-2 d-flex justify-between align-center" style="gap: 1rem; flex-wrap: wrap;">
+                <div class="glass-panel mb-2 d-flex justify-between align-center responsive-stack" style="gap: 1rem; flex-wrap: wrap;">
                     <div>
                         <h2 style="font-size: 1.35rem; color: #0F172A;">Kho Tấu Chương Đã Ban Bố</h2>
                         <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">Soạn bài tập, thêm câu hỏi trắc nghiệm hoặc thu hồi bài tập</p>
@@ -114,7 +117,7 @@
                 <!-- Assignments Table -->
                 <div class="glass-panel">
                     <div class="table-container">
-                        <table>
+                        <table class="assignments-table">
                             <thead>
                                 <tr>
                                     <th>Tiêu Đề Tấu Chương</th>
