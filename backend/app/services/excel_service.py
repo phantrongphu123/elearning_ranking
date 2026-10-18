@@ -13,6 +13,7 @@ Xác thực:
 """
 
 import json
+import os
 import threading
 import time
 from typing import Any, Optional
@@ -71,10 +72,35 @@ _CACHE_TTL = 45
 
 def _build_credentials() -> Credentials:
     """Xây dựng Google OAuth2 Credentials từ env (Vercel) hoặc file local."""
-    if GOOGLE_SERVICE_ACCOUNT_JSON:
-        info = json.loads(GOOGLE_SERVICE_ACCOUNT_JSON)
+    if GOOGLE_SERVICE_ACCOUNT_JSON and GOOGLE_SERVICE_ACCOUNT_JSON.strip():
+        raw = GOOGLE_SERVICE_ACCOUNT_JSON.strip()
+        info = None
+        try:
+            info = json.loads(raw)
+        except Exception:
+            try:
+                import base64
+                decoded = base64.b64decode(raw).decode("utf-8")
+                info = json.loads(decoded)
+            except Exception as e:
+                raise ValueError(
+                    f"Không thể đọc GOOGLE_SERVICE_ACCOUNT_JSON (đã thử cả JSON trực tiếp và Base64): {e}. "
+                    "Vui lòng kiểm tra lại biến môi trường trên Vercel."
+                )
+
+        if isinstance(info, dict) and "private_key" in info and isinstance(info["private_key"], str):
+            # Tự động sửa lỗi newlines bị escape thành ký tự literal '\\n' khi dán trên web Vercel
+            info["private_key"] = info["private_key"].replace("\\n", "\n")
+
         return Credentials.from_service_account_info(info, scopes=_SCOPES)
-    return Credentials.from_service_account_file(GOOGLE_SERVICE_ACCOUNT_FILE, scopes=_SCOPES)
+
+    if os.path.exists(GOOGLE_SERVICE_ACCOUNT_FILE):
+        return Credentials.from_service_account_file(GOOGLE_SERVICE_ACCOUNT_FILE, scopes=_SCOPES)
+
+    raise ValueError(
+        "Không tìm thấy thông tin xác thực Google Service Account! "
+        "Trên Vercel, hãy cấu hình biến môi trường GOOGLE_SERVICE_ACCOUNT_JSON với toàn bộ nội dung file service_account.json."
+    )
 
 
 # ─────────────────────────────────────────────────────────────

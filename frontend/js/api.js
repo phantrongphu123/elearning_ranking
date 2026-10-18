@@ -1,13 +1,21 @@
 // Tự động chọn URL backend phù hợp với môi trường:
-// - Mở file trực tiếp (file://) hoặc localhost → backend local port 8000
-// - Deploy trên Vercel / bất kỳ server nào → dùng /api relative (không cần cấu hình)
+// 1. Nếu có window._API_BASE tùy chỉnh (và không phải placeholder): ưu tiên dùng
+// 2. Chạy local file:// hoặc localhost: dùng http://localhost:8000/api
+// 3. Mặc định trên Vercel / server: dùng relative /api
 const API_BASE = (
-    window.location.protocol === 'file:' ||
-    window.location.hostname === 'localhost' ||
-    window.location.hostname === '127.0.0.1'
+    window._API_BASE &&
+    typeof window._API_BASE === 'string' &&
+    window._API_BASE.trim() !== '' &&
+    !window._API_BASE.includes('REPLACE_WITH')
 )
-    ? 'http://localhost:8000/api'
-    : '/api';
+    ? window._API_BASE.replace(/\/+$/, '')
+    : (
+        window.location.protocol === 'file:' ||
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1'
+    )
+        ? 'http://localhost:8000/api'
+        : '/api';
 
 async function fetchAPI(endpoint, options = {}) {
     const token = localStorage.getItem('token');
@@ -27,13 +35,40 @@ async function fetchAPI(endpoint, options = {}) {
         delete headers['Content-Type'];
     }
 
+    // Chuẩn hóa endpoint để tránh trùng /api/api
+    let cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+    if (cleanEndpoint.startsWith('/api/') || cleanEndpoint === '/api') {
+        cleanEndpoint = cleanEndpoint.slice(4) || '/';
+    }
+    const fullUrl = `${API_BASE}${cleanEndpoint.startsWith('/') ? cleanEndpoint : '/' + cleanEndpoint}`;
+
     try {
-        const response = await fetch(`${API_BASE}${endpoint}`, {
+        const response = await fetch(fullUrl, {
             ...options,
             headers
         });
 
-        const data = await response.json();
+        let data;
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+            data = await response.json();
+        } else {
+            const rawText = await response.text();
+            try {
+                data = JSON.parse(rawText);
+            } catch (e) {
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        throw new Error(`Không tìm thấy API (404 Not Found): Vercel chưa định tuyến được đến backend hoặc backend chưa khởi động.`);
+                    }
+                    if (response.status === 500) {
+                        throw new Error(`Lỗi máy chủ (500 Server Error): Serverless Function gặp lỗi khi chạy. Kiểm tra Logs trên Vercel.`);
+                    }
+                    throw new Error(`Lỗi máy chủ (${response.status}): ${response.statusText || rawText.slice(0, 100)}`);
+                }
+                throw new Error(`Phản hồi máy chủ không hợp lệ: ${rawText.slice(0, 100)}`);
+            }
+        }
 
         if (!response.ok) {
             if (response.status === 401 && endpoint !== '/auth/login') {

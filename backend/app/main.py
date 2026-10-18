@@ -23,6 +23,50 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+class PrefixMiddleware:
+    """Tự động chuẩn hóa đường dẫn để hoạt động tốt cả trên local và Vercel serverless."""
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] == "http":
+            path = scope.get("path", "")
+
+            # 1. Nếu Vercel ghi đè path thành /api/index.py, đọc x-matched-path từ header
+            if path in ("/api/index.py", "/api/index", "/api/index.py/"):
+                headers = dict(scope.get("headers", []))
+                matched = headers.get(b"x-matched-path", b"").decode("utf-8", errors="ignore")
+                if matched:
+                    path = matched
+
+            # 2. Xóa tiền tố /api/index.py hoặc /api/index nếu bị dính vào URL
+            if path.startswith("/api/index.py"):
+                path = path[len("/api/index.py"):]
+            elif path.startswith("/api/index"):
+                path = path[len("/api/index"):]
+
+            if not path:
+                path = "/"
+            elif not path.startswith("/"):
+                path = "/" + path
+
+            # 3. Chuẩn hóa: nếu request thiếu /api mà thuộc các endpoint của router thì tự thêm /api
+            prefixes = (
+                "/auth", "/students", "/teachers", "/classes", "/assignments",
+                "/submissions", "/scores", "/attendance", "/leaderboard", "/dashboard", "/health"
+            )
+            if any(path.startswith(p) for p in prefixes):
+                path = f"/api{path}"
+
+            scope["path"] = path
+            scope["raw_path"] = path.encode("utf-8")
+
+        await self.app(scope, receive, send)
+
+
+app.add_middleware(PrefixMiddleware)
+
 # Include all routers
 app.include_router(auth.router)
 app.include_router(students.router)
@@ -45,6 +89,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 
 @app.get("/")
+@app.get("/api")
 def root():
     return {
         "app": APP_NAME,
@@ -54,6 +99,7 @@ def root():
     }
 
 
+@app.get("/health")
 @app.get("/api/health")
 def health_check():
     return {"status": "ok", "app": APP_NAME}

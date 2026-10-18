@@ -1,35 +1,62 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/index.py",
-      "use": "@vercel/python"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "backend/**"
     }
-  ],
-  "routes": [
+  },
+  "rewrites": [
     {
-      "src": "/api(.*)",
-      "dest": "api/index.py"
+      "source": "/api",
+      "destination": "/api/index.py"
     },
     {
-      "src": "/(.*\\.(?:js|css|ico|png|jpg|svg|woff|woff2|ttf))",
-      "dest": "/frontend/$1"
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
     },
     {
-      "src": "/admin(.*)",
-      "dest": "/frontend/admin$1"
+      "source": "/docs",
+      "destination": "/api/index.py"
     },
     {
-      "src": "/teacher(.*)",
-      "dest": "/frontend/teacher$1"
+      "source": "/redoc",
+      "destination": "/api/index.py"
     },
     {
-      "src": "/student(.*)",
-      "dest": "/frontend/student$1"
+      "source": "/openapi.json",
+      "destination": "/api/index.py"
     },
     {
-      "src": "/(.*)",
-      "dest": "/frontend/$1"
+      "source": "/",
+      "destination": "/frontend/index.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/frontend/admin/index.html"
+    },
+    {
+      "source": "/admin/",
+      "destination": "/frontend/admin/index.html"
+    },
+    {
+      "source": "/teacher",
+      "destination": "/frontend/teacher/index.html"
+    },
+    {
+      "source": "/teacher/",
+      "destination": "/frontend/teacher/index.html"
+    },
+    {
+      "source": "/student",
+      "destination": "/frontend/student/index.html"
+    },
+    {
+      "source": "/student/",
+      "destination": "/frontend/student/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/$1"
     }
   ]
 }

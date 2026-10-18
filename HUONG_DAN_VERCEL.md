@@ -68,64 +68,110 @@ Google Sheet `Linh_Chi_DB` của bạn (ID: `1Abfw5CMLtseRVwoXOgTjnkEpjGkzHhkg5n
 
 ### BƯỚC 3: Cấu hình Vercel (`vercel.json` & Entry Point)
 
-Tạo file `vercel.json` ở thư mục gốc của dự án để Vercel biết cách định tuyến:
+Tệp `vercel.json` ở thư mục gốc của dự án đã được tối ưu hoàn chỉnh cho Vercel Serverless:
 ```json
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/index.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "frontend/**",
-      "use": "@vercel/static"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "backend/**"
     }
-  ],
-  "routes": [
+  },
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "api/index.py"
+      "source": "/api",
+      "destination": "/api/index.py"
     },
     {
-      "src": "/(.*)",
-      "dest": "frontend/$1"
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/docs",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/redoc",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/openapi.json",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/",
+      "destination": "/frontend/index.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/frontend/admin/index.html"
+    },
+    {
+      "source": "/admin/",
+      "destination": "/frontend/admin/index.html"
+    },
+    {
+      "source": "/teacher",
+      "destination": "/frontend/teacher/index.html"
+    },
+    {
+      "source": "/teacher/",
+      "destination": "/frontend/teacher/index.html"
+    },
+    {
+      "source": "/student",
+      "destination": "/frontend/student/index.html"
+    },
+    {
+      "source": "/student/",
+      "destination": "/frontend/student/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/$1"
     }
   ]
 }
 ```
 
-Tạo file cầu nối `api/index.py` ở thư mục gốc:
+Cầu nối `api/index.py` ở thư mục gốc tự động nhận diện module `backend`:
 ```python
 import sys
 import os
 
-# Thêm thư mục backend vào sys.path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "backend"))
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.abspath(os.path.join(current_dir, ".."))
+backend_dir = os.path.join(root_dir, "backend")
+cwd = os.getcwd()
+backend_cwd = os.path.join(cwd, "backend")
 
-from app.main import app
+for path in [backend_dir, backend_cwd, root_dir, cwd, current_dir]:
+    if path not in sys.path and os.path.exists(path):
+        sys.path.insert(0, path)
+
+try:
+    from app.main import app
+except ImportError:
+    try:
+        from backend.app.main import app
+    except ImportError as e:
+        raise ImportError(f"Không thể import app: {e}. sys.path={sys.path}")
 ```
 
 ---
 
 ### BƯỚC 4: Sửa đường dẫn API ở Frontend (`frontend/js/api.js`)
 
-Hiện tại `api.js` phụ thuộc vào `frontend/config.js` có chứa link mẫu `REPLACE_WITH_YOUR_BACKEND_URL`.
-Khi deploy Vercel chung cả frontend và backend, đường dẫn API chuẩn và tối ưu nhất luôn là `/api`:
-
-```javascript
-// Tự động nhận diện môi trường:
-const API_BASE = (window.location.protocol === 'file:')
-    ? 'http://localhost:8000/api'
-    : '/api';
-```
-*(Giúp code chạy mượt mà ngay cả khi mở file offline lẫn khi deploy lên Vercel mà không cần sửa cấu hình bằng tay).*
+Hệ thống đã được thiết lập tự động:
+- Khi chạy cục bộ (`file://` hoặc `localhost`): Tự động kết nối tới `http://localhost:8000/api`.
+- Khi chạy trên Vercel: Tự động dùng relative path `/api` (không cần sửa đổi).
+- Bắt lỗi thông minh: Nếu Vercel trả về HTML lỗi 404 hoặc 500, hệ thống sẽ hiển thị thông báo tiếng Việt dễ hiểu thay vì lỗi cú pháp `Unexpected token 'T'`.
 
 ---
 
 ### BƯỚC 5: Bảo mật Git (`.gitignore`)
 
-Tạo file `.gitignore` ở thư mục gốc để ngăn việc lộ khóa bảo mật lên GitHub:
+File `.gitignore` ngăn không đưa file khóa bí mật lên GitHub:
 ```gitignore
 .venv/
 __pycache__/
@@ -139,23 +185,22 @@ database/backup/
 
 ### BƯỚC 6: Thao tác Deploy trên Vercel Dashboard
 
-1. **Đẩy code lên GitHub:**
+1. **Đẩy code mới lên GitHub:**
    ```bash
    git add .
-   git commit -m "Chuyen DB sang Google Sheet va cau hinh Vercel"
+   git commit -m "fix: hoan thien cau hinh deploy Vercel va xu ly loi dinh tuyen"
    git push origin main
    ```
-2. **Đăng nhập Vercel & Import Project:**
-   - Truy cập [vercel.com](https://vercel.com) ➔ Bấm **Add New** ➔ **Project**.
-   - Chọn kho chứa GitHub chứa dự án của bạn ➔ Bấm **Import**.
-3. **Cài đặt Biến Môi Trường (Environment Variables) trên Vercel:**
-   Vào phần **Environment Variables**, thêm 3 biến sau:
+2. **Cài đặt Biến Môi Trường (Environment Variables) trên Vercel:**
+   Truy cập vào dự án trên **Vercel** ➔ Vào **Settings** ➔ **Environment Variables**, thêm 3 biến sau:
    - `GOOGLE_SHEET_ID`:
      `1Abfw5CMLtseRVwoXOgTjnkEpjGkzHhkg5nD4PcBOExk`
    - `GOOGLE_SERVICE_ACCOUNT_JSON`:
-     *(Mở file `backend/service_account.json`, copy toàn bộ nội dung dán vào ô này)*
+     *(Mở file `backend/service_account.json`, copy toàn bộ nội dung dán vào ô Value)*
+     > 💡 *Hệ thống đã hỗ trợ tự động xử lý ký tự xuống dòng `\n` và hỗ trợ cả chuỗi mã hóa Base64.*
    - `SECRET_KEY`:
      `hoangcung_secret_key_2026_thpt_linh_chi`
-4. **Bấm Deploy:**
-   - Vercel sẽ tự động build frontend và serverless backend.
-   - Khi hoàn tất, bạn sẽ nhận được đường dẫn dạng `https://your-project.vercel.app` hoạt động 24/7 hoàn toàn miễn phí.
+3. **Redeploy lại trên Vercel:**
+   - Vào tab **Deployments** ➔ Bấm dấu 3 chấm `...` ở commit mới nhất ➔ Chọn **Redeploy**.
+   - Sau khi deploy xong, truy cập link Vercel và đăng nhập thử nghiệm!
+

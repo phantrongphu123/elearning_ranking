@@ -1,7 +1,7 @@
 // =====================================================
 // CẤU HÌNH BACKEND URL
-// Điền URL backend thật vào đây sau khi deploy
-// Ví dụ Railway: https://your-app.up.railway.app/api
-// Ví dụ Render:  https://your-app.onrender.com/api
+// - Khi deploy Fullstack trên Vercel: Để rỗng '' (hệ thống tự động dùng /api)
+// - Khi backend deploy riêng (Railway, Render...): Điền URL, ví dụ: 'https://my-backend.up.railway.app/api'
 // =====================================================
-window._API_BASE = 'https://REPLACE_WITH_YOUR_BACKEND_URL/api';
+window._API_BASE = '';
+
