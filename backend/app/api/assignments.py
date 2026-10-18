@@ -49,50 +49,100 @@ def list_assignments(
     class_id: Optional[int] = Query(None),
     current_user: dict = Depends(get_current_user)
 ):
+    import pandas as pd
     df = excel_service.read_sheet("BaiTap")
+    if df.empty:
+        return []
     
     if current_user["role"] == "teacher":
-        df = df[df["teacher_id"].astype(str) == str(current_user["user_id"])]
+        t_uid = int(float(current_user["user_id"]))
+        t_col = pd.to_numeric(df["teacher_id"], errors="coerce").fillna(0).astype(int)
+        df = df[t_col == t_uid]
     elif current_user["role"] == "student":
         # Get student's class
-        student = excel_service.find_one("HocSinh", "student_id", current_user.get("student_id"))
-        if student:
-            df = df[df["class_id"].astype(str) == str(student.get("class_id", ""))]
-            # Only show assignments that have started
-            now_str = datetime.now().isoformat()
-            df = df[(df["start_time"] <= now_str) | (df["start_time"] == "")]
+        student_id = current_user.get("student_id")
+        student = None
+        if student_id:
+            student = excel_service.find_one("HocSinh", "student_id", student_id)
+        if not student:
+            username = current_user.get("username")
+            if username:
+                student = excel_service.find_one("HocSinh", "student_code", username)
+        if not student:
+            full_name = current_user.get("full_name")
+            if full_name:
+                student = excel_service.find_one("HocSinh", "full_name", full_name)
+        
+        cid = None
+        if student and student.get("class_id"):
+            cid = int(float(student.get("class_id")))
+        elif current_user.get("class_id"):
+            cid = int(float(current_user.get("class_id")))
+        
+        if cid is not None:
+            c_col = pd.to_numeric(df["class_id"], errors="coerce").fillna(0).astype(int)
+            df = df[c_col == cid]
     
-    if class_id:
-        df = df[df["class_id"].astype(str) == str(class_id)]
+    if class_id is not None:
+        try:
+            target_cid = int(float(class_id))
+            c_col = pd.to_numeric(df["class_id"], errors="coerce").fillna(0).astype(int)
+            df = df[c_col == target_cid]
+        except (ValueError, TypeError):
+            pass
     
-    df = df[df["status"] != "inactive"]
+    if not df.empty and "status" in df.columns:
+        df = df[df["status"] != "inactive"]
+    
     assignments = df.to_dict(orient="records")
     
-    # Enrich with submission count
+    # Enrich with submission count & deadline status
     submissions_df = excel_service.read_sheet("BaiNop")
+    sub_asg_col = None
+    if not submissions_df.empty and "assignment_id" in submissions_df.columns:
+        sub_asg_col = pd.to_numeric(submissions_df["assignment_id"], errors="coerce").fillna(0).astype(int)
+    
+    now = datetime.now()
     for a in assignments:
-        count = len(submissions_df[submissions_df["assignment_id"].astype(str) == str(a.get("assignment_id", ""))])
-        a["submission_count"] = count
-        # Deadline status
-        deadline_str = str(a.get("deadline", ""))
+        aid = int(float(a.get("assignment_id") or 0))
+        if sub_asg_col is not None:
+            a["submission_count"] = int((sub_asg_col == aid).sum())
+        else:
+            a["submission_count"] = 0
+            
+        deadline_str = str(a.get("deadline", "")).strip()
         if deadline_str:
             try:
-                a["is_past_deadline"] = datetime.now() > datetime.fromisoformat(deadline_str)
-            except:
+                dl = datetime.fromisoformat(deadline_str.replace("Z", "+00:00"))
+                if dl.tzinfo is not None and now.tzinfo is None:
+                    from datetime import timezone
+                    now_tz = datetime.now(timezone.utc)
+                    a["is_past_deadline"] = now_tz > dl
+                else:
+                    a["is_past_deadline"] = now > dl
+            except Exception:
                 a["is_past_deadline"] = False
+        else:
+            a["is_past_deadline"] = False
     
     return assignments
 
 
 @router.get("/{assignment_id}")
 def get_assignment(assignment_id: int, current_user: dict = Depends(get_current_user)):
+    import pandas as pd
     assignment = excel_service.find_one("BaiTap", "assignment_id", assignment_id)
     if not assignment:
         raise HTTPException(status_code=404, detail="Bài tập không tồn tại")
     
     # Get questions (hide correct_answer for students before submission)
     questions_df = excel_service.read_sheet("CauHoi")
-    questions = questions_df[questions_df["assignment_id"].astype(str) == str(assignment_id)].to_dict(orient="records")
+    if not questions_df.empty and "assignment_id" in questions_df.columns:
+        asg_id_int = int(float(assignment_id))
+        q_asg_col = pd.to_numeric(questions_df["assignment_id"], errors="coerce").fillna(0).astype(int)
+        questions = questions_df[q_asg_col == asg_id_int].to_dict(orient="records")
+    else:
+        questions = []
     
     if current_user["role"] == "student":
         for q in questions:

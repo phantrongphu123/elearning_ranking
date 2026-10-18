@@ -42,15 +42,40 @@ def submit_assignment(data: SubmissionCreate, current_user: dict = Depends(get_c
 @router.get("")
 def list_submissions(current_user: dict = Depends(get_current_user)):
     """List submissions. Students see their own, teachers see their class."""
+    import pandas as pd
     df = excel_service.read_sheet("BaiNop")
+    if df.empty:
+        return []
     
     if current_user["role"] == "student":
-        df = df[df["student_id"].astype(str) == str(current_user.get("student_id"))]
+        student_id = current_user.get("student_id")
+        if not student_id:
+            student = excel_service.find_one("HocSinh", "student_code", current_user.get("username", ""))
+            if student:
+                student_id = student.get("student_id")
+        if not student_id:
+            student = excel_service.find_one("HocSinh", "full_name", current_user.get("full_name", ""))
+            if student:
+                student_id = student.get("student_id")
+                
+        if student_id:
+            s_id = int(float(student_id))
+            sub_s_col = pd.to_numeric(df["student_id"], errors="coerce").fillna(0).astype(int)
+            df = df[sub_s_col == s_id]
+        else:
+            return []
     elif current_user["role"] == "teacher":
         # Filter by teacher's assignments
+        teacher_uid = int(float(current_user["user_id"]))
         assignments_df = excel_service.read_sheet("BaiTap")
-        teacher_assignments = assignments_df[assignments_df["teacher_id"].astype(str) == str(current_user["user_id"])]["assignment_id"].tolist()
-        df = df[df["assignment_id"].isin([str(a) for a in teacher_assignments])]
+        if not assignments_df.empty and "teacher_id" in assignments_df.columns:
+            t_asg_col = pd.to_numeric(assignments_df["teacher_id"], errors="coerce").fillna(0).astype(int)
+            teacher_asg_ids = [int(float(a)) for a in assignments_df[t_asg_col == teacher_uid]["assignment_id"].tolist() if pd.notna(a)]
+            
+            sub_asg_col = pd.to_numeric(df["assignment_id"], errors="coerce").fillna(0).astype(int)
+            df = df[sub_asg_col.isin(teacher_asg_ids)]
+        else:
+            return []
     
     submissions = df.to_dict(orient="records")
     
@@ -58,38 +83,64 @@ def list_submissions(current_user: dict = Depends(get_current_user)):
     students_df = excel_service.read_sheet("HocSinh")
     assignments_df = excel_service.read_sheet("BaiTap")
     
+    students_map = {}
+    if not students_df.empty and "student_id" in students_df.columns:
+        for _, row in students_df.iterrows():
+            try:
+                sid = int(float(row["student_id"]))
+                students_map[sid] = row.get("full_name", "")
+            except Exception:
+                pass
+                
+    assignments_map = {}
+    if not assignments_df.empty and "assignment_id" in assignments_df.columns:
+        for _, row in assignments_df.iterrows():
+            try:
+                aid = int(float(row["assignment_id"]))
+                assignments_map[aid] = row.get("title", "")
+            except Exception:
+                pass
+    
     for sub in submissions:
-        s_row = students_df[students_df["student_id"].astype(str) == str(sub.get("student_id", ""))]
-        if not s_row.empty:
-            sub["student_name"] = s_row.iloc[0].get("full_name", "")
-        
-        a_row = assignments_df[assignments_df["assignment_id"].astype(str) == str(sub.get("assignment_id", ""))]
-        if not a_row.empty:
-            sub["assignment_title"] = a_row.iloc[0].get("title", "")
+        sid = int(float(sub.get("student_id") or 0))
+        aid = int(float(sub.get("assignment_id") or 0))
+        sub["student_name"] = students_map.get(sid, f"Học tử #{sid}")
+        sub["assignment_title"] = assignments_map.get(aid, f"Tấu chương #{aid}")
     
     return submissions
 
 
 @router.get("/{submission_id}")
 def get_submission(submission_id: int, current_user: dict = Depends(get_current_user)):
+    import pandas as pd
     submission = excel_service.find_one("BaiNop", "submission_id", submission_id)
     if not submission:
         raise HTTPException(status_code=404, detail="Bài nộp không tồn tại")
     
-    if current_user["role"] == "student" and str(submission.get("student_id")) != str(current_user.get("student_id")):
+    sub_sid = int(float(submission.get("student_id") or 0))
+    user_sid = int(float(current_user.get("student_id") or 0))
+    if current_user["role"] == "student" and sub_sid != user_sid:
         raise HTTPException(status_code=403, detail="Không có quyền xem")
     
     # Get details
     details_df = excel_service.read_sheet("ChiTietBaiNop")
-    details = details_df[details_df["submission_id"].astype(str) == str(submission_id)].to_dict(orient="records")
+    sub_id_int = int(float(submission_id))
+    if not details_df.empty and "submission_id" in details_df.columns:
+        d_sub_col = pd.to_numeric(details_df["submission_id"], errors="coerce").fillna(0).astype(int)
+        details = details_df[d_sub_col == sub_id_int].to_dict(orient="records")
+    else:
+        details = []
     
     # Get questions for context
     questions_df = excel_service.read_sheet("CauHoi")
-    for d in details:
-        q = questions_df[questions_df["question_id"].astype(str) == str(d.get("question_id", ""))]
-        if not q.empty:
-            d["question_text"] = q.iloc[0].get("question_text", "")
-            d["correct_answer"] = q.iloc[0].get("correct_answer", "")  # Reveal after submission
+    if not questions_df.empty and "question_id" in questions_df.columns:
+        q_id_col = pd.to_numeric(questions_df["question_id"], errors="coerce").fillna(0).astype(int)
+        for d in details:
+            qid = int(float(d.get("question_id") or 0))
+            q = questions_df[q_id_col == qid]
+            if not q.empty:
+                d["question_text"] = q.iloc[0].get("question_text", "")
+                d["correct_answer"] = q.iloc[0].get("correct_answer", "")  # Reveal after submission
     
     submission["details"] = details
     return submission
