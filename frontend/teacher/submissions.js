@@ -1,74 +1,182 @@
-let currentSubId = null;
+let allSubmissions = [];
+let currentFilter = 'all';
+let currentSubmittingSubId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-    loadSubmissions();
-    
-    document.getElementById('gradeForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const score = document.getElementById('gradeScore').value;
-        const comment = document.getElementById('gradeComment').value;
-        
-        try {
-            await fetchAPI(`/submissions/${currentSubId}/grade`, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    score: parseFloat(score),
-                    teacher_comment: comment
-                })
-            });
-            alert('Chấm bài / Phê duyệt thành công!');
-            closeModal();
-            loadSubmissions();
-        } catch(err) {
-            alert(err.message);
-        }
-    });
+    if (!requireAuth(['teacher'])) return;
+    initMobileNav('submissions');
+    loadTeacherSubmissions();
+    initGradeForm();
 });
 
-async function loadSubmissions() {
-    try {
-        const subs = await fetchAPI('/submissions');
-        const tbody = document.getElementById('subsTable');
-        
-        if (subs.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="text-center">Chưa có học sinh nào nộp bài.</td></tr>';
-            return;
-        }
+async function loadTeacherSubmissions() {
+    const tbody = document.getElementById('subsTableBody');
+    if (!tbody) return;
 
-        tbody.innerHTML = '';
-        subs.forEach(s => {
-            const isLate = s.is_late === 'True';
-            const lateBadge = isLate ? '<span class="badge" style="background:var(--danger)">Trễ</span>' : '<span class="badge badge-graded">Đúng hạn</span>';
-            const statusBadge = s.status === 'graded' 
-                ? '<span class="badge badge-graded">Đã chấm</span>' 
-                : '<span class="badge badge-pending">Chờ xử lý</span>';
-                
-            tbody.innerHTML += `
-                <tr>
-                    <td><strong>${s.assignment_title}</strong></td>
-                    <td>${s.student_name}</td>
-                    <td>${lateBadge}</td>
-                    <td style="color: var(--primary-color); font-weight: bold;">${s.score}</td>
-                    <td>${statusBadge}</td>
-                    <td>
-                        <button class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" onclick="openGradeModal(${s.submission_id}, '${s.student_name}', ${s.score}, '${s.teacher_comment || ''}')">Phê Duyệt</button>
-                    </td>
-                </tr>
-            `;
-        });
+    try {
+        allSubmissions = await fetchAPI('/submissions');
+        filterSubmissions();
     } catch (e) {
-        console.error(e);
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center" style="color: var(--crimson);">Lỗi tải bài nộp: ${e.message}</td></tr>`;
     }
 }
 
-function openGradeModal(id, studentName, currentScore, currentComment) {
-    currentSubId = id;
-    document.getElementById('gradeDetails').textContent = `Học sinh: ${studentName}`;
-    document.getElementById('gradeScore').value = currentScore;
-    document.getElementById('gradeComment').value = currentComment || '';
-    document.getElementById('gradeModal').style.display = 'flex';
+function setSubFilter(filterType, btnEl) {
+    currentFilter = filterType;
+    document.querySelectorAll('.tabs-nav .tab-btn').forEach(b => b.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+    filterSubmissions();
 }
 
-function closeModal() {
+function filterSubmissions() {
+    const tbody = document.getElementById('subsTableBody');
+    if (!tbody) return;
+
+    const searchTerm = (document.getElementById('subSearchInput')?.value || '').toLowerCase();
+
+    let filtered = allSubmissions;
+
+    if (currentFilter === 'pending') {
+        filtered = filtered.filter(s => s.status !== 'graded');
+    } else if (currentFilter === 'graded') {
+        filtered = filtered.filter(s => s.status === 'graded');
+    }
+
+    if (searchTerm) {
+        filtered = filtered.filter(s => 
+            (s.student_name && s.student_name.toLowerCase().includes(searchTerm)) ||
+            (s.assignment_title && s.assignment_title.toLowerCase().includes(searchTerm))
+        );
+    }
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center" style="padding: 2.5rem; color: var(--text-muted)">Không tìm thấy bài nộp nào phù hợp.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = filtered.map(s => {
+        const isLate = s.is_late === 'True' || s.is_late === true;
+        const isGraded = s.status === 'graded';
+
+        const lateBadge = isLate
+            ? `<span class="badge badge-danger">Trễ hạn</span>`
+            : `<span class="badge badge-success">Đúng hạn</span>`;
+
+        const statusBadge = isGraded
+            ? `<span class="badge badge-success">✓ Đã phê duyệt</span>`
+            : `<span class="badge badge-warning">⏳ Chờ xử lý</span>`;
+
+        return `
+            <tr>
+                <td><strong>${escapeHtml(s.assignment_title || 'Tấu chương')}</strong></td>
+                <td><strong style="color: var(--gold-light);">${escapeHtml(s.student_name || 'Học tử')}</strong></td>
+                <td style="font-size: 0.85rem; color: var(--text-muted);">${formatDate(s.submitted_at)}</td>
+                <td>${lateBadge}</td>
+                <td style="font-family: 'Cinzel', serif; font-weight: 700; color: var(--gold-light); font-size: 1.05rem;">
+                    ${s.score ?? 0}đ
+                </td>
+                <td>${statusBadge}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm" onclick="openGradeModal(${s.submission_id}, '${escapeHtml(s.student_name)}', '${escapeHtml(s.assignment_title)}', ${s.score}, '${escapeHtml(s.teacher_comment || '')}')">
+                        <span>✍️ Phê Duyệt</span>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// ----------------------------------------------------
+// GRADE MODAL
+// ----------------------------------------------------
+async function openGradeModal(submissionId, studentName, assignmentTitle, currentScore, currentComment) {
+    currentSubmittingSubId = submissionId;
+
+    document.getElementById('gradeModalTitle').textContent = `Phê Duyệt: ${assignmentTitle}`;
+    document.getElementById('gradeModalSubtitle').textContent = `Học tử: ${studentName}`;
+    document.getElementById('gradeScore').value = currentScore ?? 0;
+    document.getElementById('gradeComment').value = currentComment || '';
+
+    const container = document.getElementById('gradeQuestionsContainer');
+    container.innerHTML = '<p class="text-center" style="padding: 1rem; color: var(--text-muted)">Đang tải chi tiết câu trả lời của học tử...</p>';
+
+    document.getElementById('gradeModal').style.display = 'flex';
+
+    try {
+        const subData = await fetchAPI(`/submissions/${submissionId}`);
+        const details = subData.details || [];
+
+        if (details.length === 0) {
+            container.innerHTML = '<p class="text-center" style="padding: 1.5rem; color: var(--text-muted)">Không có chi tiết từng câu hỏi cho bài này.</p>';
+            return;
+        }
+
+        container.innerHTML = details.map((d, idx) => {
+            const isCorrect = d.is_correct === 'True' || d.is_correct === true || String(d.student_answer).toLowerCase() === String(d.correct_answer).toLowerCase();
+
+            return `
+                <div class="review-q-card ${isCorrect ? 'correct' : 'wrong'}">
+                    <div class="d-flex justify-between align-center mb-1">
+                        <strong style="color: var(--gold-light);">Câu ${idx + 1}: ${escapeHtml(d.question_text || '')}</strong>
+                        <span class="badge ${isCorrect ? 'badge-success' : 'badge-danger'}">
+                            ${isCorrect ? '✓ Đúng' : '✕ Sai'} (${d.score || 0}đ)
+                        </span>
+                    </div>
+                    <div style="font-size: 0.88rem; display: flex; flex-direction: column; gap: 0.25rem;">
+                        <div>Học tử chọn: <strong style="color: ${isCorrect ? 'var(--jade)' : 'var(--crimson)'};">${escapeHtml(d.student_answer || 'Không trả lời')}</strong></div>
+                        <div>Đáp án chuẩn: <strong style="color: var(--gold-light);">${escapeHtml(d.correct_answer || '')}</strong></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+    } catch (e) {
+        container.innerHTML = `<p class="text-center" style="color: var(--crimson);">Lỗi: ${e.message}</p>`;
+    }
+}
+
+function closeGradeModal() {
     document.getElementById('gradeModal').style.display = 'none';
+    currentSubmittingSubId = null;
+}
+
+function initGradeForm() {
+    const form = document.getElementById('gradeForm');
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentSubmittingSubId) return;
+
+        const score = parseFloat(document.getElementById('gradeScore').value);
+        const comment = document.getElementById('gradeComment').value.trim();
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        try {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Đang lưu lời phê...</span>';
+
+            await fetchAPI(`/submissions/${currentSubmittingSubId}/grade`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    score: score,
+                    teacher_comment: comment
+                })
+            });
+
+            closeGradeModal();
+            showToast('📜 Phê duyệt bài nộp thành công!', 'success');
+            await loadTeacherSubmissions();
+        } catch (err) {
+            showToast('Lỗi phê duyệt: ' + err.message, 'error');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>📜 Lưu Phê Duyệt & Chấm Điểm</span>';
+        }
+    });
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }

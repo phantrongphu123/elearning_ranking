@@ -2,9 +2,48 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giáo Viên - Hoàng Cung Học Đường</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Thái Phó Điện - Hoàng Cung Học Đường</title>
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .class-card {
+            background: rgba(17, 24, 39, 0.75);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .class-card:hover {
+            border-color: var(--gold-light);
+            background: rgba(28, 36, 56, 0.85);
+            transform: translateX(4px);
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 640px) {
+            .class-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .quick-actions {
+                width: 100%;
+            }
+            .quick-actions .btn {
+                flex: 1;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -12,79 +51,170 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏯</div>
-                <h2 style="font-size: 1.2rem;">Hoàng Cung<br>Học Đường</h2>
+                <div class="sidebar-logo-icon">🏯</div>
+                <div class="sidebar-brand">
+                    <h2>Hoàng Cung</h2>
+                    <span>Học Viện Hán Ngữ</span>
+                </div>
             </div>
+
             <nav class="sidebar-nav">
-                <a href="index.html" class="nav-item active">Tổng Quan</a>
-                <a href="assignments.html" class="nav-item">Ban Bố Tấu Chương</a>
-                <a href="submissions.html" class="nav-item">Chấm Điểm</a>
-                <a href="attendance.html" class="nav-item">Điểm Danh</a>
+                <a href="index.html" class="nav-item active">
+                    <span class="nav-icon">🏯</span>
+                    <span>Tổng Quan</span>
+                </a>
+                <a href="assignments.html" class="nav-item">
+                    <span class="nav-icon">📜</span>
+                    <span>Ban Bố Tấu Chương</span>
+                </a>
+                <a href="submissions.html" class="nav-item">
+                    <span class="nav-icon">✍️</span>
+                    <span>Chấm Bài & Phê Duyệt</span>
+                </a>
+                <a href="attendance.html" class="nav-item">
+                    <span class="nav-icon">📅</span>
+                    <span>Điểm Danh Hàng Ngày</span>
+                </a>
             </nav>
-            <div style="padding: 1.5rem; text-align: center;">
-                <button onclick="logout()" class="btn btn-secondary" style="width: 100%;">Xuất Cung</button>
+
+            <div class="sidebar-footer">
+                <button onclick="logout()" class="btn btn-secondary btn-block">
+                    <span>🚪 Xuất Cung (Đăng Xuất)</span>
+                </button>
             </div>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
             <header class="topbar">
-                <div>
-                    <h1 style="font-size: 1.8rem;">Tổng Quan Tình Hình</h1>
+                <div class="topbar-left">
+                    <button class="menu-toggle" aria-label="Mở Menu">☰</button>
+                    <div class="topbar-title">
+                        <h1>Thái Phó Điện · <span class="hanzi">太傅殿</span></h1>
+                        <p>Trang quản lý giảng dạy Hán ngữ & điều phối học viện</p>
+                    </div>
                 </div>
-                <div class="user-profile">
-                    <div class="user-info">
-                        <div class="user-name" id="userName">Đang tải...</div>
-                        <div class="user-role">Thái Phó (Giáo viên)</div>
+
+                <div class="topbar-right">
+                    <button id="notifBtn" class="notif-btn" title="Chiếu chỉ & Thông báo">
+                        <span>🔔</span>
+                    </button>
+                    <div class="user-profile">
+                        <div class="user-avatar" style="background: linear-gradient(135deg, #10B981, #047857);">傅</div>
+                        <div class="user-meta">
+                            <div class="name" id="userName">Đang triệu kiến...</div>
+                            <div class="role user-role">Thái Phó</div>
+                        </div>
                     </div>
                 </div>
             </header>
 
             <div class="animate-fade-in">
+                <!-- Action Header Banner -->
+                <div class="glass-panel mb-2 d-flex justify-between align-center" style="gap: 1rem; flex-wrap: wrap;">
+                    <div>
+                        <h2 style="font-size: 1.35rem;">Quyền Lực Thái Phó</h2>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">Thưởng điểm biểu dương hoặc phạt điểm học sinh phụ trách</p>
+                    </div>
+                    <div class="d-flex gap-1" style="flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="openQuickScoreModal()">
+                            <span>⭐ Thưởng / Phạt Triều Đình</span>
+                        </button>
+                        <a href="assignments.html" class="btn btn-secondary">
+                            <span>+ Giao Bài Mới</span>
+                        </a>
+                    </div>
+                </div>
+
                 <!-- Stats Grid -->
                 <div class="grid-cards">
                     <div class="glass-panel stat-card">
-                        <div class="stat-label">Lớp Phụ Trách</div>
-                        <div class="stat-value" id="totalClasses">0</div>
+                        <div class="stat-icon" style="color: var(--gold-light);">🏛️</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Lớp Phụ Trách</div>
+                            <div class="stat-value" id="totalClasses">0</div>
+                        </div>
                     </div>
-                    <div class="stat-card glass-panel">
-                        <div class="stat-label">Tổng Học Sinh</div>
-                        <div class="stat-value" id="totalStudents">0</div>
+
+                    <div class="glass-panel stat-card">
+                        <div class="stat-icon" style="color: var(--blue);">👥</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Tổng Học Tử</div>
+                            <div class="stat-value" id="totalStudents">0</div>
+                        </div>
                     </div>
-                    <div class="stat-card glass-panel">
-                        <div class="stat-label">Bài Tập Đang Giao</div>
-                        <div class="stat-value" id="activeAssignments">0</div>
+
+                    <div class="glass-panel stat-card">
+                        <div class="stat-icon" style="color: var(--amber);">📜</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Tấu Chương Đang Giao</div>
+                            <div class="stat-value" id="activeAssignments">0</div>
+                        </div>
                     </div>
-                    <div class="stat-card glass-panel" style="border-color: var(--primary-color);">
-                        <div class="stat-label">Bài Chờ Chấm</div>
-                        <div class="stat-value" id="ungradedCount">0</div>
+
+                    <div class="glass-panel stat-card" style="border-color: var(--crimson);">
+                        <div class="stat-icon" style="color: var(--crimson);">⏳</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Bài Chờ Phê Duyệt</div>
+                            <div class="stat-value" style="color: #FB7185;" id="ungradedCount">0</div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Classes Table -->
-                <div class="glass-panel mt-2">
-                    <h3 class="mb-1">Danh sách lớp phụ trách</h3>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Mã Lớp</th>
-                                    <th>Tên Lớp</th>
-                                    <th>Năm Học</th>
-                                    <th>Trạng Thái</th>
-                                </tr>
-                            </thead>
-                            <tbody id="classesTableBody">
-                                <tr>
-                                    <td colspan="4" class="text-center">Đang tải dữ liệu...</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <!-- Classes Managed Section -->
+                <div class="glass-panel">
+                    <h3 class="mb-1">Danh Sách Lớp Phụ Trách</h3>
+                    <div id="classesListContainer">
+                        <p class="text-center" style="color: var(--text-muted); padding: 2rem;">Đang tải danh sách lớp...</p>
                     </div>
                 </div>
-
             </div>
         </main>
+    </div>
+
+    <!-- Quick Score Modal (Thưởng / Phạt) -->
+    <div id="quickScoreModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⭐ Thưởng / Phạt Điểm Triều Đình</h2>
+                <button class="modal-close-btn" onclick="closeQuickScoreModal()">&times;</button>
+            </div>
+            <form id="quickScoreForm">
+                <div class="input-group">
+                    <label>Chọn Học Sinh</label>
+                    <select id="quickScoreStudentSelect" required>
+                        <option value="">Đang tải danh sách học sinh...</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Loại Quyết Định</label>
+                    <select id="quickScoreType" onchange="updatePresetReasons()">
+                        <option value="bonus">Khen Thưởng (Thêm Điểm)</option>
+                        <option value="penalty">Phạt Điểm (Trừ Điểm)</option>
+                        <option value="manual">Điều Chỉnh Điểm Thủ Công</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Số Điểm Biến Động (Dương là cộng, Âm là trừ)</label>
+                    <input type="number" step="0.5" id="quickScorePoints" value="10" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Lý Do / Chiếu Chỉ Phê Chuẩn</label>
+                    <input type="text" id="quickScoreReason" placeholder="VD: Phát biểu hăng hái, thuộc từ vựng Hán tự..." required>
+                </div>
+
+                <div class="d-flex gap-1" style="flex-wrap: wrap; margin-bottom: 1.25rem;" id="presetReasonsContainer">
+                    <!-- Presets injected via JS -->
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" style="padding: 0.85rem;">
+                    <span>Xác Nhận Ban Chiếu</span>
+                </button>
+            </form>
+        </div>
     </div>
 
     <script src="../config.js"></script>

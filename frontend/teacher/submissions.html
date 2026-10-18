@@ -2,80 +2,173 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chấm Điểm - Giáo Viên</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chấm Bài & Phê Duyệt - Thái Phó</title>
     <link rel="stylesheet" href="../css/style.css">
     <style>
-        .badge { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; }
-        .badge-graded { background: rgba(40,167,69,0.2); color: #28a745; }
-        .badge-pending { background: rgba(255,193,7,0.2); color: #ffc107; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
-        .modal-content { background: var(--bg-dark); width: 90%; max-width: 600px; padding: 2rem; border-radius: 12px; border: 1px solid var(--glass-border); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); max-height: 90vh; overflow-y: auto;}
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .review-q-card {
+            background: rgba(13, 17, 26, 0.7);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .review-q-card.correct {
+            border-left: 4px solid var(--jade);
+        }
+
+        .review-q-card.wrong {
+            border-left: 4px solid var(--crimson);
+        }
     </style>
 </head>
 <body>
+
     <div class="app-container">
+        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏯</div>
-                <h2 style="font-size: 1.2rem;">Hoàng Cung<br>Học Đường</h2>
+                <div class="sidebar-logo-icon">🏯</div>
+                <div class="sidebar-brand">
+                    <h2>Hoàng Cung</h2>
+                    <span>Học Viện Hán Ngữ</span>
+                </div>
             </div>
+
             <nav class="sidebar-nav">
-                <a href="index.html" class="nav-item">Tổng Quan</a>
-                <a href="assignments.html" class="nav-item">Ban Bố Tấu Chương</a>
-                <a href="submissions.html" class="nav-item active">Chấm Điểm</a>
-                <a href="attendance.html" class="nav-item">Điểm Danh</a>
+                <a href="index.html" class="nav-item">
+                    <span class="nav-icon">🏯</span>
+                    <span>Tổng Quan</span>
+                </a>
+                <a href="assignments.html" class="nav-item">
+                    <span class="nav-icon">📜</span>
+                    <span>Ban Bố Tấu Chương</span>
+                </a>
+                <a href="submissions.html" class="nav-item active">
+                    <span class="nav-icon">✍️</span>
+                    <span>Chấm Bài & Phê Duyệt</span>
+                </a>
+                <a href="attendance.html" class="nav-item">
+                    <span class="nav-icon">📅</span>
+                    <span>Điểm Danh Hàng Ngày</span>
+                </a>
             </nav>
-            <div style="padding: 1.5rem; text-align: center;">
-                <button onclick="logout()" class="btn btn-secondary" style="width: 100%;">Xuất Cung</button>
+
+            <div class="sidebar-footer">
+                <button onclick="logout()" class="btn btn-secondary btn-block">
+                    <span>🚪 Xuất Cung (Đăng Xuất)</span>
+                </button>
             </div>
         </aside>
 
+        <!-- Main Content -->
         <main class="main-content">
             <header class="topbar">
-                <h1 style="font-size: 1.8rem;">Chấm Điểm Bài Nộp</h1>
+                <div class="topbar-left">
+                    <button class="menu-toggle" aria-label="Mở Menu">☰</button>
+                    <div class="topbar-title">
+                        <h1>Khảo Hạch & Phê Duyệt · <span class="hanzi">批改殿</span></h1>
+                        <p>Chấm bài tập, xem chi tiết bài làm & ban lời phê cho học tử</p>
+                    </div>
+                </div>
+
+                <div class="topbar-right">
+                    <button id="notifBtn" class="notif-btn" title="Chiếu chỉ & Thông báo">
+                        <span>🔔</span>
+                    </button>
+                    <div class="user-profile">
+                        <div class="user-avatar" style="background: linear-gradient(135deg, #10B981, #047857);">傅</div>
+                        <div class="user-meta">
+                            <div class="name" id="userName">Đang tải...</div>
+                            <div class="role user-role">Thái Phó</div>
+                        </div>
+                    </div>
+                </div>
             </header>
 
-            <div class="animate-fade-in glass-panel">
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Bài Tập</th>
-                                <th>Học Sinh</th>
-                                <th>Trạng Thái Nộp</th>
-                                <th>Điểm Hệ Thống</th>
-                                <th>Tình Trạng</th>
-                                <th>Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody id="subsTable">
-                            <tr><td colspan="6" class="text-center">Đang tải...</td></tr>
-                        </tbody>
-                    </table>
+            <div class="animate-fade-in">
+                <!-- Filters -->
+                <div class="glass-panel mb-2" style="padding: 1.25rem;">
+                    <div class="filter-bar">
+                        <div class="tabs-nav" style="margin-bottom: 0; border-bottom: none;">
+                            <button class="tab-btn active" onclick="setSubFilter('all', this)">Tất Cả</button>
+                            <button class="tab-btn" onclick="setSubFilter('pending', this)">Chờ Phê Duyệt</button>
+                            <button class="tab-btn" onclick="setSubFilter('graded', this)">Đã Phê Duyệt</button>
+                        </div>
+                        <div style="min-width: 250px; flex: 1; max-width: 350px;">
+                            <input type="text" id="subSearchInput" placeholder="🔍 Tìm tên học sinh / bài tập..." oninput="filterSubmissions()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submissions Table -->
+                <div class="glass-panel">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tấu Chương</th>
+                                    <th>Học Tử Dâng Trình</th>
+                                    <th>Thời Gian Nộp</th>
+                                    <th>Hạn Chót</th>
+                                    <th>Điểm Số</th>
+                                    <th>Tình Trạng</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subsTableBody">
+                                <tr><td colspan="7" class="text-center" style="padding: 2.5rem; color: var(--text-muted)">Đang tải danh sách bài nộp...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 
     <!-- Grade Modal -->
-    <div id="gradeModal" class="modal">
-        <div class="modal-content">
-            <div class="d-flex justify-between align-center mb-2">
-                <h2>Phê Duyệt / Chỉnh Điểm</h2>
-                <button class="btn btn-secondary" onclick="closeModal()">Đóng</button>
+    <div id="gradeModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 780px;">
+            <div class="modal-header">
+                <div>
+                    <h2 id="gradeModalTitle">Phê Duyệt Tấu Chương</h2>
+                    <p style="font-size: 0.85rem; color: var(--gold-light);" id="gradeModalSubtitle">Học sinh: —</p>
+                </div>
+                <button class="modal-close-btn" onclick="closeGradeModal()">&times;</button>
             </div>
-            <div id="gradeDetails" class="mb-2 text-muted" style="font-size: 0.9rem;"></div>
-            <form id="gradeForm">
+
+            <!-- Question Review Area -->
+            <div class="mb-2">
+                <h4 style="margin-bottom: 0.75rem; color: var(--gold-light);">Chi Tiết Bài Làm Của Học Tử:</h4>
+                <div id="gradeQuestionsContainer" style="max-height: 280px; overflow-y: auto;">
+                    <p class="text-center" style="padding: 1rem; color: var(--text-muted)">Đang tải chi tiết...</p>
+                </div>
+            </div>
+
+            <!-- Grade Form -->
+            <form id="gradeForm" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
                 <div class="input-group">
-                    <label>Điểm số (Thay đổi nếu cần)</label>
-                    <input type="number" step="0.1" name="score" id="gradeScore" required>
+                    <label>Điểm Số Đạt Được (Điểm hệ thống tự chấm, Thái Phó có thể điều chỉnh)</label>
+                    <input type="number" step="0.5" id="gradeScore" required>
                 </div>
-                <div class="input-group mb-2">
-                    <label>Lời phê (Phê duyệt Tấu chương)</label>
-                    <textarea name="teacher_comment" id="gradeComment" rows="4"></textarea>
+
+                <div class="input-group">
+                    <label>Lời Phê Của Thái Phó (Nhận xét ngữ pháp, pinyin, khen ngợi)</label>
+                    <textarea id="gradeComment" rows="3" placeholder="VD: Nắm chắc từ vựng Hán ngữ bài 3. Viết chữ chuẩn, phát huy tiếp nhé!"></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Lưu Lời Phê & Điểm</button>
+
+                <button type="submit" class="btn btn-primary btn-block" style="padding: 0.85rem;">
+                    <span>📜 Lưu Phê Duyệt & Chấm Điểm</span>
+                </button>
             </form>
         </div>
     </div>

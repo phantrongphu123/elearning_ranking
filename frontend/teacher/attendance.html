@@ -2,69 +2,175 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Điểm Danh - Giáo Viên</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Điểm Danh Hoàng Cung - Thái Phó</title>
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .attendance-status-radios {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .status-radio-label {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.45rem 0.75rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.82rem;
+            transition: all 0.2s;
+        }
+
+        .status-radio-label:hover {
+            border-color: var(--gold-primary);
+        }
+
+        .status-radio-label input[type="radio"] {
+            width: 15px;
+            height: 15px;
+            accent-color: var(--gold-primary);
+            cursor: pointer;
+        }
+
+        .status-present { color: #34D399; }
+        .status-late { color: #FBBF24; }
+        .status-excused { color: #60A5FA; }
+        .status-unexcused { color: #FB7185; }
+
+        @media (max-width: 768px) {
+            .attendance-status-radios {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
+
     <div class="app-container">
+        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏯</div>
-                <h2 style="font-size: 1.2rem;">Hoàng Cung<br>Học Đường</h2>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="index.html" class="nav-item">Tổng Quan</a>
-                <a href="assignments.html" class="nav-item">Ban Bố Tấu Chương</a>
-                <a href="submissions.html" class="nav-item">Chấm Điểm</a>
-                <a href="attendance.html" class="nav-item active">Điểm Danh</a>
-            </nav>
-            <div style="padding: 1.5rem; text-align: center;">
-                <button onclick="logout()" class="btn btn-secondary" style="width: 100%;">Xuất Cung</button>
-            </div>
-        </aside>
-
-        <main class="main-content">
-            <header class="topbar">
-                <h1 style="font-size: 1.8rem;">Điểm Danh Hàng Ngày</h1>
-            </header>
-
-            <div class="animate-fade-in glass-panel mb-2">
-                <div class="d-flex gap-1 align-center" style="gap: 1rem;">
-                    <div style="flex: 1">
-                        <label>Chọn Lớp (Class ID)</label>
-                        <input type="number" id="classSelect" placeholder="Nhập ID lớp (VD: 1)" value="1">
-                    </div>
-                    <div style="flex: 1">
-                        <label>Ngày Điểm Danh</label>
-                        <input type="date" id="dateSelect">
-                    </div>
-                    <div>
-                        <label>&nbsp;</label>
-                        <button class="btn btn-primary" onclick="loadStudents()">Tải Danh Sách</button>
-                    </div>
+                <div class="sidebar-logo-icon">🏯</div>
+                <div class="sidebar-brand">
+                    <h2>Hoàng Cung</h2>
+                    <span>Học Viện Hán Ngữ</span>
                 </div>
             </div>
 
-            <div class="animate-fade-in glass-panel" id="attendancePanel" style="display: none;">
-                <form id="attendanceForm">
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Mã HS</th>
-                                    <th>Họ Tên</th>
-                                    <th>Trạng Thái</th>
-                                    <th>Ghi Chú</th>
-                                </tr>
-                            </thead>
-                            <tbody id="studentsTable"></tbody>
-                        </table>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <span class="nav-icon">🏯</span>
+                    <span>Tổng Quan</span>
+                </a>
+                <a href="assignments.html" class="nav-item">
+                    <span class="nav-icon">📜</span>
+                    <span>Ban Bố Tấu Chương</span>
+                </a>
+                <a href="submissions.html" class="nav-item">
+                    <span class="nav-icon">✍️</span>
+                    <span>Chấm Bài & Phê Duyệt</span>
+                </a>
+                <a href="attendance.html" class="nav-item active">
+                    <span class="nav-icon">📅</span>
+                    <span>Điểm Danh Hàng Ngày</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button onclick="logout()" class="btn btn-secondary btn-block">
+                    <span>🚪 Xuất Cung (Đăng Xuất)</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle" aria-label="Mở Menu">☰</button>
+                    <div class="topbar-title">
+                        <h1>Điểm Danh Khảo Hạch · <span class="hanzi">点名殿</span></h1>
+                        <p>Kiểm tra chuyên cần, chấm điểm danh theo quy chế hoàng cung</p>
                     </div>
-                    <div class="mt-2 text-center">
-                        <button type="submit" class="btn btn-primary" style="padding: 1rem 3rem;">Lưu Điểm Danh</button>
+                </div>
+
+                <div class="topbar-right">
+                    <button id="notifBtn" class="notif-btn" title="Chiếu chỉ & Thông báo">
+                        <span>🔔</span>
+                    </button>
+                    <div class="user-profile">
+                        <div class="user-avatar" style="background: linear-gradient(135deg, #10B981, #047857);">傅</div>
+                        <div class="user-meta">
+                            <div class="name" id="userName">Đang tải...</div>
+                            <div class="role user-role">Thái Phó</div>
+                        </div>
                     </div>
-                </form>
+                </div>
+            </header>
+
+            <div class="animate-fade-in">
+                <!-- Selection Panel -->
+                <div class="glass-panel mb-2">
+                    <div class="d-flex gap-1 align-center" style="gap: 1rem; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="display: block; font-size: 0.85rem; color: var(--gold-light); margin-bottom: 0.35rem;">
+                                Lớp Học
+                            </label>
+                            <select id="classSelect">
+                                <option value="">-- Đang tải danh sách lớp --</option>
+                            </select>
+                        </div>
+
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="display: block; font-size: 0.85rem; color: var(--gold-light); margin-bottom: 0.35rem;">
+                                Ngày Điểm Danh
+                            </label>
+                            <input type="date" id="dateSelect">
+                        </div>
+
+                        <div style="display: flex; gap: 0.5rem; align-items: flex-end; padding-top: 1.35rem;">
+                            <button class="btn btn-primary" onclick="loadClassStudents()">
+                                <span>📋 Tải Học Tử</span>
+                            </button>
+                            <button class="btn btn-secondary" onclick="markAllPresent()">
+                                <span>⚡ Tất Cả Có Mặt (+5đ)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Students Roster Panel -->
+                <div class="glass-panel" id="rosterPanel" style="display: none;">
+                    <form id="attendanceForm">
+                        <div class="table-container mb-2">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Mã Học Tử</th>
+                                        <th>Họ Và Tên</th>
+                                        <th>Tước Vị</th>
+                                        <th>Trạng Thái Chuyên Cần</th>
+                                        <th>Ghi Chú</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rosterTableBody">
+                                    <!-- Injected via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary" style="padding: 0.85rem 3rem; font-size: 1rem;">
+                                <span>💾 Lưu Điểm Danh & Cập Nhật Điểm</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </main>
     </div>

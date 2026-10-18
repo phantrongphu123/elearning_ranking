@@ -2,133 +2,254 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tấu Chương (Bài Tập) - Học Sinh</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tấu Chương Hán Ngữ - Học Sinh</title>
     <link rel="stylesheet" href="../css/style.css">
     <style>
         .assignment-card {
-            background: rgba(0,0,0,0.2);
+            background: rgba(17, 24, 39, 0.75);
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--gold-primary);
+            border-radius: var(--radius-md);
             padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            border-left: 4px solid var(--primary-color);
-            transition: transform 0.2s;
+            margin-bottom: 1.25rem;
+            transition: all 0.25s ease;
         }
+
         .assignment-card:hover {
-            transform: translateX(5px);
-            background: rgba(212, 175, 55, 0.05);
+            transform: translateY(-2px);
+            border-color: var(--gold-light);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4), 0 0 15px rgba(212, 175, 55, 0.15);
         }
-        .meta-info {
+
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .assignment-meta {
+            display: flex;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+            margin: 0.6rem 0 0.9rem 0;
             font-size: 0.85rem;
             color: var(--text-muted);
-            margin: 0.5rem 0 1rem 0;
+        }
+
+        .assignment-meta span {
             display: flex;
-            gap: 1rem;
-        }
-        .badge {
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-        .badge-pending { background: rgba(255,193,7,0.2); color: #ffc107; }
-        .badge-submitted { background: rgba(40,167,69,0.2); color: #28a745; }
-        
-        /* Modal for Answering */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
             align-items: center;
-            justify-content: center;
+            gap: 0.35rem;
         }
-        .modal-content {
-            background: var(--bg-dark);
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+
+        .assignment-desc {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.5;
         }
-        .question-block {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+
+        /* Question & Quiz Styles */
+        .question-card {
+            background: rgba(13, 17, 26, 0.7);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
         }
-        .options-grid {
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            color: var(--gold-light);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .options-list {
             display: grid;
-            gap: 0.5rem;
-            margin-top: 1rem;
+            gap: 0.65rem;
         }
-        .option-label {
+
+        .option-item {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
+            gap: 0.85rem;
+            padding: 0.85rem 1rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
         }
-        .option-label:hover {
-            background: rgba(212, 175, 55, 0.1);
+
+        .option-item:hover {
+            background: rgba(212, 175, 55, 0.08);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .option-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--gold-primary);
+            cursor: pointer;
+        }
+
+        .option-item.selected {
+            background: rgba(212, 175, 55, 0.15);
+            border-color: var(--gold-primary);
+        }
+
+        /* Review Styles */
+        .review-correct {
+            border-color: var(--jade) !important;
+            background: rgba(16, 185, 129, 0.1) !important;
+        }
+
+        .review-wrong {
+            border-color: var(--crimson) !important;
+            background: rgba(225, 29, 72, 0.1) !important;
         }
     </style>
 </head>
 <body>
+
     <div class="app-container">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏯</div>
-                <h2 style="font-size: 1.2rem;">Hoàng Cung<br>Học Đường</h2>
+                <div class="sidebar-logo-icon">🏯</div>
+                <div class="sidebar-brand">
+                    <h2>Hoàng Cung</h2>
+                    <span>Học Viện Hán Ngữ</span>
+                </div>
             </div>
+
             <nav class="sidebar-nav">
-                <a href="index.html" class="nav-item">Tổng Quan</a>
-                <a href="assignments.html" class="nav-item active">Tấu Chương (Bài Tập)</a>
-                <a href="leaderboard.html" class="nav-item">Bảng Vàng (BXH)</a>
+                <a href="index.html" class="nav-item">
+                    <span class="nav-icon">🏯</span>
+                    <span>Tổng Quan</span>
+                </a>
+                <a href="assignments.html" class="nav-item active">
+                    <span class="nav-icon">📝</span>
+                    <span>Tấu Chương (Bài Tập)</span>
+                </a>
+                <a href="leaderboard.html" class="nav-item">
+                    <span class="nav-icon">🏆</span>
+                    <span>Bảng Vàng Triều Đình</span>
+                </a>
             </nav>
-            <div style="padding: 1.5rem; text-align: center;">
-                <button onclick="logout()" class="btn btn-secondary" style="width: 100%;">Xuất Cung</button>
+
+            <div class="sidebar-footer">
+                <button onclick="logout()" class="btn btn-secondary btn-block">
+                    <span>🚪 Xuất Cung (Đăng Xuất)</span>
+                </button>
             </div>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
             <header class="topbar">
-                <div>
-                    <h1 style="font-size: 1.8rem;">Tấu Chương Chờ Duyệt</h1>
+                <div class="topbar-left">
+                    <button class="menu-toggle" aria-label="Mở Menu">☰</button>
+                    <div class="topbar-title">
+                        <h1>Tấu Chương Hán Ngữ · <span class="hanzi">课后作业</span></h1>
+                        <p>Danh sách bài tập và bài thi trắc nghiệm tiếng Trung</p>
+                    </div>
+                </div>
+
+                <div class="topbar-right">
+                    <button id="notifBtn" class="notif-btn" title="Chiếu chỉ & Thông báo">
+                        <span>🔔</span>
+                    </button>
+                    <div class="user-profile">
+                        <div class="user-avatar">学</div>
+                        <div class="user-meta">
+                            <div class="name" id="userName">Đang tải...</div>
+                            <div class="role user-role">Học Tử</div>
+                        </div>
+                    </div>
                 </div>
             </header>
 
-            <div class="animate-fade-in glass-panel">
-                <div id="assignmentsList">
-                    <p class="text-center">Đang tải danh sách bài tập...</p>
+            <div class="animate-fade-in">
+                <!-- Filter Tabs -->
+                <div class="tabs-nav">
+                    <button class="tab-btn active" onclick="setAssignmentFilter('all', this)">
+                        <span>Tất Cả Tấu Chương</span>
+                    </button>
+                    <button class="tab-btn" onclick="setAssignmentFilter('pending', this)">
+                        <span>Chưa Dâng Trình (Cần Làm)</span>
+                    </button>
+                    <button class="tab-btn" onclick="setAssignmentFilter('submitted', this)">
+                        <span>Đã Dâng Trình (Xem Kết Quả)</span>
+                    </button>
+                </div>
+
+                <!-- Assignment Cards List -->
+                <div id="assignmentsListContainer">
+                    <p class="text-center" style="color: var(--text-muted); padding: 3rem;">Đang tải tấu chương triều đình...</p>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Assignment Modal -->
-    <div id="assignmentModal" class="modal">
-        <div class="modal-content">
-            <div class="d-flex justify-between align-center mb-2">
-                <h2 id="modalTitle">Làm Bài</h2>
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Đóng</button>
+    <!-- Exam / Do Assignment Modal -->
+    <div id="examModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 750px;">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modalExamTitle">Làm Bài Tập</h2>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;" id="modalExamSubject">Môn: Tiếng Trung</p>
+                </div>
+                <button class="modal-close-btn" onclick="closeExamModal()">&times;</button>
             </div>
-            <div id="modalDescription" class="mb-2 text-muted"></div>
-            
+
+            <div id="modalExamDescription" class="mb-2" style="font-size: 0.92rem; color: var(--text-secondary); background: rgba(255,255,255,0.03); padding: 0.75rem; border-radius: var(--radius-sm);"></div>
+
             <form id="submissionForm">
-                <div id="questionsContainer"></div>
-                <div class="mt-2 text-center" id="submitArea">
-                    <button type="submit" class="btn btn-primary">Dâng Trình (Nộp Bài)</button>
+                <div id="questionsContainer">
+                    <p class="text-center" style="padding: 2rem;">Đang chuẩn bị đề thi...</p>
+                </div>
+
+                <div class="mt-2 text-center" id="submitActionArea">
+                    <button type="submit" class="btn btn-primary" style="padding: 0.85rem 2.5rem; font-size: 1rem;">
+                        <span>✍️ Dâng Trình Tấu Chương (Nộp Bài)</span>
+                    </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Submission Review Modal -->
+    <div id="reviewModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 750px;">
+            <div class="modal-header">
+                <div>
+                    <h2 id="reviewModalTitle">Kết Quả Bài Nộp</h2>
+                    <p style="font-size: 0.85rem; color: var(--gold-light);" id="reviewModalScore">Điểm: —</p>
+                </div>
+                <button class="modal-close-btn" onclick="closeReviewModal()">&times;</button>
+            </div>
+
+            <div id="reviewTeacherCommentBox" class="mb-2" style="display: none; background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold-primary); padding: 1rem; border-radius: var(--radius-md);">
+                <div style="font-weight: 600; color: var(--gold-light); margin-bottom: 0.35rem;">📜 Lời Phê Của Thái Phó:</div>
+                <div id="reviewTeacherCommentText" style="font-style: italic; color: var(--text-primary);"></div>
+            </div>
+
+            <div id="reviewQuestionsContainer">
+                <p class="text-center" style="padding: 2rem;">Đang tải chi tiết bài làm...</p>
+            </div>
         </div>
     </div>
 

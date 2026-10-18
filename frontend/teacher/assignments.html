@@ -2,102 +2,268 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Tấu Chương (Giáo Viên)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ban Bố Tấu Chương - Thái Phó</title>
     <link rel="stylesheet" href="../css/style.css">
     <style>
-        .form-row { display: flex; gap: 1rem; margin-bottom: 1rem; }
-        .form-row > * { flex: 1; }
-        .badge { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; }
-        .badge-active { background: rgba(40,167,69,0.2); color: #28a745; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
-        .modal-content { background: var(--bg-dark); width: 90%; max-width: 600px; padding: 2rem; border-radius: 12px; border: 1px solid var(--glass-border); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); max-height: 90vh; overflow-y: auto;}
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .question-item {
+            background: rgba(13, 17, 26, 0.7);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .question-item:hover {
+            border-color: var(--gold-primary);
+        }
+
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .question-item {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
+
     <div class="app-container">
+        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏯</div>
-                <h2 style="font-size: 1.2rem;">Hoàng Cung<br>Học Đường</h2>
+                <div class="sidebar-logo-icon">🏯</div>
+                <div class="sidebar-brand">
+                    <h2>Hoàng Cung</h2>
+                    <span>Học Viện Hán Ngữ</span>
+                </div>
             </div>
+
             <nav class="sidebar-nav">
-                <a href="index.html" class="nav-item">Tổng Quan</a>
-                <a href="assignments.html" class="nav-item active">Ban Bố Tấu Chương</a>
-                <a href="submissions.html" class="nav-item">Chấm Điểm</a>
-                <a href="attendance.html" class="nav-item">Điểm Danh</a>
+                <a href="index.html" class="nav-item">
+                    <span class="nav-icon">🏯</span>
+                    <span>Tổng Quan</span>
+                </a>
+                <a href="assignments.html" class="nav-item active">
+                    <span class="nav-icon">📜</span>
+                    <span>Ban Bố Tấu Chương</span>
+                </a>
+                <a href="submissions.html" class="nav-item">
+                    <span class="nav-icon">✍️</span>
+                    <span>Chấm Bài & Phê Duyệt</span>
+                </a>
+                <a href="attendance.html" class="nav-item">
+                    <span class="nav-icon">📅</span>
+                    <span>Điểm Danh Hàng Ngày</span>
+                </a>
             </nav>
-            <div style="padding: 1.5rem; text-align: center;">
-                <button onclick="logout()" class="btn btn-secondary" style="width: 100%;">Xuất Cung</button>
+
+            <div class="sidebar-footer">
+                <button onclick="logout()" class="btn btn-secondary btn-block">
+                    <span>🚪 Xuất Cung (Đăng Xuất)</span>
+                </button>
             </div>
         </aside>
 
+        <!-- Main Content -->
         <main class="main-content">
             <header class="topbar">
-                <h1 style="font-size: 1.8rem;">Quản Lý Bài Tập (Tấu Chương)</h1>
-                <button class="btn btn-primary" onclick="openCreateModal()">+ Giao Bài Mới</button>
+                <div class="topbar-left">
+                    <button class="menu-toggle" aria-label="Mở Menu">☰</button>
+                    <div class="topbar-title">
+                        <h1>Quản Lý Tấu Chương · <span class="hanzi">作业管理</span></h1>
+                        <p>Ban bố bài tập tiếng Trung & soạn ngân hàng câu hỏi khảo hạch</p>
+                    </div>
+                </div>
+
+                <div class="topbar-right">
+                    <button id="notifBtn" class="notif-btn" title="Chiếu chỉ & Thông báo">
+                        <span>🔔</span>
+                    </button>
+                    <div class="user-profile">
+                        <div class="user-avatar" style="background: linear-gradient(135deg, #10B981, #047857);">傅</div>
+                        <div class="user-meta">
+                            <div class="name" id="userName">Đang tải...</div>
+                            <div class="role user-role">Thái Phó</div>
+                        </div>
+                    </div>
+                </div>
             </header>
 
-            <div class="animate-fade-in glass-panel">
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Tiêu đề</th>
-                                <th>Môn</th>
-                                <th>Lớp</th>
-                                <th>Hạn chót</th>
-                                <th>Đã nộp</th>
-                                <th>Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody id="assignmentsTable">
-                            <tr><td colspan="6" class="text-center">Đang tải...</td></tr>
-                        </tbody>
-                    </table>
+            <div class="animate-fade-in">
+                <!-- Action Header -->
+                <div class="glass-panel mb-2 d-flex justify-between align-center" style="gap: 1rem; flex-wrap: wrap;">
+                    <div>
+                        <h2 style="font-size: 1.35rem;">Kho Tấu Chương Đã Ban Bố</h2>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">Soạn bài tập, thêm câu hỏi trắc nghiệm hoặc thu hồi bài tập</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openCreateAssignmentModal()">
+                        <span>+ Ban Bố Tấu Chương Mới</span>
+                    </button>
+                </div>
+
+                <!-- Assignments Table -->
+                <div class="glass-panel">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tiêu Đề Tấu Chương</th>
+                                    <th>Môn Học</th>
+                                    <th>Lớp Phụ Trách</th>
+                                    <th>Hạn Chót Dâng Trình</th>
+                                    <th>Đã Nộp</th>
+                                    <th>Thao Tác Quản Lý</th>
+                                </tr>
+                            </thead>
+                            <tbody id="assignmentsTableBody">
+                                <tr><td colspan="6" class="text-center" style="padding: 2.5rem; color: var(--text-muted)">Đang tải tấu chương...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Create Modal -->
-    <div id="createModal" class="modal">
-        <div class="modal-content">
-            <div class="d-flex justify-between align-center mb-2">
-                <h2>Giao Bài Tập Mới</h2>
-                <button class="btn btn-secondary" onclick="closeModal()">Đóng</button>
+    <!-- Create Assignment Modal -->
+    <div id="createAssignmentModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 650px;">
+            <div class="modal-header">
+                <h2>📜 Ban Bố Tấu Chương Mới</h2>
+                <button class="modal-close-btn" onclick="closeCreateAssignmentModal()">&times;</button>
             </div>
-            <form id="createForm">
+            <form id="createAssignmentForm">
                 <div class="input-group">
-                    <label>Tiêu đề</label>
-                    <input type="text" name="title" required>
+                    <label>Tiêu Đề Tấu Chương (Bài Tập)</label>
+                    <input type="text" id="createTitle" placeholder="VD: Khảo Hạch Hán Tự & Pinyin Bài 3" required>
                 </div>
+
                 <div class="form-row">
                     <div class="input-group">
-                        <label>Môn học</label>
-                        <input type="text" name="subject" required>
+                        <label>Môn Học</label>
+                        <input type="text" id="createSubject" value="Tiếng Trung" required>
                     </div>
                     <div class="input-group">
-                        <label>Lớp (Class ID)</label>
-                        <input type="number" name="class_id" required>
+                        <label>Lớp Nhận Tấu Chương</label>
+                        <select id="createClassSelect" required>
+                            <option value="">-- Chọn lớp học --</option>
+                        </select>
                     </div>
                 </div>
+
                 <div class="form-row">
                     <div class="input-group">
-                        <label>Hạn chót</label>
-                        <input type="datetime-local" name="deadline" required>
+                        <label>Hạn Chót Dâng Trình (Deadline)</label>
+                        <input type="datetime-local" id="createDeadline" required>
                     </div>
                     <div class="input-group">
-                        <label>Điểm thưởng nộp đúng hạn</label>
-                        <input type="number" name="bonus_score" value="10">
+                        <label>Điểm Thưởng Nộp Đúng Hạn</label>
+                        <input type="number" id="createBonus" value="10" required>
                     </div>
                 </div>
-                <div class="input-group mb-2">
-                    <label>Mô tả / Ghi chú</label>
-                    <textarea name="description" rows="3"></textarea>
+
+                <div class="input-group">
+                    <label>Mô Tả / Yêu Cầu Của Thái Phó</label>
+                    <textarea id="createDesc" rows="3" placeholder="Nhập hướng dẫn làm bài tập cho học tử..."></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Ban Bố</button>
+
+                <button type="submit" class="btn btn-primary btn-block" style="padding: 0.85rem;">
+                    <span>Ban Bố Bài Tập (Bước 1)</span>
+                </button>
             </form>
+        </div>
+    </div>
+
+    <!-- Manage Questions Modal -->
+    <div id="manageQuestionsModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 780px;">
+            <div class="modal-header">
+                <div>
+                    <h2 id="mqModalTitle">Quản Lý Ngân Hàng Câu Hỏi</h2>
+                    <p style="font-size: 0.85rem; color: var(--gold-light);" id="mqModalSubtitle">Bài tập: —</p>
+                </div>
+                <button class="modal-close-btn" onclick="closeManageQuestionsModal()">&times;</button>
+            </div>
+
+            <!-- Existing Questions -->
+            <div class="mb-2">
+                <h4 style="margin-bottom: 0.75rem; color: var(--gold-light);">Danh Sách Câu Hỏi Hiện Tại:</h4>
+                <div id="questionsListContainer" style="max-height: 250px; overflow-y: auto;">
+                    <p class="text-center" style="padding: 1rem; color: var(--text-muted)">Đang tải câu hỏi...</p>
+                </div>
+            </div>
+
+            <!-- Add Question Form -->
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
+                <h4 style="margin-bottom: 1rem; color: var(--gold-light);">+ Thêm Câu Hỏi Khảo Hạch Mới:</h4>
+                <form id="addQuestionForm">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label>Loại Câu Hỏi</label>
+                            <select id="qTypeSelect" onchange="toggleQuestionOptionsUI()">
+                                <option value="multiple_choice">Trắc Nghiệm 4 Lựa Chọn (A, B, C, D)</option>
+                                <option value="true_false">Đúng / Sai (正确 / 错误)</option>
+                                <option value="short_answer">Điền Từ / Tự Luận Ngắn</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Điểm Số</label>
+                            <input type="number" step="0.5" id="qScore" value="10" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Nội Dung Đề Bài (Hỗ trợ Hán tự, Pinyin, Tiếng Việt)</label>
+                        <textarea id="qText" rows="2" placeholder="VD: Chữ '你好' phiên âm pinyin đọc là gì?" required></textarea>
+                    </div>
+
+                    <div id="optionsUI">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Đáp Án A</label>
+                                <input type="text" id="qOptA" placeholder="VD: nǐ hǎo">
+                            </div>
+                            <div class="input-group">
+                                <label>Đáp Án B</label>
+                                <input type="text" id="qOptB" placeholder="VD: nín hǎo">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Đáp Án C</label>
+                                <input type="text" id="qOptC" placeholder="VD: xièxie">
+                            </div>
+                            <div class="input-group">
+                                <label>Đáp Án D</label>
+                                <input type="text" id="qOptD" placeholder="VD: zàijiàn">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Đáp Án Chuẩn (A / B / C / D hoặc từ khóa đúng)</label>
+                        <input type="text" id="qCorrectAnswer" placeholder="Nhập 'a', 'b', 'c', 'd' hoặc từ khóa chính xác" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block" style="padding: 0.75rem;">
+                        <span>+ Thêm Câu Hỏi Vào Tấu Chương</span>
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 

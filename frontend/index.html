@@ -2,65 +2,180 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng Nhập - Hoàng Cung Học Đường</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tiến Cung - Hoàng Cung Học Đường (Tiếng Trung)</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .login-container {
+        .login-wrapper {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 1.5rem;
+            position: relative;
         }
-        .login-box {
+
+        .login-card {
             width: 100%;
-            max-width: 400px;
+            max-width: 440px;
+            padding: 2.5rem 2rem;
             text-align: center;
+            background: rgba(17, 24, 39, 0.85);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(212, 175, 55, 0.15);
+            border-radius: var(--radius-lg);
+            position: relative;
         }
-        .logo-placeholder {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+
+        .login-logo {
+            font-size: 3.2rem;
+            margin-bottom: 0.85rem;
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));
+            animation: pulseGlow 3s infinite alternate;
         }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3)); }
+            100% { transform: scale(1.04); filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.7)); }
+        }
+
+        .login-card h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.35rem;
+            background: linear-gradient(135deg, #FFF 10%, var(--gold-light) 60%, var(--gold-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-subtitle {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 1.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .login-subtitle span {
+            color: var(--gold-primary);
+            font-weight: 600;
+        }
+
         .error-message {
-            color: var(--danger);
-            background: rgba(220, 53, 69, 0.1);
-            padding: 0.75rem;
-            border-radius: 8px;
+            color: #FB7185;
+            background: rgba(225, 29, 72, 0.15);
+            border: 1px solid rgba(225, 29, 72, 0.3);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
             margin-bottom: 1.5rem;
             display: none;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
+            text-align: left;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 4px;
+        }
+
+        .demo-accounts {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .demo-title {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+
+        .demo-badges {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .demo-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: 0.4rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .demo-btn:hover {
+            background: rgba(212, 175, 55, 0.15);
+            border-color: var(--gold-primary);
+            color: var(--gold-light);
+            transform: translateY(-1px);
         }
     </style>
 </head>
 <body>
 
-    <div class="login-container">
-        <div class="glass-panel login-box animate-fade-in">
-            <div class="logo-placeholder">🏯</div>
-            <h2 class="mb-2">Hoàng Cung Học Đường</h2>
-            
+    <div class="login-wrapper">
+        <div class="glass-panel login-card animate-fade-in">
+            <div class="login-logo">🏯</div>
+            <h1>Hoàng Cung Học Đường</h1>
+            <p class="login-subtitle">Học Viện Hán Ngữ Triều Đình · <span class="hanzi">皇宫学堂</span></p>
+
             <div id="errorMsg" class="error-message"></div>
 
             <form id="loginForm">
                 <div class="input-group">
-                    <label for="username">Tên đăng nhập (Thẻ Bài)</label>
-                    <input type="text" id="username" required autocomplete="username">
+                    <label for="username">Thẻ Bài Triều Đình (Tên đăng nhập)</label>
+                    <input type="text" id="username" placeholder="Nhập thẻ bài..." required autocomplete="username">
                 </div>
-                
-                <div class="input-group mb-2">
-                    <label for="password">Mật khẩu (Khẩu Quyết)</label>
-                    <input type="password" id="password" required autocomplete="current-password">
+
+                <div class="input-group">
+                    <label for="password">Khẩu Quyết Bảo Mật (Mật khẩu)</label>
+                    <div class="password-container">
+                        <input type="password" id="password" placeholder="Nhập khẩu quyết..." required autocomplete="current-password">
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility()" title="Ẩn/Hiện mật khẩu">
+                            <span id="togglePassIcon">👁️</span>
+                        </button>
+                    </div>
                 </div>
-                
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Tiến Cung (Đăng nhập)</button>
+
+                <button type="submit" class="btn btn-primary btn-block" style="padding: 0.85rem; font-size: 1rem; margin-top: 1rem;">
+                    <span>Tiến Cung (Đăng Nhập)</span>
+                </button>
             </form>
 
-            <p class="mt-2" style="font-size: 0.8rem; color: var(--text-muted);">
-                Tài khoản demo:<br>
-                Admin: admin / admin123<br>
-                Học sinh: student01 / student123<br>
-                Giáo viên: teacher01 / teacher123
-            </p>
+            <div class="demo-accounts">
+                <div class="demo-title">Tiến Cung Nhanh (Thử Nghiệm 1 Chạm)</div>
+                <div class="demo-badges">
+                    <button class="demo-btn" onclick="quickLogin('student01', 'student123')">
+                        <span>🎓</span> Học Sinh
+                    </button>
+                    <button class="demo-btn" onclick="quickLogin('teacher01', 'teacher123')">
+                        <span>👨‍🏫</span> Thái Phó
+                    </button>
+                    <button class="demo-btn" onclick="quickLogin('admin', 'admin123')">
+                        <span>👑</span> Hoàng Đế / Admin
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
