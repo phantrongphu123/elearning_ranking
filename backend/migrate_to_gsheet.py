@@ -149,9 +149,9 @@ print("\n📋 Đang ghi sheet BaiTap...")
 bai_tap = [
     {
         "assignment_id": 1,
-        "title": "Tấu Chương Toán Học - Mệnh Đề & Tập Hợp",
-        "description": "Khảo hạch kiến thức Toán 10 chương Mệnh đề, Tập hợp và các phép toán giao, hợp, hiệu.",
-        "subject": "Toán",
+        "title": "Khảo Thí Hán Ngữ 1 - Ngữ Âm Pinyin & Chào Hỏi Sơ Cấp",
+        "description": "Kiểm tra ngữ âm Pinyin, thanh điệu, các nét cơ bản và câu chào hỏi thường nhật trong Tiếng Trung.",
+        "subject": "Tiếng Trung",
         "class_id": 1,
         "teacher_id": 2,
         "created_at": now.isoformat(),
@@ -164,9 +164,9 @@ bai_tap = [
     },
     {
         "assignment_id": 2,
-        "title": "Ngự Thí Ngữ Văn - Văn Học Dân Gian & Sử Thi",
-        "description": "Kiểm tra kiến thức Ngữ Văn 10 về Thần thoại Hy Lạp, Sử thi Đăm Săn và Văn học dân gian.",
-        "subject": "Ngữ Văn",
+        "title": "Khảo Thí Hán Ngữ 2 - Giới Thiệu Bản Thân & Gia Đình",
+        "description": "Khảo hạch từ vựng xưng hô, quốc tịch, tuổi tác và các thành viên gia đình trong Tiếng Trung.",
+        "subject": "Tiếng Trung",
         "class_id": 1,
         "teacher_id": 2,
         "created_at": now.isoformat(),
@@ -179,9 +179,9 @@ bai_tap = [
     },
     {
         "assignment_id": 3,
-        "title": "Thi Đình Ngoại Ngữ - English Unit 1 & Grammar",
-        "description": "English 10 Global Success: Family Life, Present Simple vs Continuous, and Vocabulary.",
-        "subject": "Tiếng Anh",
+        "title": "Khảo Thí Hán Ngữ 3 - Số Đếm, Thời Gian & Mua Sắm",
+        "description": "Kiểm tra kỹ năng diễn đạt giờ giấc, ngày tháng, đếm số và hỏi giá khi mua sắm bằng Tiếng Trung.",
+        "subject": "Tiếng Trung",
         "class_id": 1,
         "teacher_id": 2,
         "created_at": now.isoformat(),
@@ -194,9 +194,9 @@ bai_tap = [
     },
     {
         "assignment_id": 4,
-        "title": "Khảo Thí Vật Lý - Động Học & Ba Định Luật Newton",
-        "description": "Kiểm tra Vật lý 10 về Chuyển động biến đổi đều, Rơi tự do và Ba định luật Newton.",
-        "subject": "Vật Lý",
+        "title": "Khảo Thí Hán Ngữ 4 - Ngữ Pháp & Văn Hóa Cung Đình",
+        "description": "Kiểm tra ngữ pháp câu chữ 在, phương vị từ và xưng hô kinh điển trong hoàng cung Trung Hoa.",
+        "subject": "Tiếng Trung",
         "class_id": 1,
         "teacher_id": 2,
         "created_at": now.isoformat(),
@@ -215,202 +215,202 @@ write_sheet("BaiTap", bai_tap)
 # ══════════════════════════════════════════════════════════════
 print("\n📋 Đang ghi sheet CauHoi...")
 cau_hoi = [
-    # ── Bài 1: Toán (6 câu) ──
+    # ── Bài 1: Ngữ Âm Pinyin & Chào Hỏi Sơ Cấp (6 câu) ──
     {
         "question_id": 1, "assignment_id": 1, "question_type": "multiple_choice",
-        "question_text": "Trong các câu sau, câu nào là một mệnh đề toán học?",
-        "option_a": "Hôm nay trời đẹp quá!",
-        "option_b": "15 là số nguyên tố.",
-        "option_c": "Bạn học lớp nào vậy?",
-        "option_d": "x + 1 > 0.",
-        "correct_answer": "b", "score": 15
-    },
-    {
-        "question_id": 2, "assignment_id": 1, "question_type": "multiple_choice",
-        "question_text": "Mệnh đề phủ định của mệnh đề: '∀x ∈ ℝ, x² - x + 7 > 0' là:",
-        "option_a": "∃x ∈ ℝ, x² - x + 7 ≤ 0",
-        "option_b": "∀x ∈ ℝ, x² - x + 7 < 0",
-        "option_c": "∃x ∈ ℝ, x² - x + 7 < 0",
-        "option_d": "∃x ∈ ℝ, x² - x + 7 > 0",
+        "question_text": "Phiên âm Pinyin chính xác của chữ '你好' (Xin chào) là gì?",
+        "option_a": "nǐ hǎo",
+        "option_b": "nǐ hào",
+        "option_c": "ní hāo",
+        "option_d": "nì hǎo",
         "correct_answer": "a", "score": 15
     },
     {
+        "question_id": 2, "assignment_id": 1, "question_type": "multiple_choice",
+        "question_text": "Khi hai âm tiết mang thanh 3 đi liền nhau (ví dụ: 你好 nǐ hǎo), thanh thứ nhất sẽ biến điệu thành thanh mấy?",
+        "option_a": "Thanh 1 (âm cao bằng)",
+        "option_b": "Thanh 2 (dấu sắc)",
+        "option_c": "Thanh 4 (hạ giọng dứt khoát)",
+        "option_d": "Giữ nguyên thanh 3",
+        "correct_answer": "b", "score": 15
+    },
+    {
         "question_id": 3, "assignment_id": 1, "question_type": "multiple_choice",
-        "question_text": "Cho tập hợp A = {1; 2; 3; 4} và B = {3; 4; 5; 6}. Phép giao A ∩ B là tập hợp nào?",
-        "option_a": "{1; 2}",
-        "option_b": "{3; 4}",
-        "option_c": "{1; 2; 3; 4; 5; 6}",
-        "option_d": "{5; 6}",
+        "question_text": "Câu 'Cảm ơn bạn' trong tiếng Trung viết bằng chữ Hán là:",
+        "option_a": "对不起",
+        "option_b": "谢谢你",
+        "option_c": "再见",
+        "option_d": "没关系",
         "correct_answer": "b", "score": 15
     },
     {
         "question_id": 4, "assignment_id": 1, "question_type": "multiple_choice",
-        "question_text": "Cho A = (-∞; 3] và B = (1; +∞). Tập hợp A ∩ B là nửa khoảng nào?",
-        "option_a": "(-∞; 1)",
-        "option_b": "(1; 3]",
-        "option_c": "[1; 3)",
-        "option_d": "(-∞; +∞)",
+        "question_text": "Khi đối phương nói '对不起' (Duìbuqǐ - Xin lỗi), cách đáp lại lịch sự nhất là:",
+        "option_a": "不客气 (Bú kèqi)",
+        "option_b": "没关系 (Méi guānxi)",
+        "option_c": "谢谢 (Xièxie)",
+        "option_d": "再见 (Zàijiàn)",
         "correct_answer": "b", "score": 15
     },
     {
         "question_id": 5, "assignment_id": 1, "question_type": "true_false",
-        "question_text": "Tập hợp rỗng (∅) là tập hợp con của mọi tập hợp khác.",
+        "question_text": "Các chữ Hán '一' (số 1), '二' (số 2), '三' (số 3) đều được cấu tạo từ nét ngang (横 - héng).",
         "option_a": "Đúng", "option_b": "Sai", "option_c": "", "option_d": "",
         "correct_answer": "a", "score": 20
     },
     {
         "question_id": 6, "assignment_id": 1, "question_type": "true_false",
-        "question_text": "Nếu một số tự nhiên chia hết cho 6 thì chắc chắn nó chia hết cho cả 2 và 3.",
+        "question_text": "Tiếng Trung phổ thông (Mandarin) có tất cả 6 thanh điệu cơ bản.",
         "option_a": "Đúng", "option_b": "Sai", "option_c": "", "option_d": "",
-        "correct_answer": "a", "score": 20
+        "correct_answer": "b", "score": 20
     },
 
-    # ── Bài 2: Ngữ Văn (6 câu) ──
+    # ── Bài 2: Giới Thiệu Bản Thân & Gia Đình (6 câu) ──
     {
         "question_id": 7, "assignment_id": 2, "question_type": "multiple_choice",
-        "question_text": "Đoạn trích 'Chiến thắng Mtao Mxây' trích từ tác phẩm sử thi anh hùng nào sau đây?",
-        "option_a": "Sử thi Đăm Săn (dân tộc Ê-đê)",
-        "option_b": "Sử thi Đẻ đất đẻ nước (dân tộc Mường)",
-        "option_c": "Sử thi Khinh Dú (dân tộc Thái)",
-        "option_d": "Sử thi Ot Ndrông (dân tộc M'Nông)",
+        "question_text": "Để hỏi tên đối phương một cách tự nhiên và lịch sự, câu nào sau đây là đúng nhất?",
+        "option_a": "你叫什么名字？ (Nǐ jiào shénme míngzi?)",
+        "option_b": "你是谁的名字？ (Nǐ shì shéi de míngzi?)",
+        "option_c": "你名字叫哪儿？ (Nǐ míngzi jiào nǎr?)",
+        "option_d": "你叫谁名字？ (Nǐ jiào shéi míngzi?)",
         "correct_answer": "a", "score": 15
     },
     {
         "question_id": 8, "assignment_id": 2, "question_type": "multiple_choice",
-        "question_text": "Biện pháp tu từ nghệ thuật nổi bật nhất khi miêu tả sức mạnh và tài năng múa khiên của Đăm Săn là gì?",
-        "option_a": "Ẩn dụ và hoán dụ tinh tế",
-        "option_b": "Phóng đại (khoa trương) kết hợp so sánh trùng điệp",
-        "option_c": "Tương phản đối lập gay gắt",
-        "option_d": "Điệp từ kết hợp chơi chữ",
+        "question_text": "Câu '我是越南人' (Wǒ shì Yuènán rén) có nghĩa tiếng Việt là gì?",
+        "option_a": "Tôi là người Trung Quốc",
+        "option_b": "Tôi là người Việt Nam",
+        "option_c": "Tôi học tiếng Việt Nam",
+        "option_d": "Tôi sống ở Việt Nam",
         "correct_answer": "b", "score": 15
     },
     {
         "question_id": 9, "assignment_id": 2, "question_type": "multiple_choice",
-        "question_text": "Nhân vật dũng sĩ Hê-ra-clét (Hercules) trong Thần thoại Hy Lạp nổi tiếng với chiến công nào?",
-        "option_a": "Lấy trộm ngọn lửa của thần Dớt trao cho loài người",
-        "option_b": "Vượt qua 12 chiến công phi thường và đầy thử thách",
-        "option_c": "Chém đầu nữ quỷ rắn Medusa",
-        "option_d": "Mười năm vượt biển cả trở về quê hương I-thác",
-        "correct_answer": "b", "score": 15
-    },
-    {
-        "question_id": 10, "assignment_id": 2, "question_type": "multiple_choice",
-        "question_text": "Phương thức sáng tác và lưu truyền chủ yếu của kho tàng Văn học dân gian Việt Nam là gì?",
-        "option_a": "Khắc họa trên vách đá và trống đồng",
-        "option_b": "Ghi chép cẩn trọng trong thư tịch cổ",
-        "option_c": "Truyền miệng (truyền khẩu) từ thế hệ này sang thế hệ khác",
-        "option_d": "In khắc trên mộc bản chữ Nôm",
+        "question_text": "Từ nào sau đây có nghĩa là 'Thầy cô giáo' trong tiếng Trung?",
+        "option_a": "学生 (xuésheng)",
+        "option_b": "医生 (yīshēng)",
+        "option_c": "老师 (lǎoshī)",
+        "option_d": "朋友 (péngyou)",
         "correct_answer": "c", "score": 15
     },
     {
+        "question_id": 10, "assignment_id": 2, "question_type": "multiple_choice",
+        "question_text": "Từ chỉ người 'Mẹ' trong gia đình viết bằng chữ Hán là:",
+        "option_a": "爸爸 (bàba)",
+        "option_b": "妈妈 (māma)",
+        "option_c": "哥哥 (gēge)",
+        "option_d": "姐姐 (jiějie)",
+        "correct_answer": "b", "score": 15
+    },
+    {
         "question_id": 11, "assignment_id": 2, "question_type": "true_false",
-        "question_text": "Sử thi là thể loại tự sự dân gian quy mô đồ sộ, kể về biến cố trọng đại gắn liền vận mệnh cộng đồng.",
+        "question_text": "Đại từ nghi vấn '几' (jǐ - mấy) thường dùng để hỏi số lượng nhỏ hơn 10 (ví dụ: 你家有几口人？).",
         "option_a": "Đúng", "option_b": "Sai", "option_c": "", "option_d": "",
         "correct_answer": "a", "score": 20
     },
     {
         "question_id": 12, "assignment_id": 2, "question_type": "true_false",
-        "question_text": "'Thần Trụ Trời' là câu chuyện thần thoại suy nguyên giải thích nguồn gốc vũ trụ sơ khai của người Việt cổ.",
+        "question_text": "Từ '他们' (tāmen) chỉ dùng riêng cho nhóm toàn nữ giới.",
         "option_a": "Đúng", "option_b": "Sai", "option_c": "", "option_d": "",
-        "correct_answer": "a", "score": 20
+        "correct_answer": "b", "score": 20
     },
 
-    # ── Bài 3: Tiếng Anh (6 câu) ──
+    # ── Bài 3: Số Đếm, Thời Gian & Mua Sắm (6 câu) ──
     {
         "question_id": 13, "assignment_id": 3, "question_type": "multiple_choice",
-        "question_text": "In our family, everyone shares the ______ such as washing dishes, sweeping, and taking out the rubbish.",
-        "option_a": "household chores",
-        "option_b": "financial burdens",
-        "option_c": "heavy lifting",
-        "option_d": "breadwinner",
+        "question_text": "Câu hỏi 'Bao nhiêu tiền một cân?' khi mua hoa quả trong tiếng Trung là:",
+        "option_a": "多少钱一斤？ (Duōshao qián yì jīn?)",
+        "option_b": "几块钱一点？ (Jǐ kuài qián yì diǎn?)",
+        "option_c": "怎么钱一斤？ (Zěnme qián yì jīn?)",
+        "option_d": "为什么多少钱？ (Wèishénme duōshao qián?)",
         "correct_answer": "a", "score": 15
     },
     {
         "question_id": 14, "assignment_id": 3, "question_type": "multiple_choice",
-        "question_text": "Listen! Minh ______ the piano in his room while his mother is cooking in the kitchen.",
-        "option_a": "plays",
-        "option_b": "is playing",
-        "option_c": "played",
-        "option_d": "has played",
+        "question_text": "Câu '现在八点半' (Xiànzài bā diǎn bàn) biểu thị mấy giờ?",
+        "option_a": "Hiện tại 7 giờ 30 phút",
+        "option_b": "Hiện tại 8 giờ 30 phút",
+        "option_c": "Hiện tại 8 giờ 15 phút",
+        "option_d": "Hiện tại 9 giờ kém 15 phút",
         "correct_answer": "b", "score": 15
     },
     {
         "question_id": 15, "assignment_id": 3, "question_type": "multiple_choice",
-        "question_text": "My father is the main ______ in my family; he works hard every day to earn money and provide for us.",
-        "option_a": "homemaker",
-        "option_b": "breadwinner",
-        "option_c": "housekeeper",
-        "option_d": "babysitter",
+        "question_text": "Thứ tự biểu đạt thời gian (năm, tháng, ngày, giờ) trong tiếng Trung tuân theo quy tắc nào?",
+        "option_a": "Đơn vị nhỏ đứng trước, lớn đứng sau (Giờ -> Ngày -> Tháng -> Năm)",
+        "option_b": "Đơn vị lớn đứng trước, nhỏ đứng sau (Năm -> Tháng -> Ngày -> Giờ)",
+        "option_c": "Hoàn toàn giống thứ tự tiếng Việt (Ngày -> Tháng -> Năm)",
+        "option_d": "Sắp xếp ngẫu nhiên không có quy tắc",
         "correct_answer": "b", "score": 15
     },
     {
         "question_id": 16, "assignment_id": 3, "question_type": "multiple_choice",
-        "question_text": "Water ______ at 100 degrees Celsius under standard atmospheric pressure.",
-        "option_a": "boils",
-        "option_b": "is boiling",
-        "option_c": "boiled",
-        "option_d": "will boil",
-        "correct_answer": "a", "score": 15
+        "question_text": "Số 88 trong tiếng Trung được đọc và viết là:",
+        "option_a": "二十八 (èr shí bā)",
+        "option_b": "八十八 (bā shí bā)",
+        "option_c": "八百八 (bā bǎi bā)",
+        "option_d": "十八八 (shí bā bā)",
+        "correct_answer": "b", "score": 15
     },
     {
         "question_id": 17, "assignment_id": 3, "question_type": "true_false",
-        "question_text": "The sentence 'I am usually getting up early at 6 AM on weekdays' is grammatically correct for a daily routine.",
+        "question_text": "Lượng từ thông dụng và đa năng nhất trong tiếng Trung là chữ '个' (gè).",
         "option_a": "Đúng", "option_b": "Sai", "option_c": "", "option_d": "",
-        "correct_answer": "b", "score": 20
+        "correct_answer": "a", "score": 20
     },
     {
         "question_id": 18, "assignment_id": 3, "question_type": "true_false",
-        "question_text": "The term 'homemaker' describes a person who primarily manages a home and takes care of family chores.",
+        "question_text": "Khi muốn mặc cả xin bớt giá, ta có thể nói: '太贵了，便宜一点儿吧！' (Tài guì le, piányi yìdiǎnr ba!).",
         "option_a": "Đúng", "option_b": "Sai", "option_c": "", "option_d": "",
         "correct_answer": "a", "score": 20
     },
 
-    # ── Bài 4: Vật Lý (6 câu) ──
+    # ── Bài 4: Ngữ Pháp & Văn Hóa Cung Đình (6 câu) ──
     {
         "question_id": 19, "assignment_id": 4, "question_type": "multiple_choice",
-        "question_text": "Hệ thức độc lập thời gian giữa gia tốc a, vận tốc ban đầu v₀, vận tốc sau v và quãng đường s là:",
-        "option_a": "v² - v₀² = 2as",
-        "option_b": "v - v₀ = 2as",
-        "option_c": "v² + v₀² = 2as",
-        "option_d": "v² - v₀² = as",
-        "correct_answer": "a", "score": 15
+        "question_text": "Trong hoàng cung triều đình Trung Hoa xưa, Hoàng đế thường tự xưng là gì?",
+        "option_a": "奴才 (Núcai)",
+        "option_b": "朕 (Zhèn)",
+        "option_c": "微臣 (Wēichén)",
+        "option_d": "本宫 (Běngōng)",
+        "correct_answer": "b", "score": 15
     },
     {
         "question_id": 20, "assignment_id": 4, "question_type": "multiple_choice",
-        "question_text": "Một vật rơi tự do không vận tốc đầu từ độ cao h. Thời gian rơi t chạm đất tính theo gia tốc trọng trường g là:",
-        "option_a": "t = √(h / g)",
-        "option_b": "t = √(2h / g)",
-        "option_c": "t = 2h / g",
-        "option_d": "t = √(gh)",
+        "question_text": "Câu chúc tụng Hoàng đế vạn thọ vô cương kinh điển trong hoàng triều là:",
+        "option_a": "岁岁平安 (Suì suì píng'ān)",
+        "option_b": "吾皇万岁万岁万万岁 (Wú huáng wànsuì wànsuì wànwànsuì)",
+        "option_c": "恭喜发财 (Gōngxǐ fācái)",
+        "option_d": "一路顺风 (Yílù shùnfēng)",
         "correct_answer": "b", "score": 15
     },
     {
         "question_id": 21, "assignment_id": 4, "question_type": "multiple_choice",
-        "question_text": "Theo Định luật 2 Newton, độ lớn gia tốc a của một vật có khối lượng m chịu hợp lực F tác dụng là:",
-        "option_a": "a = F / m",
-        "option_b": "a = F × m",
-        "option_c": "a = m / F",
-        "option_d": "a = F² / m",
+        "question_text": "Điền giới từ thích hợp vào chỗ trống: '我 ______ 图书馆看书。' (Tôi đọc sách ở thư viện).",
+        "option_a": "在 (zài)",
+        "option_b": "有 (yǒu)",
+        "option_c": "是 (shì)",
+        "option_d": "从 (cóng)",
         "correct_answer": "a", "score": 15
     },
     {
         "question_id": 22, "assignment_id": 4, "question_type": "multiple_choice",
-        "question_text": "Quán tính là tính chất của mọi vật có xu hướng bảo toàn:",
-        "option_a": "Vận tốc của vật cả về hướng và độ lớn",
-        "option_b": "Khối lượng riêng của vật",
-        "option_c": "Gia tốc chuyển động của vật",
-        "option_d": "Vị trí tương đối của vật trong không gian",
+        "question_text": "Chữ '吃' (chī - Ăn) có bộ thủ nào ở phía bên trái liên quan đến miệng?",
+        "option_a": "Bộ Khẩu (口)",
+        "option_b": "Bộ Thủy (氵)",
+        "option_c": "Bộ Mộc (木)",
+        "option_d": "Bộ Hỏa (火)",
         "correct_answer": "a", "score": 15
     },
     {
         "question_id": 23, "assignment_id": 4, "question_type": "true_false",
-        "question_text": "Lực tác dụng và lực phản lực trong Định luật 3 Newton cùng tác dụng lên một vật nên chúng triệt tiêu nhau.",
+        "question_text": "Cấu trúc câu biểu đạt địa điểm hành động trong tiếng Trung là: 'Chủ ngữ + 在 + Nơi chốn + Động từ' (ví dụ: 我在学校学汉语).",
         "option_a": "Đúng", "option_b": "Sai", "option_c": "", "option_d": "",
-        "correct_answer": "b", "score": 20
+        "correct_answer": "a", "score": 20
     },
     {
         "question_id": 24, "assignment_id": 4, "question_type": "true_false",
-        "question_text": "Sự rơi tự do là chuyển động thẳng nhanh dần đều theo phương thẳng đứng với chiều từ trên xuống dưới.",
+        "question_text": "Chữ '国' trong '中国' (Trung Quốc) có bộ Vi (囗) bao bọc xung quanh, biểu thị biên giới bờ cõi bờ cõi lãnh thổ.",
         "option_a": "Đúng", "option_b": "Sai", "option_c": "", "option_d": "",
         "correct_answer": "a", "score": 20
     },
