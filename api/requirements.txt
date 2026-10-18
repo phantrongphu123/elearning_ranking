@@ -1,0 +1,12 @@
+# Vercel Python Serverless – cần file requirements.txt ở cùng thư mục với api/
+# File này copy lại requirements từ backend để Vercel tự động cài thư viện.
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+pydantic>=2.0.0
+pandas>=2.0.0
+openpyxl>=3.1.0
+python-multipart>=0.0.6
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+gspread>=6.0.0
+google-auth>=2.0.0

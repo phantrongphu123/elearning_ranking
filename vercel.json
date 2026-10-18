@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api(.*)",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/(.*\\.(?:js|css|ico|png|jpg|svg|woff|woff2|ttf))",
+      "dest": "/frontend/$1"
+    },
+    {
+      "src": "/admin(.*)",
+      "dest": "/frontend/admin$1"
+    },
+    {
+      "src": "/teacher(.*)",
+      "dest": "/frontend/teacher$1"
+    },
+    {
+      "src": "/student(.*)",
+      "dest": "/frontend/student$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/$1"
+    }
+  ]
+}

@@ -1,7 +1,13 @@
-// Tự động chọn URL backend: nếu chạy local dùng localhost, nếu deploy dùng env hoặc config
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+// Tự động chọn URL backend phù hợp với môi trường:
+// - Mở file trực tiếp (file://) hoặc localhost → backend local port 8000
+// - Deploy trên Vercel / bất kỳ server nào → dùng /api relative (không cần cấu hình)
+const API_BASE = (
+    window.location.protocol === 'file:' ||
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1'
+)
     ? 'http://localhost:8000/api'
-    : (window._API_BASE || '/api');
+    : '/api';
 
 async function fetchAPI(endpoint, options = {}) {
     const token = localStorage.getItem('token');
