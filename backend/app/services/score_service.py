@@ -24,10 +24,10 @@ def add_score(student_id: int, score_type: str, reason: str, points: float,
     }
     excel_service.insert_row("Diem", score_entry)
     
-    # Recalculate total score from all Diem entries for safety
-    diem_df = excel_service.read_sheet("Diem")
-    student_scores = diem_df[diem_df["student_id"].astype(str) == str(student_id)]
-    new_total = float(student_scores["points"].sum())
+    # Safely increment total score based on student's current total_score
+    student = excel_service.find_one("HocSinh", "student_id", student_id)
+    current_score = float(student.get("total_score", 0)) if student else 0
+    new_total = max(0.0, current_score + float(points))
     
     # Update rank
     rank_info = update_student_rank(student_id, new_total, created_by)
