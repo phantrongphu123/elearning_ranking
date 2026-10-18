@@ -72,11 +72,6 @@ Tệp `vercel.json` ở thư mục gốc của dự án đã được tối ưu 
 ```json
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "functions": {
-    "api/index.py": {
-      "includeFiles": "backend/**"
-    }
-  },
   "rewrites": [
     {
       "source": "/api",
