@@ -40,36 +40,55 @@
         .stat-pill-present { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; }
         .stat-pill-absent { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
 
-        .absent-toggle-box {
+        .attendance-toggle-badge {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             padding: 0.45rem 0.85rem;
             border-radius: var(--radius-sm);
-            border: 1px solid #CBD5E1;
-            background: #FFFFFF;
             cursor: pointer;
             font-size: 0.85rem;
             font-weight: 600;
             user-select: none;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
 
-        .absent-toggle-box:hover {
-            border-color: #94A3B8;
+        /* Mặc định: Có mặt */
+        .attendance-toggle-badge.status-present {
+            background: #ECFDF5;
+            border: 1px solid #A7F3D0;
+            color: #047857;
         }
 
-        .absent-toggle-box input[type="checkbox"] {
+        .attendance-toggle-badge.status-present:hover {
+            border-color: #6EE7B7;
+            background: #D1FAE5;
+        }
+
+        .attendance-toggle-badge.status-present input[type="checkbox"] {
             width: 17px;
             height: 17px;
-            accent-color: #DC2626;
             cursor: pointer;
+            accent-color: #059669;
         }
 
-        .absent-toggle-box.is-absent {
+        /* Khi tích vào: Chuyển sang Vắng mặt */
+        .attendance-toggle-badge.status-absent {
             background: #FEF2F2;
+            border: 1px solid #FCA5A5;
+            color: #B91C1C;
+        }
+
+        .attendance-toggle-badge.status-absent:hover {
             border-color: #F87171;
-            color: #991B1B;
+            background: #FEE2E2;
+        }
+
+        .attendance-toggle-badge.status-absent input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            cursor: pointer;
+            accent-color: #DC2626;
         }
 
         tr.row-absent {
@@ -85,6 +104,13 @@
             min-width: 170px;
         }
 
+        .absence-type-select:disabled {
+            background: #F1F5F9;
+            color: #94A3B8;
+            border-color: #E2E8F0;
+            cursor: not-allowed;
+        }
+
         .absence-note-input {
             font-size: 0.82rem;
             padding: 0.4rem 0.65rem;
@@ -92,6 +118,13 @@
             border: 1px solid #CBD5E1;
             background: #FFFFFF;
             width: 100%;
+        }
+
+        .absence-note-input:disabled {
+            background: #F1F5F9;
+            color: #94A3B8;
+            border-color: #E2E8F0;
+            cursor: not-allowed;
         }
 
         .present-status-tag {

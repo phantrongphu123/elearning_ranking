@@ -112,7 +112,7 @@ async function loadClassStudents() {
                         <span class="rank-badge sm">${escapeHtml(s.rank || 'Học sinh')}</span>
                     </td>
                     <td>
-                        <label class="absent-toggle-box ${isAbsent ? 'is-absent' : ''}" id="toggle_box_${s.student_id}">
+                        <label class="attendance-toggle-badge ${isAbsent ? 'status-absent' : 'status-present'}" id="toggle_box_${s.student_id}">
                             <input type="checkbox" id="check_absent_${s.student_id}" ${isAbsent ? 'checked' : ''} onchange="onAbsentToggle(${s.student_id})">
                             <span id="label_absent_${s.student_id}">${isAbsent ? 'Vắng mặt' : 'Có mặt'}</span>
                         </label>
@@ -154,8 +154,12 @@ function onAbsentToggle(studentId) {
     if (!chk) return;
 
     if (chk.checked) {
+        // Tích vào -> Chuyển sang VẮNG
         if (row) row.classList.add('row-absent');
-        if (toggleBox) toggleBox.classList.add('is-absent');
+        if (toggleBox) {
+            toggleBox.classList.remove('status-present');
+            toggleBox.classList.add('status-absent');
+        }
         if (label) label.textContent = 'Vắng mặt';
         if (typeSelect) typeSelect.disabled = false;
         if (noteInput) {
@@ -163,11 +167,18 @@ function onAbsentToggle(studentId) {
             noteInput.focus();
         }
     } else {
+        // Bỏ tích -> Về mặc định CÓ MẶT
         if (row) row.classList.remove('row-absent');
-        if (toggleBox) toggleBox.classList.remove('is-absent');
+        if (toggleBox) {
+            toggleBox.classList.remove('status-absent');
+            toggleBox.classList.add('status-present');
+        }
         if (label) label.textContent = 'Có mặt';
         if (typeSelect) typeSelect.disabled = true;
-        if (noteInput) noteInput.disabled = true;
+        if (noteInput) {
+            noteInput.disabled = true;
+            noteInput.value = '';
+        }
     }
 
     updateAttendanceSummary();
@@ -220,14 +231,20 @@ function markAllPresent() {
 
         if (chk) chk.checked = false;
         if (row) row.classList.remove('row-absent');
-        if (toggleBox) toggleBox.classList.remove('is-absent');
+        if (toggleBox) {
+            toggleBox.classList.remove('status-absent');
+            toggleBox.classList.add('status-present');
+        }
         if (label) label.textContent = 'Có mặt';
         if (typeSelect) typeSelect.disabled = true;
-        if (noteInput) noteInput.disabled = true;
+        if (noteInput) {
+            noteInput.disabled = true;
+            noteInput.value = '';
+        }
     });
 
     updateAttendanceSummary();
-    showToast('Đã đặt toàn bộ học sinh là Có mặt!', 'success');
+    showToast('Đã chuyển toàn bộ học sinh sang Có mặt!', 'success');
 }
 
 function initAttendanceForm() {
