@@ -21,25 +21,31 @@ class LoginResponse(BaseModel):
 @router.post("/login/")
 def login(form_data: OAuth2PasswordRequestForm = Depends()):
     """Login and receive JWT token."""
-    users_df = excel_service.read_sheet("Users")
-    user_row = users_df[users_df["username"] == form_data.username]
+    clean_username = form_data.username.strip()
+    user = excel_service.find_one("Users", "username", clean_username)
+    if not user:
+        users_df = excel_service.read_sheet("Users")
+        if not users_df.empty and "username" in users_df.columns:
+            matched = users_df[users_df["username"].astype(str).str.strip().str.lower() == clean_username.lower()]
+            if not matched.empty:
+                user = matched.iloc[0].to_dict()
     
-    if user_row.empty:
+    if not user:
         raise HTTPException(status_code=401, detail="Tên đăng nhập hoặc mật khẩu không đúng")
-    
-    user = user_row.iloc[0].to_dict()
     
     if not verify_password(form_data.password, user.get("password_hash", "")):
         raise HTTPException(status_code=401, detail="Tên đăng nhập hoặc mật khẩu không đúng")
     
-    if user.get("status") != "active":
+    if str(user.get("status", "")).strip() != "active":
         raise HTTPException(status_code=403, detail="Tài khoản đã bị vô hiệu hóa")
     
+    uid = int(float(user["user_id"]))
+    sid = int(float(user.get("student_id") or 0)) if user.get("student_id") else ""
     token_data = {
-        "user_id": user["user_id"],
-        "username": user["username"],
-        "role": user["role"],
-        "student_id": user.get("student_id", ""),
+        "user_id": uid,
+        "username": str(user["username"]).strip(),
+        "role": str(user["role"]).strip(),
+        "student_id": sid,
     }
     token = create_access_token(token_data)
     

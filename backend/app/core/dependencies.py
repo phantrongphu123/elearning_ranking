@@ -22,13 +22,16 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
     if user_id is None or role is None:
         raise credentials_exception
     
-    # Verify user still exists in DB
-    users_df = excel_service.read_sheet("Users")
-    user_row = users_df[users_df["user_id"] == user_id]
-    if user_row.empty:
+    # Verify user still exists in DB using type-safe find_one
+    user = excel_service.find_one("Users", "user_id", user_id)
+    if not user:
+        # Fallback by username if user_id format mismatched
+        username = payload.get("username")
+        if username:
+            user = excel_service.find_one("Users", "username", username)
+    if not user:
         raise credentials_exception
     
-    user = user_row.iloc[0].to_dict()
     if user.get("status") != "active":
         raise HTTPException(status_code=403, detail="Tài khoản đã bị vô hiệu hóa")
     
