@@ -15,19 +15,21 @@
         }
 
         .review-q-card {
-            background: rgba(13, 17, 26, 0.7);
-            border: 1px solid var(--border-subtle);
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
             border-radius: var(--radius-md);
             padding: 1rem;
             margin-bottom: 0.85rem;
         }
 
         .review-q-card.correct {
-            border-left: 4px solid var(--jade);
+            border-left: 4px solid #10B981;
+            background: #ECFDF5;
         }
 
         .review-q-card.wrong {
-            border-left: 4px solid var(--crimson);
+            border-left: 4px solid #F43F5E;
+            background: #FFF1F2;
         }
     </style>
 </head>
@@ -86,7 +88,7 @@
                         <span>🔔</span>
                     </button>
                     <div class="user-profile">
-                        <div class="user-avatar" style="background: linear-gradient(135deg, #10B981, #047857);">傅</div>
+                        <div class="user-avatar" style="background: linear-gradient(135deg, #10B981, #059669);">傅</div>
                         <div class="user-meta">
                             <div class="name" id="userName">Đang tải...</div>
                             <div class="role user-role">Thái Phó</div>
@@ -141,21 +143,21 @@
             <div class="modal-header">
                 <div>
                     <h2 id="gradeModalTitle">Phê Duyệt Tấu Chương</h2>
-                    <p style="font-size: 0.85rem; color: var(--gold-light);" id="gradeModalSubtitle">Học sinh: —</p>
+                    <p style="font-size: 0.88rem; color: #D97706; font-weight: 600;" id="gradeModalSubtitle">Học sinh: —</p>
                 </div>
                 <button class="modal-close-btn" onclick="closeGradeModal()">&times;</button>
             </div>
 
             <!-- Question Review Area -->
             <div class="mb-2">
-                <h4 style="margin-bottom: 0.75rem; color: var(--gold-light);">Chi Tiết Bài Làm Của Học Tử:</h4>
+                <h4 style="margin-bottom: 0.75rem; color: #0F172A;">Chi Tiết Bài Làm Của Học Tử:</h4>
                 <div id="gradeQuestionsContainer" style="max-height: 280px; overflow-y: auto;">
                     <p class="text-center" style="padding: 1rem; color: var(--text-muted)">Đang tải chi tiết...</p>
                 </div>
             </div>
 
             <!-- Grade Form -->
-            <form id="gradeForm" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
+            <form id="gradeForm" style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: var(--radius-md); padding: 1.25rem;">
                 <div class="input-group">
                     <label>Điểm Số Đạt Được (Điểm hệ thống tự chấm, Thái Phó có thể điều chỉnh)</label>
                     <input type="number" step="0.5" id="gradeScore" required>

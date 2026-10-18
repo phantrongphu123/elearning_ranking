@@ -18,57 +18,58 @@
         .login-card {
             width: 100%;
             max-width: 440px;
-            padding: 2.5rem 2rem;
+            padding: 2.75rem 2.25rem;
             text-align: center;
-            background: rgba(17, 24, 39, 0.85);
+            background: #FFFFFF;
             border: 1px solid var(--border-color);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(212, 175, 55, 0.15);
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08), 0 0 25px rgba(245, 158, 11, 0.12);
             border-radius: var(--radius-lg);
             position: relative;
         }
 
         .login-logo {
-            font-size: 3.2rem;
+            font-size: 3.5rem;
             margin-bottom: 0.85rem;
-            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));
+            filter: drop-shadow(0 4px 12px rgba(245, 158, 11, 0.35));
             animation: pulseGlow 3s infinite alternate;
         }
 
         @keyframes pulseGlow {
-            0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3)); }
-            100% { transform: scale(1.04); filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.7)); }
+            0% { transform: scale(1); filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.25)); }
+            100% { transform: scale(1.05); filter: drop-shadow(0 6px 18px rgba(245, 158, 11, 0.45)); }
         }
 
         .login-card h1 {
-            font-size: 1.8rem;
+            font-size: 1.85rem;
             margin-bottom: 0.35rem;
-            background: linear-gradient(135deg, #FFF 10%, var(--gold-light) 60%, var(--gold-primary) 100%);
+            background: linear-gradient(135deg, #0F172A 20%, #D97706 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .login-subtitle {
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
-            margin-bottom: 1.75rem;
-            letter-spacing: 0.5px;
+            margin-bottom: 1.85rem;
+            letter-spacing: 0.3px;
         }
 
         .login-subtitle span {
-            color: var(--gold-primary);
+            color: var(--gold-light);
             font-weight: 600;
         }
 
         .error-message {
-            color: #FB7185;
-            background: rgba(225, 29, 72, 0.15);
-            border: 1px solid rgba(225, 29, 72, 0.3);
+            color: #DC2626;
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
             padding: 0.75rem 1rem;
             border-radius: var(--radius-md);
             margin-bottom: 1.5rem;
             display: none;
             font-size: 0.88rem;
             text-align: left;
+            font-weight: 500;
         }
 
         .password-container {
@@ -84,14 +85,14 @@
             border: none;
             color: var(--text-muted);
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             padding: 4px;
         }
 
         .demo-accounts {
             margin-top: 2rem;
             padding-top: 1.5rem;
-            border-top: 1px solid var(--border-subtle);
+            border-top: 1px solid var(--border-color);
         }
 
         .demo-title {
@@ -99,7 +100,8 @@
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.85rem;
+            font-weight: 600;
         }
 
         .demo-badges {
@@ -110,12 +112,13 @@
         }
 
         .demo-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            padding: 0.4rem 0.75rem;
+            background: #F8FAFC;
+            border: 1px solid #CBD5E1;
+            color: #334155;
+            padding: 0.45rem 0.85rem;
             border-radius: var(--radius-sm);
-            font-size: 0.8rem;
+            font-size: 0.82rem;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
@@ -124,10 +127,11 @@
         }
 
         .demo-btn:hover {
-            background: rgba(212, 175, 55, 0.15);
-            border-color: var(--gold-primary);
-            color: var(--gold-light);
+            background: #FFFBEB;
+            border-color: #FCD34D;
+            color: #92400E;
             transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(245, 158, 11, 0.15);
         }
     </style>
 </head>
@@ -157,7 +161,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block" style="padding: 0.85rem; font-size: 1rem; margin-top: 1rem;">
+                <button type="submit" class="btn btn-primary btn-block" style="padding: 0.85rem; font-size: 1rem; margin-top: 1.25rem;">
                     <span>Tiến Cung (Đăng Nhập)</span>
                 </button>
             </form>

@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="../css/style.css">
     <style>
         .rank-card {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.12) 0%, rgba(17, 24, 39, 0.9) 100%);
-            border: 1px solid var(--gold-primary);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.15);
+            background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 60%, #FDE68A 100%);
+            border: 1px solid #FCD34D;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.12);
             padding: 1.75rem;
             display: flex;
             align-items: center;
@@ -25,22 +25,22 @@
             bottom: -30px;
             font-size: 10rem;
             font-family: 'Noto Serif SC', serif;
-            color: rgba(212, 175, 55, 0.04);
+            color: rgba(217, 119, 6, 0.08);
             pointer-events: none;
         }
 
         .rank-icon-wrapper {
-            font-size: 4.2rem;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, transparent 70%);
+            font-size: 4rem;
+            background: #FFFFFF;
             width: 90px;
             height: 90px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            border: 2px solid var(--gold-primary);
+            border: 3px solid #F59E0B;
             flex-shrink: 0;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
         }
 
         .rank-details {
@@ -54,37 +54,38 @@
             align-items: center;
             gap: 0.75rem;
             flex-wrap: wrap;
+            color: #78350F;
         }
 
         .score-display {
             font-size: 1.15rem;
-            color: var(--text-secondary);
+            color: #92400E;
             margin-bottom: 1rem;
         }
 
         .score-display strong {
             font-size: 1.6rem;
-            color: var(--gold-light);
+            color: #78350F;
             font-family: 'Cinzel', serif;
         }
 
         .podium-box {
             text-align: center;
             padding: 1.25rem 1.5rem;
-            background: rgba(13, 17, 26, 0.8);
-            border: 1px solid var(--border-color);
+            background: #FFFFFF;
+            border: 1px solid #FCD34D;
             border-radius: var(--radius-md);
             flex-shrink: 0;
             min-width: 140px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
         }
 
         .podium-rank {
             font-size: 2.4rem;
             font-family: 'Cinzel', serif;
             font-weight: 700;
-            color: var(--gold-light);
+            color: #D97706;
             line-height: 1.1;
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
         }
 
         @media (max-width: 768px) {
@@ -180,27 +181,27 @@
                             Điểm tích lũy tu luyện: <strong id="totalScore">0</strong> điểm
                         </div>
                         <div>
-                            <div class="d-flex justify-between mb-1" style="font-size: 0.85rem; color: var(--text-secondary);">
-                                <span>Tước vị tiếp theo: <strong style="color: var(--gold-light);" id="nextRankName">...</strong></span>
-                                <span>Cần thêm: <strong style="color: var(--gold-light);" id="pointsNeeded">0</strong> điểm</span>
+                            <div class="d-flex justify-between mb-1" style="font-size: 0.85rem; color: #78350F; font-weight: 500;">
+                                <span>Tước vị tiếp theo: <strong style="color: #92400E;" id="nextRankName">...</strong></span>
+                                <span>Cần thêm: <strong style="color: #92400E;" id="pointsNeeded">0</strong> điểm</span>
                             </div>
-                            <div class="progress-container">
+                            <div class="progress-container" style="background: rgba(217, 119, 6, 0.15);">
                                 <div class="progress-bar-fill" id="rankProgressBar" style="width: 0%;"></div>
                             </div>
                         </div>
                     </div>
 
                     <div class="podium-box">
-                        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px;">Vị Trí Bảng Vàng</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600;">Vị Trí Bảng Vàng</div>
                         <div class="podium-rank" id="leaderboardPosition">#-</div>
-                        <div style="font-size: 0.75rem; color: var(--gold-primary); margin-top: 0.2rem;">Toàn Học Viện</div>
+                        <div style="font-size: 0.75rem; color: var(--gold-light); margin-top: 0.2rem; font-weight: 600;">Toàn Học Viện</div>
                     </div>
                 </div>
 
                 <!-- Quick Stats Grid -->
                 <div class="grid-cards">
                     <div class="glass-panel stat-card">
-                        <div class="stat-icon" style="color: var(--amber);">⏳</div>
+                        <div class="stat-icon" style="color: #D97706; background: #FFFBEB; border-color: #FDE68A;">⏳</div>
                         <div class="stat-info">
                             <div class="stat-label">Tấu Chương Cần Làm</div>
                             <div class="stat-value" id="pendingAssignmentsCount">0</div>
@@ -208,7 +209,7 @@
                     </div>
 
                     <div class="glass-panel stat-card">
-                        <div class="stat-icon" style="color: var(--jade);">✍️</div>
+                        <div class="stat-icon" style="color: #059669; background: #ECFDF5; border-color: #A7F3D0;">✍️</div>
                         <div class="stat-info">
                             <div class="stat-label">Bài Đã Dâng Trình</div>
                             <div class="stat-value" id="totalSubmissionsCount">0</div>
@@ -216,7 +217,7 @@
                     </div>
 
                     <div class="glass-panel stat-card">
-                        <div class="stat-icon" style="color: var(--gold-primary);">🔥</div>
+                        <div class="stat-icon" style="color: #F59E0B; background: #FFFBEB; border-color: #FDE68A;">🔥</div>
                         <div class="stat-info">
                             <div class="stat-label">Chuỗi Chuyên Cần</div>
                             <div class="stat-value" id="attendanceStreakDays">0</div>
@@ -246,17 +247,17 @@
                                 <tr>
                                     <td><strong>📝 Bài Tập Về Nhà (Tấu Chương)</strong></td>
                                     <td style="color: var(--text-muted)">Điểm bài tập ngữ pháp & từ vựng tiếng Trung</td>
-                                    <td style="color: var(--gold-light); font-weight: bold;" id="scoreHomework">0</td>
+                                    <td style="color: var(--gold-light); font-weight: bold; font-size: 1.05rem;" id="scoreHomework">0</td>
                                 </tr>
                                 <tr>
                                     <td><strong>📅 Điểm Danh & Chuyên Cần</strong></td>
                                     <td style="color: var(--text-muted)">Đi học đúng giờ (+5đ/buổi), đi trễ (+2đ), vắng phép (0đ)</td>
-                                    <td style="color: var(--gold-light); font-weight: bold;" id="scoreAttendance">0</td>
+                                    <td style="color: var(--gold-light); font-weight: bold; font-size: 1.05rem;" id="scoreAttendance">0</td>
                                 </tr>
                                 <tr>
                                     <td><strong>⭐ Điểm Thưởng Triều Đình (Bonus)</strong></td>
                                     <td style="color: var(--text-muted)">Thái phó khen thưởng phát biểu, thành tích đặc biệt</td>
-                                    <td style="color: var(--gold-light); font-weight: bold;" id="scoreBonus">0</td>
+                                    <td style="color: var(--gold-light); font-weight: bold; font-size: 1.05rem;" id="scoreBonus">0</td>
                                 </tr>
                             </tbody>
                         </table>

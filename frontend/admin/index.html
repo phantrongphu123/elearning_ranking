@@ -14,17 +14,19 @@
         }
 
         .rank-dist-card {
-            background: rgba(13, 17, 26, 0.7);
-            border: 1px solid var(--border-subtle);
+            background: #FFFFFF;
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             padding: 0.85rem 1rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: var(--shadow-sm);
         }
 
         .rank-dist-card:hover {
-            border-color: var(--gold-primary);
+            border-color: #FCD34D;
+            background: #FFFBEB;
         }
 
         .form-row {
@@ -100,7 +102,7 @@
                         <span>🔔</span>
                     </button>
                     <div class="user-profile">
-                        <div class="user-avatar" style="background: linear-gradient(135deg, #FFD700, #B8860B);">帝</div>
+                        <div class="user-avatar" style="background: linear-gradient(135deg, #F59E0B, #D97706);">帝</div>
                         <div class="user-meta">
                             <div class="name" id="userName">Đang tải...</div>
                             <div class="role user-role">Quản Trị Tối Cao</div>
@@ -115,7 +117,7 @@
                 <section id="tab-dashboard" class="tab-content active">
                     <div class="grid-cards">
                         <div class="glass-panel stat-card">
-                            <div class="stat-icon" style="color: var(--blue);">👥</div>
+                            <div class="stat-icon" style="color: #2563EB; background: #EFF6FF; border-color: #BFDBFE;">👥</div>
                             <div class="stat-info">
                                 <div class="stat-label">Tổng Học Tử</div>
                                 <div class="stat-value" id="dashTotalStudents">0</div>
@@ -123,7 +125,7 @@
                         </div>
 
                         <div class="glass-panel stat-card">
-                            <div class="stat-icon" style="color: var(--gold-light);">🏛️</div>
+                            <div class="stat-icon" style="color: #D97706; background: #FFFBEB; border-color: #FDE68A;">🏛️</div>
                             <div class="stat-info">
                                 <div class="stat-label">Tổng Lớp Học</div>
                                 <div class="stat-value" id="dashTotalClasses">0</div>
@@ -131,7 +133,7 @@
                         </div>
 
                         <div class="glass-panel stat-card">
-                            <div class="stat-icon" style="color: var(--jade);">🎓</div>
+                            <div class="stat-icon" style="color: #059669; background: #ECFDF5; border-color: #A7F3D0;">🎓</div>
                             <div class="stat-info">
                                 <div class="stat-label">Tổng Thái Phó</div>
                                 <div class="stat-value" id="dashTotalTeachers">0</div>
@@ -139,7 +141,7 @@
                         </div>
 
                         <div class="glass-panel stat-card">
-                            <div class="stat-icon" style="color: var(--amber);">📈</div>
+                            <div class="stat-icon" style="color: #F59E0B; background: #FFFBEB; border-color: #FDE68A;">📈</div>
                             <div class="stat-info">
                                 <div class="stat-label">Điểm Trung Bình</div>
                                 <div class="stat-value" id="dashAvgScore">0</div>
@@ -151,7 +153,7 @@
                     <div class="glass-panel mb-2">
                         <div class="d-flex justify-between align-center mb-1">
                             <h3>🏆 Top 5 Bảng Vàng (Toàn Học Viện)</h3>
-                            <span style="font-size: 0.85rem; color: var(--gold-light);" id="dashSubmissionsStats">Bài nộp tuần này: 0</span>
+                            <span style="font-size: 0.85rem; color: #D97706; font-weight: 600;" id="dashSubmissionsStats">Bài nộp tuần này: 0</span>
                         </div>
                         <div class="table-container">
                             <table>

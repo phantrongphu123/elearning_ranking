@@ -17,16 +17,13 @@
             align-items: center;
             gap: 0.35rem;
             padding: 0.45rem 0.75rem;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border-subtle);
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
             border-radius: var(--radius-sm);
             cursor: pointer;
             font-size: 0.82rem;
+            font-weight: 600;
             transition: all 0.2s;
-        }
-
-        .status-radio-label:hover {
-            border-color: var(--gold-primary);
         }
 
         .status-radio-label input[type="radio"] {
@@ -36,10 +33,10 @@
             cursor: pointer;
         }
 
-        .status-present { color: #34D399; }
-        .status-late { color: #FBBF24; }
-        .status-excused { color: #60A5FA; }
-        .status-unexcused { color: #FB7185; }
+        .status-present { color: #059669; background: #ECFDF5; border-color: #A7F3D0; }
+        .status-late { color: #D97706; background: #FFFBEB; border-color: #FDE68A; }
+        .status-excused { color: #2563EB; background: #EFF6FF; border-color: #BFDBFE; }
+        .status-unexcused { color: #DC2626; background: #FEF2F2; border-color: #FECACA; }
 
         @media (max-width: 768px) {
             .attendance-status-radios {
@@ -104,7 +101,7 @@
                         <span>🔔</span>
                     </button>
                     <div class="user-profile">
-                        <div class="user-avatar" style="background: linear-gradient(135deg, #10B981, #047857);">傅</div>
+                        <div class="user-avatar" style="background: linear-gradient(135deg, #10B981, #059669);">傅</div>
                         <div class="user-meta">
                             <div class="name" id="userName">Đang tải...</div>
                             <div class="role user-role">Thái Phó</div>
@@ -118,7 +115,7 @@
                 <div class="glass-panel mb-2">
                     <div class="d-flex gap-1 align-center" style="gap: 1rem; flex-wrap: wrap;">
                         <div style="flex: 1; min-width: 200px;">
-                            <label style="display: block; font-size: 0.85rem; color: var(--gold-light); margin-bottom: 0.35rem;">
+                            <label style="display: block; font-size: 0.85rem; color: #334155; font-weight: 600; margin-bottom: 0.35rem;">
                                 Lớp Học
                             </label>
                             <select id="classSelect">
@@ -127,7 +124,7 @@
                         </div>
 
                         <div style="flex: 1; min-width: 200px;">
-                            <label style="display: block; font-size: 0.85rem; color: var(--gold-light); margin-bottom: 0.35rem;">
+                            <label style="display: block; font-size: 0.85rem; color: #334155; font-weight: 600; margin-bottom: 0.35rem;">
                                 Ngày Điểm Danh
                             </label>
                             <input type="date" id="dateSelect">

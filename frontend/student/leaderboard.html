@@ -32,7 +32,7 @@
             width: 70px;
             height: 70px;
             border-radius: 50%;
-            background: var(--bg-secondary);
+            background: #FFFFFF;
             border: 3px solid;
             display: flex;
             align-items: center;
@@ -40,7 +40,7 @@
             font-size: 2.2rem;
             margin-bottom: 0.75rem;
             position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
 
         .podium-crown {
@@ -65,28 +65,28 @@
             padding: 1.25rem 0.5rem;
             border: 1px solid;
             border-bottom: none;
-            box-shadow: 0 -5px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.04);
         }
 
-        .podium-1 .podium-avatar { border-color: #FFD700; box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
+        .podium-1 .podium-avatar { border-color: #F59E0B; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35); }
         .podium-1 .podium-pillar {
             height: 200px;
-            background: linear-gradient(180deg, rgba(255, 215, 0, 0.22) 0%, rgba(17, 24, 39, 0.95) 100%);
-            border-color: #FFD700;
+            background: linear-gradient(180deg, #FEF3C7 0%, #FFFFFF 100%);
+            border-color: #F59E0B;
         }
 
-        .podium-2 .podium-avatar { border-color: #E2E8F0; box-shadow: 0 0 20px rgba(226, 232, 240, 0.3); }
+        .podium-2 .podium-avatar { border-color: #94A3B8; box-shadow: 0 4px 15px rgba(148, 163, 184, 0.25); }
         .podium-2 .podium-pillar {
             height: 160px;
-            background: linear-gradient(180deg, rgba(226, 232, 240, 0.18) 0%, rgba(17, 24, 39, 0.95) 100%);
+            background: linear-gradient(180deg, #F1F5F9 0%, #FFFFFF 100%);
             border-color: #CBD5E1;
         }
 
-        .podium-3 .podium-avatar { border-color: #CD7F32; box-shadow: 0 0 20px rgba(205, 127, 50, 0.3); }
+        .podium-3 .podium-avatar { border-color: #FB923C; box-shadow: 0 4px 15px rgba(251, 146, 60, 0.25); }
         .podium-3 .podium-pillar {
             height: 130px;
-            background: linear-gradient(180deg, rgba(205, 127, 50, 0.18) 0%, rgba(17, 24, 39, 0.95) 100%);
-            border-color: #CD7F32;
+            background: linear-gradient(180deg, #FFEDD5 0%, #FFFFFF 100%);
+            border-color: #FDBA74;
         }
 
         .podium-rank-tag {
@@ -94,19 +94,20 @@
             font-family: 'Cinzel', serif;
             font-weight: 800;
             line-height: 1;
+            color: #1E293B;
         }
 
         .podium-score {
             font-size: 1.25rem;
-            color: var(--gold-light);
+            color: #D97706;
             font-family: 'Cinzel', serif;
             font-weight: 700;
             margin-top: 0.35rem;
         }
 
         .current-user-row {
-            background: rgba(212, 175, 55, 0.18) !important;
-            border-left: 3px solid var(--gold-primary);
+            background: #FEF3C7 !important;
+            border-left: 4px solid #F59E0B;
         }
 
         @media (max-width: 640px) {
@@ -301,7 +302,6 @@
         async function loadStudentLeaderboard() {
             const classId = document.getElementById('classFilterSelect')?.value || '';
             const tbody = document.getElementById('leaderboardTbody');
-            const podium = document.getElementById('topPodiumContainer');
 
             try {
                 const url = classId ? `/leaderboard?class_id=${classId}&limit=100` : '/leaderboard?limit=100';
@@ -330,7 +330,7 @@
                         </td>
                         <td><strong>${escapeHtml(c.class_name)}</strong></td>
                         <td>${c.student_count || 0} học tử</td>
-                        <td style="color:var(--gold-light); font-weight:bold; font-size:1.05rem;">${c.avg_score} điểm</td>
+                        <td style="color:#D97706; font-weight:bold; font-size:1.05rem;">${c.avg_score} điểm</td>
                     </tr>
                 `).join('');
             } catch (e) {
@@ -383,10 +383,10 @@
                         <span class="podium-crown">${item.crown}</span>
                         <span>${item.student.icon || '学'}</span>
                     </div>
-                    <div style="font-weight:600; text-align:center; font-size:0.92rem; margin-bottom:0.2rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">
+                    <div style="font-weight:600; text-align:center; font-size:0.92rem; margin-bottom:0.2rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%; color:#0F172A;">
                         ${escapeHtml(item.student.full_name)}
                     </div>
-                    <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.5rem;">
+                    <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.5rem; font-weight:500;">
                         ${item.student.rank || 'Học tử'}
                     </div>
                     <div class="podium-pillar">
@@ -412,7 +412,7 @@
             tbody.innerHTML = students.map((s, idx) => {
                 const isMe = String(s.student_id) === currentStudentId;
                 const position = idx + 1;
-                let rankBadge = `<span class="rank-badge sm" style="border-color:${s.color || 'var(--gold-primary)'}; color:${s.color || 'var(--gold-light)'};">${s.icon || '📜'} ${s.rank}</span>`;
+                let rankBadge = `<span class="rank-badge sm" style="border-color:${s.color || '#FCD34D'}; color:${s.color || '#92400E'};">${s.icon || '📜'} ${s.rank}</span>`;
 
                 return `
                     <tr class="${isMe ? 'current-user-row' : ''}">
@@ -425,8 +425,8 @@
                         </td>
                         <td style="color:var(--text-muted);">${escapeHtml(s.class_name || 'N/A')}</td>
                         <td>${rankBadge}</td>
-                        <td style="color:var(--gold-light); font-weight:700; font-family:'Cinzel', serif;">
-                            ${s.total_score}
+                        <td style="color:#D97706; font-weight:700; font-family:'Cinzel', serif;">
+                            ${s.total_score}đ
                         </td>
                     </tr>
                 `;

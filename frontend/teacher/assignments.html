@@ -13,8 +13,8 @@
         }
 
         .question-item {
-            background: rgba(13, 17, 26, 0.7);
-            border: 1px solid var(--border-subtle);
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
             border-radius: var(--radius-md);
             padding: 1rem;
             margin-bottom: 0.85rem;
@@ -25,7 +25,7 @@
         }
 
         .question-item:hover {
-            border-color: var(--gold-primary);
+            border-color: #F59E0B;
         }
 
         @media (max-width: 640px) {
@@ -94,7 +94,7 @@
                         <span>🔔</span>
                     </button>
                     <div class="user-profile">
-                        <div class="user-avatar" style="background: linear-gradient(135deg, #10B981, #047857);">傅</div>
+                        <div class="user-avatar" style="background: linear-gradient(135deg, #10B981, #059669);">傅</div>
                         <div class="user-meta">
                             <div class="name" id="userName">Đang tải...</div>
                             <div class="role user-role">Thái Phó</div>
@@ -107,7 +107,7 @@
                 <!-- Action Header -->
                 <div class="glass-panel mb-2 d-flex justify-between align-center" style="gap: 1rem; flex-wrap: wrap;">
                     <div>
-                        <h2 style="font-size: 1.35rem;">Kho Tấu Chương Đã Ban Bố</h2>
+                        <h2 style="font-size: 1.35rem; color: #0F172A;">Kho Tấu Chương Đã Ban Bố</h2>
                         <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">Soạn bài tập, thêm câu hỏi trắc nghiệm hoặc thu hồi bài tập</p>
                     </div>
                     <button class="btn btn-primary" onclick="openCreateAssignmentModal()">
@@ -194,22 +194,22 @@
             <div class="modal-header">
                 <div>
                     <h2 id="mqModalTitle">Quản Lý Ngân Hàng Câu Hỏi</h2>
-                    <p style="font-size: 0.85rem; color: var(--gold-light);" id="mqModalSubtitle">Bài tập: —</p>
+                    <p style="font-size: 0.88rem; color: #D97706; font-weight: 600;" id="mqModalSubtitle">Bài tập: —</p>
                 </div>
                 <button class="modal-close-btn" onclick="closeManageQuestionsModal()">&times;</button>
             </div>
 
             <!-- Existing Questions -->
             <div class="mb-2">
-                <h4 style="margin-bottom: 0.75rem; color: var(--gold-light);">Danh Sách Câu Hỏi Hiện Tại:</h4>
+                <h4 style="margin-bottom: 0.75rem; color: #0F172A;">Danh Sách Câu Hỏi Hiện Tại:</h4>
                 <div id="questionsListContainer" style="max-height: 250px; overflow-y: auto;">
                     <p class="text-center" style="padding: 1rem; color: var(--text-muted)">Đang tải câu hỏi...</p>
                 </div>
             </div>
 
             <!-- Add Question Form -->
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
-                <h4 style="margin-bottom: 1rem; color: var(--gold-light);">+ Thêm Câu Hỏi Khảo Hạch Mới:</h4>
+            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: var(--radius-md); padding: 1.25rem;">
+                <h4 style="margin-bottom: 1rem; color: #0F172A;">+ Thêm Câu Hỏi Khảo Hạch Mới:</h4>
                 <form id="addQuestionForm">
                     <div class="form-row">
                         <div class="input-group">

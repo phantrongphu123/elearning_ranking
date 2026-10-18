@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../css/style.css">
     <style>
         .class-card {
-            background: rgba(17, 24, 39, 0.75);
+            background: #FFFFFF;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             padding: 1.25rem;
@@ -16,11 +16,12 @@
             align-items: center;
             margin-bottom: 1rem;
             transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
         }
 
         .class-card:hover {
-            border-color: var(--gold-light);
-            background: rgba(28, 36, 56, 0.85);
+            border-color: #FCD34D;
+            background: #FFFBEB;
             transform: translateX(4px);
         }
 
@@ -100,7 +101,7 @@
                         <span>🔔</span>
                     </button>
                     <div class="user-profile">
-                        <div class="user-avatar" style="background: linear-gradient(135deg, #10B981, #047857);">傅</div>
+                        <div class="user-avatar" style="background: linear-gradient(135deg, #10B981, #059669);">傅</div>
                         <div class="user-meta">
                             <div class="name" id="userName">Đang triệu kiến...</div>
                             <div class="role user-role">Thái Phó</div>
@@ -113,7 +114,7 @@
                 <!-- Action Header Banner -->
                 <div class="glass-panel mb-2 d-flex justify-between align-center" style="gap: 1rem; flex-wrap: wrap;">
                     <div>
-                        <h2 style="font-size: 1.35rem;">Quyền Lực Thái Phó</h2>
+                        <h2 style="font-size: 1.35rem; color: #0F172A;">Quyền Lực Thái Phó</h2>
                         <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">Thưởng điểm biểu dương hoặc phạt điểm học sinh phụ trách</p>
                     </div>
                     <div class="d-flex gap-1" style="flex-wrap: wrap;">
@@ -129,7 +130,7 @@
                 <!-- Stats Grid -->
                 <div class="grid-cards">
                     <div class="glass-panel stat-card">
-                        <div class="stat-icon" style="color: var(--gold-light);">🏛️</div>
+                        <div class="stat-icon" style="color: #D97706; background: #FFFBEB; border-color: #FDE68A;">🏛️</div>
                         <div class="stat-info">
                             <div class="stat-label">Lớp Phụ Trách</div>
                             <div class="stat-value" id="totalClasses">0</div>
@@ -137,7 +138,7 @@
                     </div>
 
                     <div class="glass-panel stat-card">
-                        <div class="stat-icon" style="color: var(--blue);">👥</div>
+                        <div class="stat-icon" style="color: #2563EB; background: #EFF6FF; border-color: #BFDBFE;">👥</div>
                         <div class="stat-info">
                             <div class="stat-label">Tổng Học Tử</div>
                             <div class="stat-value" id="totalStudents">0</div>
@@ -145,25 +146,25 @@
                     </div>
 
                     <div class="glass-panel stat-card">
-                        <div class="stat-icon" style="color: var(--amber);">📜</div>
+                        <div class="stat-icon" style="color: #D97706; background: #FFFBEB; border-color: #FDE68A;">📜</div>
                         <div class="stat-info">
                             <div class="stat-label">Tấu Chương Đang Giao</div>
                             <div class="stat-value" id="activeAssignments">0</div>
                         </div>
                     </div>
 
-                    <div class="glass-panel stat-card" style="border-color: var(--crimson);">
-                        <div class="stat-icon" style="color: var(--crimson);">⏳</div>
+                    <div class="glass-panel stat-card" style="border-color: #FECACA;">
+                        <div class="stat-icon" style="color: #DC2626; background: #FEF2F2; border-color: #FECACA;">⏳</div>
                         <div class="stat-info">
                             <div class="stat-label">Bài Chờ Phê Duyệt</div>
-                            <div class="stat-value" style="color: #FB7185;" id="ungradedCount">0</div>
+                            <div class="stat-value" style="color: #DC2626;" id="ungradedCount">0</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Classes Managed Section -->
                 <div class="glass-panel">
-                    <h3 class="mb-1">Danh Sách Lớp Phụ Trách</h3>
+                    <h3 class="mb-1" style="color: #0F172A;">Danh Sách Lớp Phụ Trách</h3>
                     <div id="classesListContainer">
                         <p class="text-center" style="color: var(--text-muted); padding: 2rem;">Đang tải danh sách lớp...</p>
                     </div>
@@ -206,9 +207,7 @@
                     <input type="text" id="quickScoreReason" placeholder="VD: Phát biểu hăng hái, thuộc từ vựng Hán tự..." required>
                 </div>
 
-                <div class="d-flex gap-1" style="flex-wrap: wrap; margin-bottom: 1.25rem;" id="presetReasonsContainer">
-                    <!-- Presets injected via JS -->
-                </div>
+                <div class="d-flex gap-1" style="flex-wrap: wrap; margin-bottom: 1.25rem;" id="presetReasonsContainer"></div>
 
                 <button type="submit" class="btn btn-primary btn-block" style="padding: 0.85rem;">
                     <span>Xác Nhận Ban Chiếu</span>
