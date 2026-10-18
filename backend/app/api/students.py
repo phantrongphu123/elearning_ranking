@@ -38,16 +38,23 @@ def list_students(
     current_user: dict = Depends(get_current_user)
 ):
     """Get all students. Teacher sees only their class, admin sees all."""
+    import pandas as pd
     df = excel_service.read_sheet("HocSinh")
     
     if current_user["role"] == "teacher":
         # Only students in teacher's class
         classes_df = excel_service.read_sheet("LopHoc")
-        teacher_classes = classes_df[classes_df["teacher_id"].astype(str) == str(current_user["user_id"])]["class_id"].tolist()
-        df = df[df["class_id"].isin([str(c) for c in teacher_classes])]
+        teacher_uid = int(float(current_user["user_id"]))
+        t_col = pd.to_numeric(classes_df["teacher_id"], errors="coerce").fillna(0).astype(int)
+        teacher_classes = [int(float(c)) for c in classes_df[t_col == teacher_uid]["class_id"].tolist() if pd.notna(c)]
+        
+        c_col = pd.to_numeric(df["class_id"], errors="coerce").fillna(0).astype(int)
+        df = df[c_col.isin(teacher_classes)]
     
-    if class_id:
-        df = df[df["class_id"].astype(str) == str(class_id)]
+    if class_id is not None:
+        target_cid = int(float(class_id))
+        c_col = pd.to_numeric(df["class_id"], errors="coerce").fillna(0).astype(int)
+        df = df[c_col == target_cid]
     
     students = df.to_dict(orient="records")
     
@@ -68,7 +75,8 @@ def get_student(student_id: int, current_user: dict = Depends(get_current_user))
     
     # Students can only view their own profile
     if current_user["role"] == "student":
-        if str(current_user.get("student_id")) != str(student_id):
+        user_s_id = int(float(current_user.get("student_id") or 0))
+        if user_s_id != int(float(student_id)):
             raise HTTPException(status_code=403, detail="Không có quyền xem thông tin này")
     
     rank_info = calculate_rank(float(student.get("total_score", 0)), student.get("gender", "female"))

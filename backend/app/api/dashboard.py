@@ -61,26 +61,33 @@ def teacher_dashboard(current_user: dict = Depends(get_current_user)):
         from fastapi import HTTPException
         raise HTTPException(status_code=403, detail="Không có quyền")
     
+    import pandas as pd
     classes_df = excel_service.read_sheet("LopHoc")
-    teacher_classes = classes_df[classes_df["teacher_id"].astype(str) == str(current_user["user_id"])]
+    t_uid = int(float(current_user["user_id"]))
+    t_col = pd.to_numeric(classes_df["teacher_id"], errors="coerce").fillna(0).astype(int)
+    teacher_classes = classes_df[t_col == t_uid]
     
-    class_ids = teacher_classes["class_id"].tolist()
+    class_ids = [int(float(c)) for c in teacher_classes["class_id"].tolist() if pd.notna(c)]
     
     students_df = excel_service.read_sheet("HocSinh")
     assignments_df = excel_service.read_sheet("BaiTap")
     submissions_df = excel_service.read_sheet("BaiNop")
     
-    teacher_students = students_df[students_df["class_id"].isin([str(c) for c in class_ids])]
+    s_class_col = pd.to_numeric(students_df["class_id"], errors="coerce").fillna(0).astype(int)
+    teacher_students = students_df[s_class_col.isin(class_ids)]
+    
+    a_teacher_col = pd.to_numeric(assignments_df["teacher_id"], errors="coerce").fillna(0).astype(int)
     teacher_assignments = assignments_df[
-        (assignments_df["teacher_id"].astype(str) == str(current_user["user_id"])) &
+        (a_teacher_col == t_uid) &
         (assignments_df["status"] != "inactive")
     ]
     
     # Ungraded submissions
     if not teacher_assignments.empty:
-        assignment_ids = teacher_assignments["assignment_id"].tolist()
+        assignment_ids = [int(float(a)) for a in teacher_assignments["assignment_id"].tolist() if pd.notna(a)]
+        sub_asg_col = pd.to_numeric(submissions_df["assignment_id"], errors="coerce").fillna(0).astype(int)
         ungraded = submissions_df[
-            (submissions_df["assignment_id"].isin([str(a) for a in assignment_ids])) &
+            (sub_asg_col.isin(assignment_ids)) &
             (submissions_df["status"] != "graded")
         ]
     else:
@@ -101,13 +108,27 @@ def student_dashboard(current_user: dict = Depends(get_current_user)):
         from fastapi import HTTPException
         raise HTTPException(status_code=403, detail="Không có quyền")
     
+    import pandas as pd
     student_id = current_user.get("student_id")
-    student = excel_service.find_one("HocSinh", "student_id", student_id)
+    student = None
+    if student_id:
+        student = excel_service.find_one("HocSinh", "student_id", student_id)
+    
+    # Fallback to search by username or full_name if not found by student_id
+    if not student:
+        username = current_user.get("username")
+        if username:
+            student = excel_service.find_one("HocSinh", "student_code", username)
+    if not student:
+        full_name = current_user.get("full_name")
+        if full_name:
+            student = excel_service.find_one("HocSinh", "full_name", full_name)
     
     if not student:
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Không tìm thấy học sinh")
     
+    s_id = int(float(student.get("student_id")))
     from ..services.rank_service import get_next_rank_info
     
     total_score = float(student.get("total_score", 0))
@@ -117,42 +138,50 @@ def student_dashboard(current_user: dict = Depends(get_current_user)):
     
     # Submissions stats
     subs_df = excel_service.read_sheet("BaiNop")
-    student_subs = subs_df[subs_df["student_id"].astype(str) == str(student_id)]
-    on_time = student_subs[student_subs["is_late"].astype(str) == "False"]
-    late = student_subs[student_subs["is_late"].astype(str) == "True"]
+    sub_s_col = pd.to_numeric(subs_df["student_id"], errors="coerce").fillna(0).astype(int)
+    student_subs = subs_df[sub_s_col == s_id]
+    on_time = student_subs[student_subs["is_late"].astype(str).str.lower().isin(["false", "0"])]
+    late = student_subs[student_subs["is_late"].astype(str).str.lower().isin(["true", "1"])]
     
     # Pending assignments
     class_id = student.get("class_id")
     assignments_df = excel_service.read_sheet("BaiTap")
     if class_id:
+        c_id = int(float(class_id))
+        asg_c_col = pd.to_numeric(assignments_df["class_id"], errors="coerce").fillna(0).astype(int)
         class_assignments = assignments_df[
-            (assignments_df["class_id"].astype(str) == str(class_id)) &
+            (asg_c_col == c_id) &
             (assignments_df["status"] != "inactive")
         ]
-        submitted_ids = student_subs["assignment_id"].tolist()
-        pending = class_assignments[~class_assignments["assignment_id"].isin(submitted_ids)]
+        submitted_ids = [int(float(x)) for x in student_subs["assignment_id"].tolist() if pd.notna(x)]
+        asg_id_col = pd.to_numeric(class_assignments["assignment_id"], errors="coerce").fillna(0).astype(int)
+        pending = class_assignments[~asg_id_col.isin(submitted_ids)]
     else:
         pending = assignments_df.head(0)
     
     # Score breakdown
     scores_df = excel_service.read_sheet("Diem")
-    student_scores = scores_df[scores_df["student_id"].astype(str) == str(student_id)]
-    homework_score = float(student_scores[student_scores["type"] == "homework"]["points"].sum())
-    attendance_score = float(student_scores[student_scores["type"] == "attendance"]["points"].sum())
-    bonus_score = float(student_scores[student_scores["type"].isin(["bonus", "manual"])]["points"].sum())
+    score_s_col = pd.to_numeric(scores_df["student_id"], errors="coerce").fillna(0).astype(int)
+    student_scores = scores_df[score_s_col == s_id]
+    scores_pts = pd.to_numeric(student_scores["points"], errors="coerce").fillna(0)
+    homework_score = float(scores_pts[student_scores["type"] == "homework"].sum())
+    attendance_score = float(scores_pts[student_scores["type"] == "attendance"].sum())
+    bonus_score = float(scores_pts[student_scores["type"].isin(["bonus", "manual"])].sum())
     
     # Leaderboard position
     all_students = excel_service.read_sheet("HocSinh")
     all_students = all_students[all_students["status"] != "inactive"]
-    all_students["total_score"] = all_students["total_score"].astype(float)
-    sorted_students = all_students.sort_values("total_score", ascending=False).reset_index()
-    position_rows = sorted_students[sorted_students["student_id"].astype(str) == str(student_id)]
+    all_students["total_score"] = pd.to_numeric(all_students["total_score"], errors="coerce").fillna(0).astype(float)
+    sorted_students = all_students.sort_values("total_score", ascending=False).reset_index(drop=True)
+    sorted_s_col = pd.to_numeric(sorted_students["student_id"], errors="coerce").fillna(0).astype(int)
+    position_rows = sorted_students[sorted_s_col == s_id]
     position = int(position_rows.index[0]) + 1 if not position_rows.empty else "-"
     
     # Attendance streak
     attendance_df = excel_service.read_sheet("DiemDanh")
+    att_s_col = pd.to_numeric(attendance_df["student_id"], errors="coerce").fillna(0).astype(int)
     student_att = attendance_df[
-        (attendance_df["student_id"].astype(str) == str(student_id)) &
+        (att_s_col == s_id) &
         (attendance_df["status"] == "present")
     ]
     streak = len(student_att)  # Simplified streak count

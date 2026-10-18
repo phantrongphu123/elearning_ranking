@@ -7,6 +7,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     const dateInput = document.getElementById('dateSelect');
     if (dateInput) {
         dateInput.value = new Date().toISOString().split('T')[0];
+        dateInput.addEventListener('change', () => {
+            const classSelect = document.getElementById('classSelect');
+            if (classSelect && classSelect.value) {
+                loadClassStudents();
+            }
+        });
+    }
+
+    const classSelect = document.getElementById('classSelect');
+    if (classSelect) {
+        classSelect.addEventListener('change', () => {
+            if (classSelect.value) {
+                loadClassStudents();
+            }
+        });
     }
 
     await loadTeacherClassesForAttendance();
@@ -15,12 +30,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Check if class_id is passed in URL query
     const params = new URLSearchParams(window.location.search);
     const paramClassId = params.get('class_id');
-    if (paramClassId) {
-        const select = document.getElementById('classSelect');
-        if (select) {
-            select.value = paramClassId;
-            loadClassStudents();
-        }
+    if (paramClassId && classSelect) {
+        classSelect.value = paramClassId;
+    }
+
+    // Automatically load students if a class is selected
+    if (classSelect && classSelect.value) {
+        loadClassStudents();
     }
 });
 
@@ -58,6 +74,9 @@ async function loadClassStudents() {
     const tbody = document.getElementById('rosterTableBody');
 
     try {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center" style="padding: 2.5rem; color: var(--text-muted)">Đang nạp danh sách học tử...</td></tr>';
+        rosterPanel.style.display = 'block';
+
         // Load students of this class
         currentStudents = await fetchAPI(`/students?class_id=${classId}`);
 
@@ -120,7 +139,7 @@ async function loadClassStudents() {
         rosterPanel.style.display = 'block';
 
         if (existingMap.size > 0) {
-            showToast(`ℹ️ Đã nạp dữ liệu điểm danh đã lưu ngày ${formatDate(dateStr, false)}`, 'info');
+            showToast(`Đã nạp dữ liệu điểm danh đã lưu ngày ${formatDate(dateStr, false)}`, 'info');
         }
 
     } catch (e) {

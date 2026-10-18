@@ -79,17 +79,27 @@ def get_attendance(
     date: Optional[str] = None,
     current_user: dict = Depends(get_current_user)
 ):
+    import pandas as pd
     df = excel_service.read_sheet("DiemDanh")
     
     if current_user["role"] == "student":
-        df = df[df["student_id"].astype(str) == str(current_user.get("student_id"))]
+        curr_sid = int(float(current_user.get("student_id") or 0))
+        s_col = pd.to_numeric(df["student_id"], errors="coerce").fillna(0).astype(int)
+        df = df[s_col == curr_sid]
     
-    if class_id:
-        df = df[df["class_id"].astype(str) == str(class_id)]
-    if student_id:
-        df = df[df["student_id"].astype(str) == str(student_id)]
+    if class_id is not None:
+        c_id = int(float(class_id))
+        c_col = pd.to_numeric(df["class_id"], errors="coerce").fillna(0).astype(int)
+        df = df[c_col == c_id]
+    if student_id is not None:
+        s_id = int(float(student_id))
+        s_col = pd.to_numeric(df["student_id"], errors="coerce").fillna(0).astype(int)
+        df = df[s_col == s_id]
     if date:
-        df = df[df["date"] == date]
+        df = df[df["date"].astype(str) == str(date)]
+    
+    if df.empty:
+        return []
     
     return df.sort_values("date", ascending=False).to_dict(orient="records")
 

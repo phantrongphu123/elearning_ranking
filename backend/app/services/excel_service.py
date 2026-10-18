@@ -56,15 +56,20 @@ SHEET_COLUMNS = {
     "RankConfig":      ["rank_id", "min_score", "max_score", "male_name", "female_name", "level", "color", "icon"],
 }
 
-# Các cột cần chuyển về kiểu số
-_NUMERIC_COLS = {
+# Phân loại kiểu số: số nguyên (IDs, cấp bậc) và số thực (điểm số)
+_INT_COLS = {
     "user_id", "student_id", "class_id", "teacher_id",
     "assignment_id", "question_id", "submission_id", "submission_detail_id",
     "score_id", "history_id", "attendance_id", "achievement_id",
-    "notification_id", "rank_id",
-    "total_score", "score", "points", "min_score", "max_score",
-    "level", "rank_level", "bonus_score", "penalty_score", "max_score",
+    "notification_id", "rank_id", "rank_level", "level",
 }
+
+_FLOAT_COLS = {
+    "total_score", "score", "points", "min_score", "max_score",
+    "bonus_score", "penalty_score",
+}
+
+_NUMERIC_COLS = _INT_COLS | _FLOAT_COLS
 
 # TTL cache (giây)
 _CACHE_TTL = 45
@@ -157,8 +162,10 @@ class ExcelService:
         """Chuẩn hóa kiểu dữ liệu: cột ID và số về numeric, còn lại là string."""
         df = df.fillna("")
         for col in df.columns:
-            if col in _NUMERIC_COLS:
-                df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+            if col in _INT_COLS:
+                df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0).astype(int)
+            elif col in _FLOAT_COLS:
+                df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0).astype(float)
         return df
 
     # ── Public API (giữ nguyên interface cũ) ─────────────────
@@ -215,7 +222,13 @@ class ExcelService:
     def update_row(self, sheet_name: str, id_column: str, id_value: Any, updates: dict) -> bool:
         """Cập nhật trường trong 1 dòng xác định bởi id_column == id_value."""
         df = self.read_sheet(sheet_name)
-        mask = df[id_column].astype(str) == str(id_value)
+        if id_column in _INT_COLS:
+            try:
+                mask = pd.to_numeric(df[id_column], errors="coerce").fillna(0).astype(int) == int(float(id_value))
+            except (ValueError, TypeError):
+                mask = df[id_column].astype(str) == str(id_value)
+        else:
+            mask = df[id_column].astype(str) == str(id_value)
         if not mask.any():
             return False
         for key, value in updates.items():
@@ -227,7 +240,14 @@ class ExcelService:
     def delete_row(self, sheet_name: str, id_column: str, id_value: Any) -> bool:
         """Xóa dòng xác định bởi id_column == id_value."""
         df = self.read_sheet(sheet_name)
-        df = df[df[id_column].astype(str) != str(id_value)]
+        if id_column in _INT_COLS:
+            try:
+                mask = pd.to_numeric(df[id_column], errors="coerce").fillna(0).astype(int) != int(float(id_value))
+            except (ValueError, TypeError):
+                mask = df[id_column].astype(str) != str(id_value)
+        else:
+            mask = df[id_column].astype(str) != str(id_value)
+        df = df[mask]
         self.write_sheet(sheet_name, df)
         return True
 
@@ -243,6 +263,26 @@ class ExcelService:
     def find_one(self, sheet_name: str, column: str, value: Any) -> Optional[dict]:
         """Tìm dòng đầu tiên thoả mãn column == value."""
         df = self.read_sheet(sheet_name)
+        if df.empty or column not in df.columns:
+            return None
+        if column in _INT_COLS:
+            try:
+                num_val = int(float(value))
+                mask = pd.to_numeric(df[column], errors="coerce").fillna(0).astype(int) == num_val
+                result = df[mask]
+                if not result.empty:
+                    return result.iloc[0].to_dict()
+            except (ValueError, TypeError):
+                pass
+        elif column in _FLOAT_COLS:
+            try:
+                num_val = float(value)
+                mask = pd.to_numeric(df[column], errors="coerce").fillna(0.0).astype(float) == num_val
+                result = df[mask]
+                if not result.empty:
+                    return result.iloc[0].to_dict()
+            except (ValueError, TypeError):
+                pass
         result = df[df[column].astype(str) == str(value)]
         if result.empty:
             return None
