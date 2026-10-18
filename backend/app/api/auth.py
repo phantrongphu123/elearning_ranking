@@ -18,6 +18,7 @@ class LoginResponse(BaseModel):
 
 
 @router.post("/login")
+@router.post("/login/")
 def login(form_data: OAuth2PasswordRequestForm = Depends()):
     """Login and receive JWT token."""
     users_df = excel_service.read_sheet("Users")

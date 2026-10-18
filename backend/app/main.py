@@ -24,23 +24,44 @@ app.add_middleware(
 )
 
 
+import urllib.parse
+
+
 class PrefixMiddleware:
-    """Tự động chuẩn hóa đường dẫn để hoạt động tốt cả trên local và Vercel serverless."""
+    """Tự động chuẩn hóa đường dẫn để hoạt động hoàn hảo cả trên local và Vercel serverless."""
     def __init__(self, app):
         self.app = app
 
     async def __call__(self, scope, receive, send):
         if scope["type"] == "http":
             path = scope.get("path", "")
+            query_string = scope.get("query_string", b"").decode("utf-8")
 
-            # 1. Nếu Vercel ghi đè path thành /api/index.py, đọc x-matched-path từ header
-            if path in ("/api/index.py", "/api/index", "/api/index.py/"):
+            # 1. Trích xuất __path__ được Vercel rewrite chuyển tiếp qua query param
+            if "__path__=" in query_string:
+                qs_parts = urllib.parse.parse_qs(query_string, keep_blank_values=True)
+                if "__path__" in qs_parts and qs_parts["__path__"]:
+                    extracted = qs_parts.pop("__path__")[0]
+                    # Loại bỏ __path__ khỏi query string để không làm bẩn endpoint của route
+                    new_qs = urllib.parse.urlencode(qs_parts, doseq=True)
+                    scope["query_string"] = new_qs.encode("utf-8")
+                    path = f"/{extracted.lstrip('/')}"
+
+            # 2. Nếu path bị Vercel đặt thành /api/index.py hoặc /api, đọc header định tuyến
+            if path in ("/api/index.py", "/api/index", "/api/index.py/", "/api", "/api/"):
                 headers = dict(scope.get("headers", []))
-                matched = headers.get(b"x-matched-path", b"").decode("utf-8", errors="ignore")
-                if matched:
-                    path = matched
+                # Vercel x-now-route-matches có dạng: 1=auth/login
+                route_matches = headers.get(b"x-now-route-matches", b"").decode("utf-8", errors="ignore")
+                if "1=" in route_matches:
+                    m_parts = urllib.parse.parse_qs(route_matches)
+                    if "1" in m_parts and m_parts["1"]:
+                        path = f"/{m_parts['1'][0].lstrip('/')}"
+                else:
+                    matched = headers.get(b"x-matched-path", b"").decode("utf-8", errors="ignore")
+                    if matched and matched not in ("/api/index.py", "/api/index", "/api", "/api/", "/"):
+                        path = matched
 
-            # 2. Xóa tiền tố /api/index.py hoặc /api/index nếu bị dính vào URL
+            # 3. Xóa tiền tố /api/index.py nếu vẫn còn dính
             if path.startswith("/api/index.py"):
                 path = path[len("/api/index.py"):]
             elif path.startswith("/api/index"):
@@ -51,7 +72,7 @@ class PrefixMiddleware:
             elif not path.startswith("/"):
                 path = "/" + path
 
-            # 3. Chuẩn hóa: nếu request thiếu /api mà thuộc các endpoint của router thì tự thêm /api
+            # 4. Chuẩn hóa: nếu request thiếu /api mà thuộc các endpoint của router thì tự thêm /api
             prefixes = (
                 "/auth", "/students", "/teachers", "/classes", "/assignments",
                 "/submissions", "/scores", "/attendance", "/leaderboard", "/dashboard", "/health"
