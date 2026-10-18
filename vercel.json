@@ -1,57 +1,44 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "frontend": {
+      "root": "frontend"
+    },
+    "backend": {
+      "root": "backend",
+      "entrypoint": "app.main:app"
+    }
+  },
   "rewrites": [
     {
-      "source": "/api",
-      "destination": "/api/index.py"
-    },
-    {
       "source": "/api/(.*)",
-      "destination": "/api/index.py?__path__=$1"
+      "destination": {
+        "service": "backend"
+      }
     },
     {
       "source": "/docs",
-      "destination": "/api/index.py"
+      "destination": {
+        "service": "backend"
+      }
     },
     {
       "source": "/redoc",
-      "destination": "/api/index.py"
+      "destination": {
+        "service": "backend"
+      }
     },
     {
       "source": "/openapi.json",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/",
-      "destination": "/frontend/index.html"
-    },
-    {
-      "source": "/admin",
-      "destination": "/frontend/admin/index.html"
-    },
-    {
-      "source": "/admin/",
-      "destination": "/frontend/admin/index.html"
-    },
-    {
-      "source": "/teacher",
-      "destination": "/frontend/teacher/index.html"
-    },
-    {
-      "source": "/teacher/",
-      "destination": "/frontend/teacher/index.html"
-    },
-    {
-      "source": "/student",
-      "destination": "/frontend/student/index.html"
-    },
-    {
-      "source": "/student/",
-      "destination": "/frontend/student/index.html"
+      "destination": {
+        "service": "backend"
+      }
     },
     {
       "source": "/(.*)",
-      "destination": "/frontend/$1"
+      "destination": {
+        "service": "frontend"
+      }
     }
   ]
 }
