@@ -63,13 +63,13 @@ function filterSubmissions() {
             : `<span class="badge badge-success">Đúng hạn</span>`;
 
         const statusBadge = isGraded
-            ? `<span class="badge badge-success">✓ Đã phê duyệt</span>`
-            : `<span class="badge badge-warning">⏳ Chờ xử lý</span>`;
+            ? `<span class="badge badge-success">Đã chấm</span>`
+            : `<span class="badge badge-warning">Chờ chấm</span>`;
 
         return `
             <tr>
-                <td><strong>${escapeHtml(s.assignment_title || 'Tấu chương')}</strong></td>
-                <td><strong style="color: var(--gold-light);">${escapeHtml(s.student_name || 'Học tử')}</strong></td>
+                <td><strong>${escapeHtml(s.assignment_title || 'Bài tập')}</strong></td>
+                <td><strong style="color: var(--gold-light);">${escapeHtml(s.student_name || 'Học sinh')}</strong></td>
                 <td style="font-size: 0.85rem; color: var(--text-muted);">${formatDate(s.submitted_at)}</td>
                 <td>${lateBadge}</td>
                 <td style="font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif; font-weight: 700; color: var(--gold-light); font-size: 1.05rem;">
@@ -78,7 +78,7 @@ function filterSubmissions() {
                 <td>${statusBadge}</td>
                 <td>
                     <button class="btn btn-primary btn-sm" onclick="openGradeModal(${s.submission_id}, '${escapeHtml(s.student_name)}', '${escapeHtml(s.assignment_title)}', ${s.score}, '${escapeHtml(s.teacher_comment || '')}')">
-                        <span>✍️ Phê Duyệt</span>
+                        <span>Chấm Điểm</span>
                     </button>
                 </td>
             </tr>
@@ -119,7 +119,7 @@ async function openGradeModal(submissionId, studentName, assignmentTitle, curren
                     <div class="d-flex justify-between align-center mb-1">
                         <strong style="color: var(--gold-light);">Câu ${idx + 1}: ${escapeHtml(d.question_text || '')}</strong>
                         <span class="badge ${isCorrect ? 'badge-success' : 'badge-danger'}">
-                            ${isCorrect ? '✓ Đúng' : '✕ Sai'} (${d.score || 0}đ)
+                            ${isCorrect ? 'Đúng' : 'Sai'} (${d.score || 0}đ)
                         </span>
                     </div>
                     <div style="font-size: 0.88rem; display: flex; flex-direction: column; gap: 0.25rem;">
@@ -165,13 +165,13 @@ function initGradeForm() {
             });
 
             closeGradeModal();
-            showToast('📜 Phê duyệt bài nộp thành công!', 'success');
+            showToast('Lưu kết quả chấm điểm thành công!', 'success');
             await loadTeacherSubmissions();
         } catch (err) {
             showToast('Lỗi phê duyệt: ' + err.message, 'error');
         } finally {
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<span>📜 Lưu Phê Duyệt & Chấm Điểm</span>';
+            submitBtn.innerHTML = '<span>Lưu Phê Duyệt & Chấm Điểm</span>';
         }
     });
 }

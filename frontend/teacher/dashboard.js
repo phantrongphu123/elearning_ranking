@@ -41,13 +41,13 @@ async function loadTeacherDashboard() {
 
                 <div class="quick-actions">
                     <a href="attendance.html?class_id=${cls.class_id}" class="btn btn-secondary btn-sm">
-                        <span>📅 Điểm Danh</span>
+                        <span>Điểm Danh</span>
                     </a>
                     <a href="assignments.html?class_id=${cls.class_id}" class="btn btn-secondary btn-sm">
-                        <span>📜 Giao Bài</span>
+                        <span>Giao Bài</span>
                     </a>
                     <a href="submissions.html" class="btn btn-primary btn-sm">
-                        <span>✍️ Chấm Bài</span>
+                        <span>Chấm Bài</span>
                     </a>
                 </div>
             </div>

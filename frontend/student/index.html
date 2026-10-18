@@ -110,7 +110,7 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="sidebar-logo-icon">🏯</div>
+                <div class="sidebar-logo-badge">LC</div>
                 <div class="sidebar-brand">
                     <h2>Hoàng Cung</h2>
                     <span>Học Viện Hán Ngữ</span>
@@ -119,26 +119,22 @@
 
             <nav class="sidebar-nav">
                 <a href="index.html" class="nav-item active">
-                    <span class="nav-icon">🏯</span>
                     <span>Tổng Quan</span>
                 </a>
                 <a href="assignments.html" class="nav-item">
-                    <span class="nav-icon">📝</span>
-                    <span>Tấu Chương (Bài Tập)</span>
+                    <span>Bài Tập</span>
                 </a>
                 <a href="leaderboard.html" class="nav-item">
-                    <span class="nav-icon">🏆</span>
-                    <span>Bảng Vàng Triều Đình</span>
+                    <span>Bảng Vàng</span>
                 </a>
                 <a href="#" class="nav-item" onclick="openScoreHistoryModal(); return false;">
-                    <span class="nav-icon">📜</span>
-                    <span>Lịch Sử Điểm Thưởng</span>
+                    <span>Lịch Sử Điểm</span>
                 </a>
             </nav>
 
             <div class="sidebar-footer">
                 <button onclick="logout()" class="btn btn-secondary btn-block">
-                    <span>🚪 Xuất Cung (Đăng Xuất)</span>
+                    <span>Đăng Xuất</span>
                 </button>
             </div>
         </aside>
@@ -147,7 +143,7 @@
         <main class="main-content">
             <header class="topbar">
                 <div class="topbar-left">
-                    <button class="menu-toggle" aria-label="Mở Menu">☰</button>
+                    <button class="menu-toggle" aria-label="Mở Menu">Menu</button>
                     <div class="topbar-title">
                         <h1>Điện Học Tử · <span class="hanzi">学子殿</span></h1>
                         <p>Tổng quan tu dưỡng & học tập tiếng Trung</p>
@@ -155,8 +151,8 @@
                 </div>
 
                 <div class="topbar-right">
-                    <button id="notifBtn" class="notif-btn" title="Chiếu chỉ & Thông báo">
-                        <span>🔔</span>
+                    <button id="notifBtn" class="btn btn-secondary btn-sm" title="Thông báo" style="font-size: 0.82rem; font-weight: 600;">
+                        Thông Báo
                     </button>
                     <div class="user-profile">
                         <div class="user-avatar" id="userAvatar">学</div>
@@ -171,7 +167,6 @@
             <div class="animate-fade-in">
                 <!-- Royal Rank Banner Card -->
                 <div class="glass-panel rank-card mb-2">
-                    <div class="rank-icon-wrapper" id="rankIcon">📜</div>
                     <div class="rank-details">
                         <div class="rank-title">
                             <span id="rankName">Đang tải tước vị...</span>
@@ -201,23 +196,20 @@
                 <!-- Quick Stats Grid -->
                 <div class="grid-cards">
                     <div class="glass-panel stat-card">
-                        <div class="stat-icon" style="color: #D97706; background: #FFFBEB; border-color: #FDE68A;">⏳</div>
                         <div class="stat-info">
-                            <div class="stat-label">Tấu Chương Cần Làm</div>
+                            <div class="stat-label">Bài Tập Cần Làm</div>
                             <div class="stat-value" id="pendingAssignmentsCount">0</div>
                         </div>
                     </div>
 
                     <div class="glass-panel stat-card">
-                        <div class="stat-icon" style="color: #059669; background: #ECFDF5; border-color: #A7F3D0;">✍️</div>
                         <div class="stat-info">
-                            <div class="stat-label">Bài Đã Dâng Trình</div>
+                            <div class="stat-label">Bài Đã Nộp</div>
                             <div class="stat-value" id="totalSubmissionsCount">0</div>
                         </div>
                     </div>
 
                     <div class="glass-panel stat-card">
-                        <div class="stat-icon" style="color: #F59E0B; background: #FFFBEB; border-color: #FDE68A;">🔥</div>
                         <div class="stat-info">
                             <div class="stat-label">Chuỗi Chuyên Cần</div>
                             <div class="stat-value" id="attendanceStreakDays">0</div>
@@ -230,7 +222,7 @@
                     <div class="d-flex justify-between align-center mb-1">
                         <h3>Chi Tiết Điểm Tích Lũy</h3>
                         <button class="btn btn-secondary btn-sm" onclick="openScoreHistoryModal()">
-                            <span>📜 Xem Lịch Sử Chi Tiết</span>
+                            <span>Xem Lịch Sử Chi Tiết</span>
                         </button>
                     </div>
 
@@ -245,17 +237,17 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><strong>📝 Bài Tập Về Nhà (Tấu Chương)</strong></td>
+                                    <td><strong>Bài Tập Về Nhà</strong></td>
                                     <td style="color: var(--text-muted)">Điểm bài tập ngữ pháp & từ vựng tiếng Trung</td>
                                     <td style="color: var(--gold-light); font-weight: bold; font-size: 1.05rem;" id="scoreHomework">0</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>📅 Điểm Danh & Chuyên Cần</strong></td>
+                                    <td><strong>Điểm Danh & Chuyên Cần</strong></td>
                                     <td style="color: var(--text-muted)">Đi học đúng giờ (+5đ/buổi), đi trễ (+2đ), vắng phép (0đ)</td>
                                     <td style="color: var(--gold-light); font-weight: bold; font-size: 1.05rem;" id="scoreAttendance">0</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>⭐ Điểm Thưởng Triều Đình (Bonus)</strong></td>
+                                    <td><strong>Điểm Thưởng (Bonus)</strong></td>
                                     <td style="color: var(--text-muted)">Thái phó khen thưởng phát biểu, thành tích đặc biệt</td>
                                     <td style="color: var(--gold-light); font-weight: bold; font-size: 1.05rem;" id="scoreBonus">0</td>
                                 </tr>
@@ -271,7 +263,7 @@
     <div id="scoreHistoryModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>📜 Biến Động Điểm Số Triều Đình</h2>
+                <h2>Lịch Sử Biến Động Điểm</h2>
                 <button class="modal-close-btn" onclick="closeScoreHistoryModal()">&times;</button>
             </div>
             <div id="scoreHistoryList" style="max-height: 420px; overflow-y: auto;">

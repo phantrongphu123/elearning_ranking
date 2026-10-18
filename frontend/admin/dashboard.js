@@ -79,11 +79,11 @@ async function loadAdminDashboard() {
                 topTable.innerHTML = data.top_students.map((s, idx) => `
                     <tr>
                         <td style="font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif; font-weight: 700; color: ${idx === 0 ? 'var(--gold-light)' : 'inherit'};">
-                            ${idx === 0 ? '👑 #1' : `#${idx + 1}`}
+                            #${idx + 1}
                         </td>
                         <td><strong>${escapeHtml(s.full_name)}</strong> (${escapeHtml(s.student_code)})</td>
                         <td>
-                            <span class="rank-badge sm">${s.icon || '📜'} ${escapeHtml(s.rank || 'Học tử')}</span>
+                            <span class="rank-badge sm">${escapeHtml(s.rank || 'Học sinh')}</span>
                         </td>
                         <td style="font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif; font-weight: 700; color: var(--gold-light);">
                             ${s.total_score}đ
@@ -193,7 +193,7 @@ function filterStudentsList() {
                 <td><span class="badge badge-info">${escapeHtml(className)}</span></td>
                 <td>
                     <span class="rank-badge sm" style="border-color:${s.color || 'var(--gold-primary)'}; color:${s.color || 'var(--gold-light)'};">
-                        ${s.icon || '📜'} ${escapeHtml(s.rank || 'Học tử')}
+                        ${escapeHtml(s.rank || 'Học sinh')}
                     </span>
                 </td>
                 <td style="font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif; font-weight: 700; color: var(--gold-light);">
@@ -202,10 +202,10 @@ function filterStudentsList() {
                 <td>
                     <div class="d-flex gap-1" style="align-items: center;">
                         <button class="btn btn-secondary btn-sm" onclick="openQuickScoreForStudent(${s.student_id})">
-                            <span>⭐ Điểm</span>
+                            <span>Cộng/Trừ Điểm</span>
                         </button>
                         <button class="btn btn-danger btn-sm" onclick="deleteStudent(${s.student_id})">
-                            <span>Vô hiệu</span>
+                            <span>Vô hiệu hóa</span>
                         </button>
                     </div>
                 </td>
@@ -218,7 +218,7 @@ async function deleteStudent(studentId) {
     if (!confirm('Bạn có chắc chắn muốn vô hiệu hóa học tử này khỏi học viện?')) return;
     try {
         await fetchAPI(`/students/${studentId}`, { method: 'DELETE' });
-        showToast('✓ Đã vô hiệu hóa học tử thành công!', 'success');
+        showToast('Đã vô hiệu hóa học sinh thành công!', 'success');
         await loadStudentsManagement();
     } catch (e) {
         showToast('Lỗi: ' + e.message, 'error');
@@ -275,7 +275,7 @@ async function deleteTeacher(userId) {
     if (!confirm('Bạn có chắc muốn vô hiệu hóa tài khoản Thái Phó này?')) return;
     try {
         await fetchAPI(`/teachers/${userId}`, { method: 'DELETE' });
-        showToast('✓ Đã vô hiệu hóa Thái Phó!', 'success');
+        showToast('Đã vô hiệu hóa giảng viên!', 'success');
         await loadTeachersManagement();
     } catch (e) {
         showToast('Lỗi: ' + e.message, 'error');
@@ -301,7 +301,7 @@ async function loadClassesManagement() {
                 <td style="font-family: monospace; font-weight: 700; color: var(--gold-light);">${escapeHtml(c.class_code)}</td>
                 <td><strong>${escapeHtml(c.class_name)}</strong></td>
                 <td>${escapeHtml(c.teacher_name || 'Chưa phân công')}</td>
-                <td style="font-weight: 600; color: var(--gold-primary); text-align: center;">${c.student_count || 0} học tử</td>
+                <td style="font-weight: 600; color: var(--gold-primary); text-align: center;">${c.student_count || 0} học sinh</td>
                 <td>${escapeHtml(c.school_year || '2026-2027')}</td>
                 <td>
                     <span class="badge ${c.status === 'active' ? 'badge-success' : 'badge-danger'}">
@@ -325,7 +325,7 @@ async function deleteClass(classId) {
     if (!confirm('Bạn có chắc muốn đóng lớp học này?')) return;
     try {
         await fetchAPI(`/classes/${classId}`, { method: 'DELETE' });
-        showToast('✓ Đã đóng lớp học!', 'success');
+        showToast('Đã đóng lớp học!', 'success');
         await loadClassesManagement();
         await loadClassesCache();
     } catch (e) {
@@ -426,7 +426,7 @@ function initModalsAndForms() {
                 });
 
                 closeCreateStudentModal();
-                showToast(`✓ Đã thêm học tử ${name} thành công!`, 'success');
+                showToast(`Đã thêm học sinh ${name} thành công!`, 'success');
                 sForm.reset();
                 await loadStudentsManagement();
             } catch (err) {
@@ -462,7 +462,7 @@ function initModalsAndForms() {
                 });
 
                 closeCreateTeacherModal();
-                showToast(`✓ Đã bổ nhiệm Thái Phó ${name} thành công!`, 'success');
+                showToast(`Đã bổ nhiệm giảng viên ${name} thành công!`, 'success');
                 tForm.reset();
                 await loadTeachersManagement();
             } catch (err) {
@@ -500,7 +500,7 @@ function initModalsAndForms() {
                 });
 
                 closeCreateClassModal();
-                showToast(`✓ Đã mở lớp học ${name} thành công!`, 'success');
+                showToast(`Đã mở lớp học ${name} thành công!`, 'success');
                 cForm.reset();
                 await loadClassesManagement();
                 await loadClassesCache();

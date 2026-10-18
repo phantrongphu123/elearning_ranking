@@ -123,7 +123,7 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="sidebar-logo-icon">🏯</div>
+                <div class="sidebar-logo-badge">LC</div>
                 <div class="sidebar-brand">
                     <h2>Hoàng Cung</h2>
                     <span>Học Viện Hán Ngữ</span>
@@ -132,22 +132,19 @@
 
             <nav class="sidebar-nav">
                 <a href="index.html" class="nav-item">
-                    <span class="nav-icon">🏯</span>
                     <span>Tổng Quan</span>
                 </a>
                 <a href="assignments.html" class="nav-item active">
-                    <span class="nav-icon">📝</span>
-                    <span>Tấu Chương (Bài Tập)</span>
+                    <span>Bài Tập</span>
                 </a>
                 <a href="leaderboard.html" class="nav-item">
-                    <span class="nav-icon">🏆</span>
-                    <span>Bảng Vàng Triều Đình</span>
+                    <span>Bảng Vàng</span>
                 </a>
             </nav>
 
             <div class="sidebar-footer">
                 <button onclick="logout()" class="btn btn-secondary btn-block">
-                    <span>🚪 Xuất Cung (Đăng Xuất)</span>
+                    <span>Đăng Xuất</span>
                 </button>
             </div>
         </aside>
@@ -156,7 +153,7 @@
         <main class="main-content">
             <header class="topbar">
                 <div class="topbar-left">
-                    <button class="menu-toggle" aria-label="Mở Menu">☰</button>
+                    <button class="menu-toggle" aria-label="Mở Menu">Menu</button>
                     <div class="topbar-title">
                         <h1>Tấu Chương Hán Ngữ · <span class="hanzi">课后作业</span></h1>
                         <p>Danh sách bài tập và bài thi trắc nghiệm tiếng Trung</p>
@@ -164,8 +161,8 @@
                 </div>
 
                 <div class="topbar-right">
-                    <button id="notifBtn" class="notif-btn" title="Chiếu chỉ & Thông báo">
-                        <span>🔔</span>
+                    <button id="notifBtn" class="btn btn-secondary btn-sm" title="Thông báo" style="font-size: 0.82rem; font-weight: 600;">
+                        Thông Báo
                     </button>
                     <div class="user-profile">
                         <div class="user-avatar">学</div>
@@ -219,7 +216,7 @@
 
                 <div class="mt-2 text-center" id="submitActionArea">
                     <button type="submit" class="btn btn-primary" style="padding: 0.85rem 2.5rem; font-size: 1rem;">
-                        <span>✍️ Dâng Trình Tấu Chương (Nộp Bài)</span>
+                        <span>Nộp Bài</span>
                     </button>
                 </div>
             </form>
@@ -238,7 +235,7 @@
             </div>
 
             <div id="reviewTeacherCommentBox" class="mb-2" style="display: none; background: #FFFBEB; border: 1px solid #FCD34D; padding: 1rem; border-radius: var(--radius-md);">
-                <div style="font-weight: 600; color: #92400E; margin-bottom: 0.35rem;">📜 Lời Phê Của Thái Phó:</div>
+                <div style="font-weight: 600; color: #92400E; margin-bottom: 0.35rem;">Lời Phê Của Giảng Viên:</div>
                 <div id="reviewTeacherCommentText" style="font-style: italic; color: #78350F;"></div>
             </div>
 

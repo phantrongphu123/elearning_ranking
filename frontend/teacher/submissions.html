@@ -39,7 +39,7 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="sidebar-logo-icon">🏯</div>
+                <div class="sidebar-logo-badge">LC</div>
                 <div class="sidebar-brand">
                     <h2>Hoàng Cung</h2>
                     <span>Học Viện Hán Ngữ</span>
@@ -48,26 +48,22 @@
 
             <nav class="sidebar-nav">
                 <a href="index.html" class="nav-item">
-                    <span class="nav-icon">🏯</span>
                     <span>Tổng Quan</span>
                 </a>
                 <a href="assignments.html" class="nav-item">
-                    <span class="nav-icon">📜</span>
-                    <span>Ban Bố Tấu Chương</span>
+                    <span>Giao Bài Tập</span>
                 </a>
                 <a href="submissions.html" class="nav-item active">
-                    <span class="nav-icon">✍️</span>
-                    <span>Chấm Bài & Phê Duyệt</span>
+                    <span>Chấm Bài</span>
                 </a>
                 <a href="attendance.html" class="nav-item">
-                    <span class="nav-icon">📅</span>
-                    <span>Điểm Danh Hàng Ngày</span>
+                    <span>Điểm Danh</span>
                 </a>
             </nav>
 
             <div class="sidebar-footer">
                 <button onclick="logout()" class="btn btn-secondary btn-block">
-                    <span>🚪 Xuất Cung (Đăng Xuất)</span>
+                    <span>Đăng Xuất</span>
                 </button>
             </div>
         </aside>
@@ -76,7 +72,7 @@
         <main class="main-content">
             <header class="topbar">
                 <div class="topbar-left">
-                    <button class="menu-toggle" aria-label="Mở Menu">☰</button>
+                    <button class="menu-toggle" aria-label="Mở Menu">Menu</button>
                     <div class="topbar-title">
                         <h1>Khảo Hạch & Phê Duyệt · <span class="hanzi">批改殿</span></h1>
                         <p>Chấm bài tập, xem chi tiết bài làm & ban lời phê cho học tử</p>
@@ -84,8 +80,8 @@
                 </div>
 
                 <div class="topbar-right">
-                    <button id="notifBtn" class="notif-btn" title="Chiếu chỉ & Thông báo">
-                        <span>🔔</span>
+                    <button id="notifBtn" class="btn btn-secondary btn-sm" title="Thông báo" style="font-size: 0.82rem; font-weight: 600;">
+                        Thông Báo
                     </button>
                     <div class="user-profile">
                         <div class="user-avatar" style="background: linear-gradient(135deg, #10B981, #059669);">傅</div>
@@ -107,7 +103,7 @@
                             <button class="tab-btn" onclick="setSubFilter('graded', this)">Đã Phê Duyệt</button>
                         </div>
                         <div style="min-width: 250px; flex: 1; max-width: 350px;">
-                            <input type="text" id="subSearchInput" placeholder="🔍 Tìm tên học sinh / bài tập..." oninput="filterSubmissions()">
+                            <input type="text" id="subSearchInput" placeholder="Tìm tên học sinh / bài tập..." oninput="filterSubmissions()">
                         </div>
                     </div>
                 </div>
@@ -169,7 +165,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block" style="padding: 0.85rem;">
-                    <span>📜 Lưu Phê Duyệt & Chấm Điểm</span>
+                    <span>Lưu Phê Duyệt & Chấm Điểm</span>
                 </button>
             </form>
         </div>

@@ -98,10 +98,10 @@ function togglePasswordVisibility() {
     if (p) {
         if (p.type === 'password') {
             p.type = 'text';
-            if (icon) icon.textContent = '👁️';
+            if (icon) icon.textContent = 'Ẩn';
         } else {
             p.type = 'password';
-            if (icon) icon.textContent = '🙈';
+            if (icon) icon.textContent = 'Hiện';
         }
     }
 }

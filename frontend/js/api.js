@@ -145,14 +145,7 @@ function showToast(message, type = 'info') {
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
 
-    const icons = {
-        success: '✓',
-        error: '✕',
-        info: '📜'
-    };
-
     toast.innerHTML = `
-        <span class="toast-icon" style="font-size: 1.2rem; font-weight: bold;">${icons[type] || '•'}</span>
         <div class="toast-body">${message}</div>
     `;
 
@@ -184,9 +177,9 @@ function formatDate(dateStr, includeTime = true) {
 }
 
 // Format Rank Badge
-function renderRankBadge(rank, icon = '📜', color = null) {
+function renderRankBadge(rank, icon = '', color = null) {
     const customStyle = color ? `style="border-color:${color}; color:${color};"` : '';
-    return `<span class="rank-badge" ${customStyle}>${icon} ${rank || 'Học viên'}</span>`;
+    return `<span class="rank-badge" ${customStyle}>${rank || 'Học viên'}</span>`;
 }
 
 // Shared Mobile Navigation & Topbar Initialization
@@ -240,31 +233,30 @@ function initMobileNav(activePage = '') {
         let navItems = [];
         if (user.role === 'student') {
             navItems = [
-                { id: 'dashboard', label: 'Tổng Quan', icon: '🏯', href: 'index.html' },
-                { id: 'assignments', label: 'Tấu Chương', icon: '📝', href: 'assignments.html' },
-                { id: 'leaderboard', label: 'Bảng Vàng', icon: '🏆', href: 'leaderboard.html' },
-                { id: 'notifications', label: 'Thông Báo', icon: '🔔', href: '#', onClick: 'openNotificationsModal()' }
+                { id: 'dashboard', label: 'Tổng Quan', href: 'index.html' },
+                { id: 'assignments', label: 'Bài Tập', href: 'assignments.html' },
+                { id: 'leaderboard', label: 'Bảng Vàng', href: 'leaderboard.html' },
+                { id: 'notifications', label: 'Thông Báo', href: '#', onClick: 'openNotificationsModal()' }
             ];
         } else if (user.role === 'teacher') {
             navItems = [
-                { id: 'dashboard', label: 'Tổng Quan', icon: '🏯', href: 'index.html' },
-                { id: 'assignments', label: 'Bài Tập', icon: '📜', href: 'assignments.html' },
-                { id: 'submissions', label: 'Chấm Điểm', icon: '✍️', href: 'submissions.html' },
-                { id: 'attendance', label: 'Điểm Danh', icon: '📅', href: 'attendance.html' }
+                { id: 'dashboard', label: 'Tổng Quan', href: 'index.html' },
+                { id: 'assignments', label: 'Bài Tập', href: 'assignments.html' },
+                { id: 'submissions', label: 'Chấm Điểm', href: 'submissions.html' },
+                { id: 'attendance', label: 'Điểm Danh', href: 'attendance.html' }
             ];
         } else if (user.role === 'admin') {
             navItems = [
-                { id: 'dashboard', label: 'Tổng Quan', icon: '🏯', href: 'index.html#dashboard' },
-                { id: 'students', label: 'Học Sinh', icon: '👥', href: 'index.html#students' },
-                { id: 'teachers', label: 'Thái Phó', icon: '🎓', href: 'index.html#teachers' },
-                { id: 'classes', label: 'Lớp Học', icon: '🏛️', href: 'index.html#classes' }
+                { id: 'dashboard', label: 'Tổng Quan', href: 'index.html#dashboard' },
+                { id: 'students', label: 'Học Sinh', href: 'index.html#students' },
+                { id: 'teachers', label: 'Giảng Viên', href: 'index.html#teachers' },
+                { id: 'classes', label: 'Lớp Học', href: 'index.html#classes' }
             ];
         }
 
         bottomNav.innerHTML = navItems.map(item => `
             <a href="${item.href}" class="mobile-nav-link ${activePage === item.id ? 'active' : ''}" 
                ${item.onClick ? `onclick="${item.onClick}; return false;"` : ''}>
-                <span class="nav-icon">${item.icon}</span>
                 <span>${item.label}</span>
             </a>
         `).join('');
@@ -312,7 +304,7 @@ function openNotificationsModal(notifsData) {
         modal.innerHTML = `
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>📜 Chiếu Chỉ & Thông Báo</h2>
+                    <h2>Thông Báo Hệ Thống</h2>
                     <button class="modal-close-btn" onclick="closeNotificationsModal()">&times;</button>
                 </div>
                 <div class="d-flex justify-between align-center mb-1">
@@ -343,7 +335,7 @@ async function renderNotifList(preloadedNotifs) {
     try {
         const notifs = preloadedNotifs || await fetchAPI('/scores/notifications');
         if (!notifs || notifs.length === 0) {
-            container.innerHTML = '<p class="text-center" style="color: var(--text-muted); padding: 2rem;">Triều đình hiện không có chiếu chỉ mới.</p>';
+            container.innerHTML = '<p class="text-center" style="color: var(--text-muted); padding: 2rem;">Hiện không có thông báo mới.</p>';
             return;
         }
 
@@ -351,7 +343,6 @@ async function renderNotifList(preloadedNotifs) {
             const isUnread = n.is_read !== 'true' && n.is_read !== true;
             return `
                 <div style="padding: 0.85rem; border-radius: var(--radius-md); background: ${isUnread ? 'rgba(212, 175, 55, 0.1)' : 'rgba(255,255,255,0.03)'}; border: 1px solid ${isUnread ? 'var(--border-color)' : 'var(--border-subtle)'}; display: flex; gap: 0.75rem; align-items: flex-start;">
-                    <span style="font-size: 1.3rem;">📜</span>
                     <div style="flex: 1;">
                         <div style="font-size: 0.92rem; font-weight: ${isUnread ? '600' : '400'}; color: var(--text-primary);">${n.message || n.title || 'Thông báo mới'}</div>
                         <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">${formatDate(n.created_at)}</div>

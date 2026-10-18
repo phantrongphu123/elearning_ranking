@@ -47,9 +47,10 @@
 
     <div class="app-container">
         <!-- Sidebar -->
+        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="sidebar-logo-icon">👑</div>
+                <div class="sidebar-logo-badge">LC</div>
                 <div class="sidebar-brand">
                     <h2>Triều Đình</h2>
                     <span>Tổng Quản Học Viện</span>
@@ -58,30 +59,25 @@
 
             <nav class="sidebar-nav">
                 <a href="#dashboard" class="nav-item active" onclick="switchAdminTab('dashboard', this)">
-                    <span class="nav-icon">🏯</span>
-                    <span>Toàn Cảnh Triều Đình</span>
+                    <span>Tổng Quan Hệ Thống</span>
                 </a>
                 <a href="#students" class="nav-item" onclick="switchAdminTab('students', this)">
-                    <span class="nav-icon">👥</span>
-                    <span>Quản Lý Học Tử</span>
+                    <span>Quản Lý Học Sinh</span>
                 </a>
                 <a href="#teachers" class="nav-item" onclick="switchAdminTab('teachers', this)">
-                    <span class="nav-icon">🎓</span>
-                    <span>Quản Lý Thái Phó</span>
+                    <span>Quản Lý Giảng Viên</span>
                 </a>
                 <a href="#classes" class="nav-item" onclick="switchAdminTab('classes', this)">
-                    <span class="nav-icon">🏛️</span>
                     <span>Quản Lý Lớp Học</span>
                 </a>
                 <a href="#scores" class="nav-item" onclick="switchAdminTab('scores', this)">
-                    <span class="nav-icon">⭐</span>
-                    <span>Thưởng Phạt Triều Đình</span>
+                    <span>Cộng / Trừ Điểm</span>
                 </a>
             </nav>
 
             <div class="sidebar-footer">
                 <button onclick="logout()" class="btn btn-secondary btn-block">
-                    <span>🚪 Xuất Cung (Đăng Xuất)</span>
+                    <span>Đăng Xuất</span>
                 </button>
             </div>
         </aside>
@@ -90,7 +86,7 @@
         <main class="main-content">
             <header class="topbar">
                 <div class="topbar-left">
-                    <button class="menu-toggle" aria-label="Mở Menu">☰</button>
+                    <button class="menu-toggle" aria-label="Mở Menu">Menu</button>
                     <div class="topbar-title">
                         <h1 id="pageHeaderTitle">Toàn Cảnh Triều Đình · <span class="hanzi">皇城总览</span></h1>
                         <p id="pageHeaderSubtitle">Báo cáo tình hình học viện Hán ngữ toàn diện</p>
@@ -98,8 +94,8 @@
                 </div>
 
                 <div class="topbar-right">
-                    <button id="notifBtn" class="notif-btn" title="Chiếu chỉ & Thông báo">
-                        <span>🔔</span>
+                    <button id="notifBtn" class="btn btn-secondary btn-sm" title="Thông báo" style="font-size: 0.82rem; font-weight: 600;">
+                        Thông Báo
                     </button>
                     <div class="user-profile">
                         <div class="user-avatar" style="background: linear-gradient(135deg, #F59E0B, #D97706);">帝</div>
@@ -117,15 +113,13 @@
                 <section id="tab-dashboard" class="tab-content active">
                     <div class="grid-cards">
                         <div class="glass-panel stat-card">
-                            <div class="stat-icon" style="color: #2563EB; background: #EFF6FF; border-color: #BFDBFE;">👥</div>
                             <div class="stat-info">
-                                <div class="stat-label">Tổng Học Tử</div>
+                                <div class="stat-label">Tổng Học Sinh</div>
                                 <div class="stat-value" id="dashTotalStudents">0</div>
                             </div>
                         </div>
 
                         <div class="glass-panel stat-card">
-                            <div class="stat-icon" style="color: #D97706; background: #FFFBEB; border-color: #FDE68A;">🏛️</div>
                             <div class="stat-info">
                                 <div class="stat-label">Tổng Lớp Học</div>
                                 <div class="stat-value" id="dashTotalClasses">0</div>
@@ -133,15 +127,13 @@
                         </div>
 
                         <div class="glass-panel stat-card">
-                            <div class="stat-icon" style="color: #059669; background: #ECFDF5; border-color: #A7F3D0;">🎓</div>
                             <div class="stat-info">
-                                <div class="stat-label">Tổng Thái Phó</div>
+                                <div class="stat-label">Tổng Giảng Viên</div>
                                 <div class="stat-value" id="dashTotalTeachers">0</div>
                             </div>
                         </div>
 
                         <div class="glass-panel stat-card">
-                            <div class="stat-icon" style="color: #F59E0B; background: #FFFBEB; border-color: #FDE68A;">📈</div>
                             <div class="stat-info">
                                 <div class="stat-label">Điểm Trung Bình</div>
                                 <div class="stat-value" id="dashAvgScore">0</div>
@@ -152,7 +144,7 @@
                     <!-- Top 5 & Submissions -->
                     <div class="glass-panel mb-2">
                         <div class="d-flex justify-between align-center mb-1">
-                            <h3>🏆 Top 5 Bảng Vàng (Toàn Học Viện)</h3>
+                            <h3>Top 5 Bảng Vàng (Toàn Học Viện)</h3>
                             <span style="font-size: 0.85rem; color: #D97706; font-weight: 600;" id="dashSubmissionsStats">Bài nộp tuần này: 0</span>
                         </div>
                         <div class="table-container">
@@ -174,7 +166,7 @@
 
                     <!-- Rank Distribution -->
                     <div class="glass-panel">
-                        <h3>👑 Phân Bố Tước Vị Hoàng Cung</h3>
+                        <h3>Phân Bố Danh Hiệu Học Sinh</h3>
                         <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">Số lượng học tử đạt được từng phẩm trật</p>
                         <div class="rank-dist-grid" id="dashRankDistribution">
                             <!-- Injected via JS -->
@@ -186,13 +178,13 @@
                 <section id="tab-students" class="tab-content">
                     <div class="glass-panel mb-2 d-flex justify-between align-center" style="gap: 1rem; flex-wrap: wrap;">
                         <div class="d-flex gap-1 align-center" style="flex: 1; min-width: 280px; flex-wrap: wrap;">
-                            <input type="text" id="studentSearchInput" placeholder="🔍 Tìm tên hoặc mã học tử..." style="flex: 1; min-width: 180px;" oninput="filterStudentsList()">
+                            <input type="text" id="studentSearchInput" placeholder="Tìm tên hoặc mã học sinh..." style="flex: 1; min-width: 180px;" oninput="filterStudentsList()">
                             <select id="studentClassFilterSelect" style="width: auto; min-width: 160px;" onchange="loadStudentsManagement()">
                                 <option value="">Tất Cả Lớp</option>
                             </select>
                         </div>
                         <button class="btn btn-primary" onclick="openCreateStudentModal()">
-                            <span>+ Thêm Học Tử Mới</span>
+                            <span>+ Thêm Học Sinh Mới</span>
                         </button>
                     </div>
 
@@ -336,7 +328,7 @@
     <div id="createStudentModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>👥 Thêm Học Tử Mới</h2>
+                <h2>Thêm Học Sinh Mới</h2>
                 <button class="modal-close-btn" onclick="closeCreateStudentModal()">&times;</button>
             </div>
             <form id="createStudentForm">
@@ -389,7 +381,7 @@
     <div id="createTeacherModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>🎓 Thêm Thái Phó Mới</h2>
+                <h2>Thêm Giảng Viên Mới</h2>
                 <button class="modal-close-btn" onclick="closeCreateTeacherModal()">&times;</button>
             </div>
             <form id="createTeacherForm">
@@ -418,7 +410,7 @@
     <div id="createClassModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>🏛️ Mở Lớp Học Mới</h2>
+                <h2>Mở Lớp Học Mới</h2>
                 <button class="modal-close-btn" onclick="closeCreateClassModal()">&times;</button>
             </div>
             <form id="createClassForm">

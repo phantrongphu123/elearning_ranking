@@ -19,7 +19,7 @@ async function loadStudentDashboard() {
         const totalScoreEl = document.getElementById('totalScore');
         const lbPositionEl = document.getElementById('leaderboardPosition');
 
-        if (rankIconEl) rankIconEl.textContent = data.icon || '📜';
+        if (rankIconEl) rankIconEl.textContent = '';
         if (rankNameEl) {
             rankNameEl.textContent = data.rank || 'Nô Tài';
             if (data.color) rankNameEl.style.color = data.color;

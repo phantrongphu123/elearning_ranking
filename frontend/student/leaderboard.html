@@ -140,7 +140,7 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="sidebar-logo-icon">🏯</div>
+                <div class="sidebar-logo-badge">LC</div>
                 <div class="sidebar-brand">
                     <h2>Hoàng Cung</h2>
                     <span>Học Viện Hán Ngữ</span>
@@ -149,22 +149,19 @@
 
             <nav class="sidebar-nav">
                 <a href="index.html" class="nav-item">
-                    <span class="nav-icon">🏯</span>
                     <span>Tổng Quan</span>
                 </a>
                 <a href="assignments.html" class="nav-item">
-                    <span class="nav-icon">📝</span>
-                    <span>Tấu Chương (Bài Tập)</span>
+                    <span>Bài Tập</span>
                 </a>
                 <a href="leaderboard.html" class="nav-item active">
-                    <span class="nav-icon">🏆</span>
-                    <span>Bảng Vàng Triều Đình</span>
+                    <span>Bảng Vàng</span>
                 </a>
             </nav>
 
             <div class="sidebar-footer">
                 <button onclick="logout()" class="btn btn-secondary btn-block">
-                    <span>🚪 Xuất Cung (Đăng Xuất)</span>
+                    <span>Đăng Xuất</span>
                 </button>
             </div>
         </aside>
@@ -173,7 +170,7 @@
         <main class="main-content">
             <header class="topbar">
                 <div class="topbar-left">
-                    <button class="menu-toggle" aria-label="Mở Menu">☰</button>
+                    <button class="menu-toggle" aria-label="Mở Menu">Menu</button>
                     <div class="topbar-title">
                         <h1>Bảng Vàng Triều Đình · <span class="hanzi">金榜题名</span></h1>
                         <p>Tôn vinh học tử kiệt xuất & thi đua thứ bậc toàn học viện</p>
@@ -181,8 +178,8 @@
                 </div>
 
                 <div class="topbar-right">
-                    <button id="notifBtn" class="notif-btn" title="Chiếu chỉ & Thông báo">
-                        <span>🔔</span>
+                    <button id="notifBtn" class="btn btn-secondary btn-sm" title="Thông báo" style="font-size: 0.82rem; font-weight: 600;">
+                        Thông Báo
                     </button>
                     <div class="user-profile">
                         <div class="user-avatar">学</div>
@@ -200,10 +197,10 @@
                     <div class="d-flex justify-between align-center" style="gap: 1rem; flex-wrap: wrap;">
                         <div class="tabs-nav" style="border-bottom: none; margin-bottom: 0;">
                             <button class="tab-btn active" id="tabStudentsBtn" onclick="switchLBView('students')">
-                                <span>👥 Bảng Vàng Học Tử</span>
+                                <span>Bảng Vàng Học Sinh</span>
                             </button>
                             <button class="tab-btn" id="tabClassesBtn" onclick="switchLBView('classes')">
-                                <span>🏛️ Xếp Hạng Lớp Học</span>
+                                <span>Xếp Hạng Lớp Học</span>
                             </button>
                         </div>
 
@@ -326,10 +323,10 @@
                 tbody.innerHTML = currentClassesLBData.map((c, idx) => `
                     <tr>
                         <td style="font-family:'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif; font-weight:700; color:${idx < 3 ? 'var(--gold-light)' : 'var(--text-muted)'};">
-                            ${idx === 0 ? '👑 #1' : `#${idx + 1}`}
+                            #${idx + 1}
                         </td>
                         <td><strong>${escapeHtml(c.class_name)}</strong></td>
-                        <td>${c.student_count || 0} học tử</td>
+                        <td>${c.student_count || 0} học sinh</td>
                         <td style="color:#D97706; font-weight:bold; font-size:1.05rem;">${c.avg_score} điểm</td>
                     </tr>
                 `).join('');
@@ -373,21 +370,20 @@
 
             // Display Order: 2 - 1 - 3
             let items = [];
-            if (top3[1]) items.push({ student: top3[1], rank: 2, crown: '🥈' });
-            if (top3[0]) items.push({ student: top3[0], rank: 1, crown: '👑' });
-            if (top3[2]) items.push({ student: top3[2], rank: 3, crown: '🥉' });
+            if (top3[1]) items.push({ student: top3[1], rank: 2 });
+            if (top3[0]) items.push({ student: top3[0], rank: 1 });
+            if (top3[2]) items.push({ student: top3[2], rank: 3 });
 
             container.innerHTML = items.map(item => `
                 <div class="podium-step podium-${item.rank}">
                     <div class="podium-avatar">
-                        <span class="podium-crown">${item.crown}</span>
-                        <span>${item.student.icon || '学'}</span>
+                        <span>${(item.student.full_name || 'H').charAt(0).toUpperCase()}</span>
                     </div>
                     <div style="font-weight:600; text-align:center; font-size:0.92rem; margin-bottom:0.2rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%; color:#0F172A;">
                         ${escapeHtml(item.student.full_name)}
                     </div>
                     <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.5rem; font-weight:500;">
-                        ${item.student.rank || 'Học tử'}
+                        ${item.student.rank || 'Học sinh'}
                     </div>
                     <div class="podium-pillar">
                         <div class="podium-rank-tag">#${item.rank}</div>
@@ -412,7 +408,7 @@
             tbody.innerHTML = students.map((s, idx) => {
                 const isMe = String(s.student_id) === currentStudentId;
                 const position = idx + 1;
-                let rankBadge = `<span class="rank-badge sm" style="border-color:${s.color || '#FCD34D'}; color:${s.color || '#92400E'};">${s.icon || '📜'} ${s.rank}</span>`;
+                let rankBadge = `<span class="rank-badge sm" style="border-color:${s.color || '#FCD34D'}; color:${s.color || '#92400E'};">${s.rank}</span>`;
 
                 return `
                     <tr class="${isMe ? 'current-user-row' : ''}">

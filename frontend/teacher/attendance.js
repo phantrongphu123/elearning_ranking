@@ -88,7 +88,7 @@ async function loadClassStudents() {
                         <strong style="color: var(--gold-light); font-size: 0.95rem;">${escapeHtml(s.full_name)}</strong>
                     </td>
                     <td>
-                        <span class="rank-badge sm">${s.icon || '📜'} ${escapeHtml(s.rank || 'Học tử')}</span>
+                        <span class="rank-badge sm">${escapeHtml(s.rank || 'Học sinh')}</span>
                     </td>
                     <td>
                         <div class="attendance-status-radios">
@@ -141,7 +141,7 @@ function markAllPresent() {
         }
     });
 
-    showToast('✓ Đã chọn "Có mặt (+5đ)" cho tất cả học tử!', 'success');
+    showToast('Đã chọn "Có mặt (+5đ)" cho tất cả học sinh!', 'success');
 }
 
 function initAttendanceForm() {
@@ -186,12 +186,12 @@ function initAttendanceForm() {
                 })
             });
 
-            showToast(`📅 Đã lưu điểm danh ngày ${formatDate(dateStr, false)} thành công! Điểm đã được cộng/trừ vào tổng điểm học tử.`, 'success');
+            showToast(`Đã lưu điểm danh ngày ${formatDate(dateStr, false)} thành công! Điểm đã được cập nhật.`, 'success');
         } catch (err) {
             showToast('Lỗi lưu điểm danh: ' + err.message, 'error');
         } finally {
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<span>💾 Lưu Điểm Danh & Cập Nhật Điểm</span>';
+            submitBtn.innerHTML = '<span>Lưu Điểm Danh & Cập Nhật Điểm</span>';
         }
     });
 }

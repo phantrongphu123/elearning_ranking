@@ -71,9 +71,8 @@ function renderAssignments() {
             submitted: 'Bạn chưa dâng trình bài tập nào.'
         };
         container.innerHTML = `
-            <div class="glass-panel text-center" style="padding: 3.5rem 1rem;">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">📜</div>
-                <p style="color: var(--text-muted); font-size: 1rem;">${emptyTexts[currentFilter] || 'Không có bài tập.'}</p>
+            <div class="glass-panel text-center" style="padding: 3rem 1rem;">
+                <p style="color: var(--text-muted); font-size: 0.95rem;">${emptyTexts[currentFilter] || 'Không có bài tập.'}</p>
             </div>
         `;
         return;
@@ -86,11 +85,11 @@ function renderAssignments() {
         let statusBadge = '';
         if (isSubmitted) {
             const scoreText = sub.score !== undefined ? `${sub.score}đ` : 'Đã nộp';
-            statusBadge = `<span class="badge badge-success">✓ Đã dâng trình: ${scoreText}</span>`;
+            statusBadge = `<span class="badge badge-success">Đã nộp: ${scoreText}</span>`;
         } else {
             statusBadge = a.is_past_deadline
-                ? `<span class="badge badge-danger">⚠️ Quá hạn chót</span>`
-                : `<span class="badge badge-warning">⏳ Cần hoàn thành</span>`;
+                ? `<span class="badge badge-danger">Quá hạn</span>`
+                : `<span class="badge badge-warning">Cần làm</span>`;
         }
 
         const bonusBadge = a.bonus_score > 0 
@@ -101,13 +100,13 @@ function renderAssignments() {
         if (isSubmitted) {
             actionBtn = `
                 <button class="btn btn-secondary btn-sm" onclick="openSubmissionReview(${sub.submission_id}, '${escapeHtml(a.title)}', ${sub.score})">
-                    <span>🔍 Xem Kết Quả & Lời Phê</span>
+                    <span>Xem Kết Quả & Lời Phê</span>
                 </button>
             `;
         } else {
             actionBtn = `
                 <button class="btn btn-primary" onclick="openExam(${a.assignment_id}, '${escapeHtml(a.title)}', '${escapeHtml(a.description || '')}', '${escapeHtml(a.subject || 'Tiếng Trung')}')">
-                    <span>✍️ Làm Bài Thi</span>
+                    <span>Làm Bài Thi</span>
                 </button>
             `;
         }
@@ -122,9 +121,9 @@ function renderAssignments() {
                             ${bonusBadge}
                         </h3>
                         <div class="assignment-meta">
-                            <span>📚 Môn: <strong style="color: var(--gold-light);">${escapeHtml(a.subject || 'Tiếng Trung')}</strong></span>
-                            <span>⏰ Hạn nộp: <strong style="color: ${a.is_past_deadline ? 'var(--crimson)' : 'var(--gold-light)'};">${formatDate(a.deadline)}</strong></span>
-                            <span>👥 Đã dâng trình: <strong>${a.submission_count || 0}</strong> bài</span>
+                            <span>Môn: <strong style="color: var(--gold-light);">${escapeHtml(a.subject || 'Tiếng Trung')}</strong></span>
+                            <span>Hạn nộp: <strong style="color: ${a.is_past_deadline ? 'var(--crimson)' : 'var(--gold-light)'};">${formatDate(a.deadline)}</strong></span>
+                            <span>Đã nộp: <strong>${a.submission_count || 0}</strong> bài</span>
                         </div>
                     </div>
                     <div>
@@ -253,15 +252,15 @@ async function submitExam() {
         });
 
         closeExamModal();
-        showToast(`🎉 Dâng trình thành công! Điểm: ${res.score} (+${res.points_added}đ tổng)`, 'success');
+        showToast(`Nộp bài thành công! Điểm: ${res.score} (+${res.points_added}đ tổng)`, 'success');
         
         await loadSubmissions();
         await loadAssignments();
     } catch (err) {
-        showToast('Lỗi dâng trình: ' + err.message, 'error');
+        showToast('Lỗi nộp bài: ' + err.message, 'error');
     } finally {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = '<span>✍️ Dâng Trình Tấu Chương (Nộp Bài)</span>';
+        submitBtn.innerHTML = '<span>Nộp Bài</span>';
     }
 }
 
@@ -299,7 +298,7 @@ async function openSubmissionReview(submissionId, assignmentTitle, score) {
         container.innerHTML = details.map((d, idx) => {
             const isCorrect = d.is_correct === 'True' || d.is_correct === true || String(d.student_answer).toLowerCase() === String(d.correct_answer).toLowerCase();
             const borderClass = isCorrect ? 'review-correct' : 'review-wrong';
-            const statusIcon = isCorrect ? '✓ Đúng' : '✕ Sai';
+            const statusIcon = isCorrect ? 'Đúng' : 'Sai';
             const badgeClass = isCorrect ? 'badge-success' : 'badge-danger';
 
             return `

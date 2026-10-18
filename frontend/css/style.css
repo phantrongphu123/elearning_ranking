@@ -147,9 +147,24 @@ button, input, select, textarea {
     background: linear-gradient(180deg, #FFFBEB 0%, rgba(255, 255, 255, 0.8) 100%);
 }
 
+.sidebar-logo-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: -0.5px;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+    flex-shrink: 0;
+}
+
 .sidebar-logo-icon {
-    font-size: 2.2rem;
-    filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.3));
+    display: none;
 }
 
 .sidebar-brand h2 {
@@ -180,8 +195,7 @@ button, input, select, textarea {
 .nav-item {
     display: flex;
     align-items: center;
-    gap: 0.9rem;
-    padding: 0.85rem 1.1rem;
+    padding: 0.8rem 1.1rem;
     color: var(--text-secondary);
     border-radius: var(--radius-md);
     font-weight: 500;
@@ -191,9 +205,7 @@ button, input, select, textarea {
 }
 
 .nav-item .nav-icon {
-    font-size: 1.25rem;
-    width: 24px;
-    text-align: center;
+    display: none;
 }
 
 .nav-item:hover {
@@ -245,12 +257,13 @@ button, input, select, textarea {
     display: none;
     background: #FFFFFF;
     border: 1px solid var(--border-color);
-    color: var(--gold-primary);
-    width: 42px;
-    height: 42px;
+    color: var(--text-primary);
+    padding: 0.45rem 0.85rem;
+    height: 38px;
     border-radius: var(--radius-md);
     cursor: pointer;
-    font-size: 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
     align-items: center;
     justify-content: center;
     box-shadow: var(--shadow-sm);
@@ -371,25 +384,17 @@ button, input, select, textarea {
 
 .stat-card {
     display: flex;
-    align-items: center;
-    gap: 1.25rem;
+    flex-direction: column;
+    justify-content: center;
     padding: 1.35rem;
-    position: relative;
     background: #FFFFFF;
     border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    gap: 0.4rem;
 }
 
 .stat-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: var(--radius-md);
-    background: #FFFBEB;
-    border: 1px solid #FDE68A;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.7rem;
-    flex-shrink: 0;
+    display: none !important;
 }
 
 .stat-info {
@@ -795,25 +800,40 @@ tbody tr:last-child td {
 
 .mobile-nav-link {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.2rem;
     color: var(--text-muted);
-    font-size: 0.72rem;
+    font-size: 0.82rem;
     font-weight: 600;
-    padding: 0.4rem 0.6rem;
-    border-radius: var(--radius-sm);
-    transition: color 0.2s;
-    min-width: 55px;
+    padding: 0.5rem 0.85rem;
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+    background: transparent;
 }
 
 .mobile-nav-link .nav-icon {
-    font-size: 1.25rem;
+    display: none !important;
 }
 
 .mobile-nav-link.active, .mobile-nav-link:hover {
-    color: var(--gold-light);
+    color: #92400E;
+    background: #FEF3C7;
+}
+
+.login-logo-badge {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 1.25rem auto;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: -0.5px;
+    box-shadow: var(--shadow-gold);
 }
 
 /* Backdrop for Mobile Drawer */

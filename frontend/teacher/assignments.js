@@ -65,7 +65,7 @@ async function loadTeacherAssignments() {
                     <td>
                         <div class="d-flex gap-1" style="align-items: center;">
                             <button class="btn btn-secondary btn-sm" onclick="openManageQuestions(${a.assignment_id}, '${escapeHtml(a.title)}')">
-                                <span>❓ Câu Hỏi</span>
+                                <span>Câu Hỏi</span>
                             </button>
                             <button class="btn btn-danger btn-sm" onclick="deleteAssignment(${a.assignment_id})">
                                 <span>Thu Hồi</span>
@@ -127,7 +127,7 @@ function initForms() {
                 });
 
                 closeCreateAssignmentModal();
-                showToast('📜 Ban bố tấu chương thành công!', 'success');
+                showToast('Tạo bài tập thành công!', 'success');
                 await loadTeacherAssignments();
 
                 // Open Question Builder immediately for this assignment!
@@ -179,7 +179,7 @@ function initForms() {
                     })
                 });
 
-                showToast('✓ Đã thêm câu hỏi khảo hạch thành công!', 'success');
+                showToast('Đã thêm câu hỏi thành công!', 'success');
                 document.getElementById('qText').value = '';
                 document.getElementById('qOptA').value = '';
                 document.getElementById('qOptB').value = '';
@@ -273,7 +273,7 @@ async function deleteQuestion(questionId) {
     if (!confirm('Bạn có chắc chắn muốn xóa câu hỏi này khỏi đề thi?')) return;
     try {
         await fetchAPI(`/assignments/questions/${questionId}`, { method: 'DELETE' });
-        showToast('✓ Đã xóa câu hỏi!', 'success');
+        showToast('Đã xóa câu hỏi!', 'success');
         if (currentManagingAssignmentId) {
             await loadQuestionsForAssignment(currentManagingAssignmentId);
         }
@@ -303,7 +303,7 @@ async function deleteAssignment(assignmentId) {
     if (!confirm('CẢNH BÁO: Thu hồi bài tập sẽ ẩn bài này khỏi học sinh. Bạn có chắc chắn muốn thu hồi?')) return;
     try {
         await fetchAPI(`/assignments/${assignmentId}`, { method: 'DELETE' });
-        showToast('✓ Đã thu hồi tấu chương thành công!', 'success');
+        showToast('Đã thu hồi bài tập thành công!', 'success');
         await loadTeacherAssignments();
     } catch (e) {
         showToast('Lỗi thu hồi: ' + e.message, 'error');
